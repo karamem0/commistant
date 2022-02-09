@@ -1,0 +1,83 @@
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - v*.*.*
+
+env:
+  BUILD_VERSION: 1.0.0.${{github.run_number}}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.x
+      - name: Build source
+        run: |
+          dotnet restore ${{env.TARGET_FILE}}
+          dotnet publish ${{env.TARGET_FILE}} -c Release -o artifact/commistant -p:Version=${{env.BUILD_VERSION}} -p:FileVersion=${{env.BUILD_VERSION}}
+        env:
+          TARGET_FILE: source/Karamem0.Commistant.csproj
+      - name: Upload build file
+        uses: actions/upload-artifact@v2
+        with:
+          name: commistant-build
+          path: artifact/commistant
+      - name: Rewrite manifest.json
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path manifest/manifest.json
+          $content = $content -Replace "{{AppId}}", "${{secrets.AZUREAD_APP_ID}}"
+          $content = $content -Replace "{{AppDomain}}", "${{secrets.AZUREAD_APP_DOMAIN}}"
+          Out-File -FilePath manifest/manifest.json -InputObject $content -Encoding UTF8
+      - name: Upload manifest file
+        uses: actions/upload-artifact@v2
+        with:
+          name: commistant-manifest
+          path: manifest
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Download build file
+        uses: actions/download-artifact@v2
+        with:
+          name: commistant-build
+          path: artifact
+      - name: Connect to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: commistant
+          package: artifact
+  release:
+    needs: build
+    if: contains(github.ref, 'refs/tags/')
+    runs-on: windows-latest
+    steps:
+      - name: Download manifest file
+        uses: actions/download-artifact@v2
+        with:
+          name: commistant-manifest
+          path: artifact
+      - name: Archive manifest file
+        shell: pwsh
+        run: |
+          Compress-Archive -Path artifact/* -DestinationPath manifest_${{env.BUILD_VERSION}}.zip
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          files: |
+            manifest_${{env.BUILD_VERSION}}.zip

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.11",
+  "version": "1.0.0",
+  "id": "{{AppId}}",
+  "packageName": "dev.karamem0.commistant",
+  "developer": {
+    "name": "karamem0",
+    "websiteUrl": "https://github.com/karamem0/commistant",
+    "privacyUrl": "https://github.com/karamem0/commistant/blob/main/PRIVACY.md",
+    "termsOfUseUrl": "https://github.com/karamem0/commistant/blob/main/TERMS_OF_USE.md"
+  },
+  "name": {
+    "short": "Commistant",
+    "full": "Commistant"
+  },
+  "description": {
+    "short": "Commistant はコミュニティ イベントのアシスタント ボットです。",
+    "full": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。\n- 会議が開始した後の通知の送信。\n- 会議が終了する前の通知の送信。\n- 会議中の定期的な通知の送信。\n通知にはテキストおよび QR コードつきの URL を添付することができます。"
+  },
+  "icons": {
+    "outline": "icon_outline.png",
+    "color": "icon_color.png"
+  },
+  "accentColor": "#ea5549",
+  "bots": [
+    {
+      "botId": "{{AppId}}",
+      "scopes": [
+        "groupchat"
+      ],
+      "commandLists": [
+        {
+          "commands": [
+            {
+              "title": "会議開始後",
+              "description": "会議が開始した後に通知する内容を設定します。"
+            },
+            {
+              "title": "会議終了前",
+              "description": "会議が終了する前に通知する内容を設定します。"
+            },
+            {
+              "title": "会議中",
+              "description": "会議中に通知する内容を設定します。"
+            },
+            {
+              "title": "初期化",
+              "description": "この会議のすべての設定を初期化します。"
+            }
+          ],
+          "scopes": [
+            "groupchat"
+          ]
+        }
+      ],
+      "isNotificationOnly": false
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "commistant.karamem0.dev",
+    "token.botframework.com"
+  ],
+  "webApplicationInfo": {
+    "id": "{{AppId}}",
+    "resource": "api://{{AppDomain}}/{{AppId}}",
+    "applicationPermissions": [
+      "OnlineMeeting.ReadBasic.Chat"
+    ]
+  }
+}
