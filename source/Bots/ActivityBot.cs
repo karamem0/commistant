@@ -21,6 +21,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Karamem0.Commistant.Logging;
 
 namespace Karamem0.Commistant.Bots
 {
@@ -34,14 +36,18 @@ namespace Karamem0.Commistant.Bots
 
         private readonly CommandSet commandSet;
 
+        private readonly ILogger logger;
+
         public ActivityBot(
             ConversationState conversationState,
             DialogSet dialogSet,
-            CommandSet commandSet)
+            CommandSet commandSet,
+            ILogger<ActivityBot> logger)
         {
             this.conversationState = conversationState;
             this.dialogSet = dialogSet;
             this.commandSet = commandSet;
+            this.logger = logger;
         }
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
@@ -68,22 +74,25 @@ namespace Karamem0.Commistant.Bots
                     _ => await dc.ContinueDialogAsync(cancellationToken)
                 };
             }
-            await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
         protected override async Task OnTeamsMeetingStartAsync(MeetingStartEventDetails meeting, ITurnContext<IEventActivity> turnContext, CancellationToken cancellationToken)
         {
+            this.logger.MeetingStarted(meeting.Id);
             var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
             var property = await accessor.GetAsync(turnContext, () => new(), cancellationToken);
             var meetingInfo = await TeamsInfo.GetMeetingInfoAsync(turnContext);
             property.InMeeting = true;
             property.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
             property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
-            await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
             await Task.Run(async () =>
             {
+                this.logger.TimerStarted(meeting.Id);
                 while (true)
                 {
+                    this.logger.TimerExecuting(meeting.Id);
                     var cd = await this.commandSet.CreateContextAsync(turnContext, cancellationToken);
                     var property = await accessor.GetAsync(turnContext, () => new(), cancellationToken);
                     if (property.InMeeting != true)
@@ -94,16 +103,19 @@ namespace Karamem0.Commistant.Bots
                     await cd.ExecuteCommandAsync(nameof(EndMeetingCommand), cancellationToken);
                     await cd.ExecuteCommandAsync(nameof(InMeetingCommand), cancellationToken);
                     await Task.Delay(TimeSpan.FromSeconds(15));
+                    this.logger.TimerExecuted(meeting.Id);
                 }
+                this.logger.TimerEnded(meeting.Id);
             }, cancellationToken);
         }
 
         protected override async Task OnTeamsMeetingEndAsync(MeetingEndEventDetails meeting, ITurnContext<IEventActivity> turnContext, CancellationToken cancellationToken)
         {
+            this.logger.MeetingEnded(meeting.Id);
             var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
             var property = await accessor.GetAsync(turnContext, () => new(), cancellationToken);
             property.InMeeting = false;
-            await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
     }

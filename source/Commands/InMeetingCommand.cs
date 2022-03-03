@@ -7,10 +7,12 @@
 //
 
 using Karamem0.Commistant.Commands.Abstraction;
+using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +30,16 @@ namespace Karamem0.Commistant.Commands
 
         private readonly QrCodeService qrCodeService;
 
-        public InMeetingCommand(ConversationState conversationState, QrCodeService qrCodeService)
+        private readonly ILogger logger;
+
+        public InMeetingCommand(
+            ConversationState conversationState,
+            QrCodeService qrCodeService,
+            ILogger<InMeetingCommand> logger)
         {
             this.conversationState = conversationState;
             this.qrCodeService = qrCodeService;
+            this.logger = logger;
         }
 
         public override async Task ExecuteAsync(ITurnContext turnContext, CancellationToken cancellationToken)
@@ -59,12 +67,14 @@ namespace Karamem0.Commistant.Commands
             }
             if (string.IsNullOrEmpty(property.InMeetingMessage) is not true)
             {
+                this.logger.InMeetingMessageSending(property.InMeetingMessage);
                 _ = await turnContext.SendActivityAsync(
                     MessageFactory.Text(property.InMeetingMessage),
                     cancellationToken: cancellationToken);
             }
             if (string.IsNullOrEmpty(property.InMeetingUrl) is not true)
             {
+                this.logger.InMeetingUrlSending(property.InMeetingUrl);
                 var bytes = await this.qrCodeService.CreateAsync(property.InMeetingUrl);
                 var base64 = Convert.ToBase64String(bytes);
                 var activity = MessageFactory.Text(property.InMeetingUrl);
