@@ -8,11 +8,13 @@
 
 using AdaptiveCards;
 using Karamem0.Commistant.Extensions;
+using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -30,9 +32,12 @@ namespace Karamem0.Commistant.Dialogs
 
         private readonly ConversationState conversationState;
 
-        public InMeetingDialog(ConversationState conversationState)
+        private readonly ILogger logger;
+
+        public InMeetingDialog(ConversationState conversationState, ILogger<InMeetingDialog> logger)
         {
             this.conversationState = conversationState;
+            this.logger = logger;
         }
 
         protected override async Task OnInitializeAsync(DialogContext dc)
@@ -130,6 +135,7 @@ namespace Karamem0.Commistant.Dialogs
                 ContentType = AdaptiveCard.ContentType,
                 Content = JsonConvert.DeserializeObject(card.ToJson())
             });
+            this.logger.SettingsUpdating(stepContext.Context.Activity);
             return await stepContext.PromptAsync(
                 nameof(this.BeforeConfirmAsync),
                 new PromptOptions()
@@ -153,6 +159,7 @@ namespace Karamem0.Commistant.Dialogs
                 property.InMeetingSchedule = value.Value<int>("Schedule", 0);
                 property.InMeetingMessage = value.Value<string>("Message", null);
                 property.InMeetingUrl = value.Value<string>("Url", null);
+                this.logger.SettingsUpdated(stepContext.Context.Activity);
                 _ = await stepContext.Context.SendActivityAsync(
                     "設定を変更しました。",
                     cancellationToken: cancellationToken);

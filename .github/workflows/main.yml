@@ -7,46 +7,74 @@ on:
       - v*.*.*
 
 env:
-  BUILD_VERSION: 1.0.1.${{github.run_number}}
+  BUILD_VERSION: 1.0.2.${{github.run_number}}
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
+      - name: Set environment variables
+        if: contains(github.ref, 'refs/heads/main')
+        run: |
+          ConvertFrom-Json -InputObject '${{secrets.PRD_GITHUB_ENV}}' `
+            | %{ $_.PSObject.Properties } `
+            | %{ Add-Content -Path $env:GITHUB_ENV -Value ($_.Name + '=' + $_.Value) }
+      - name: Set environment variables
+        if: contains(github.ref, 'refs/heads/develop')
+        run: |
+          ConvertFrom-Json -InputObject '${{secrets.DEV_GITHUB_ENV}}' `
+            | %{ $_.PSObject.Properties } `
+            | %{ Add-Content -Path $env:GITHUB_ENV -Value ($_.Name + '=' + $_.Value) }
       - name: Checkout repos
         uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.x
+      - name: Restore source
+        run: |
+          dotnet restore source/Karamem0.Commistant.csproj
       - name: Build source
         run: |
-          dotnet restore ${{env.TARGET_FILE}}
-          dotnet publish ${{env.TARGET_FILE}} -c Release -o artifact/commistant -p:Version=${{env.BUILD_VERSION}} -p:FileVersion=${{env.BUILD_VERSION}}
-        env:
-          TARGET_FILE: source/Karamem0.Commistant.csproj
-      - name: Upload build file
+          dotnet publish source/Karamem0.Commistant.csproj `
+            -c Release `
+            -o artifact/commistant `
+            -p:Version=${{env.BUILD_VERSION}} `
+            -p:FileVersion=${{env.BUILD_VERSION}}
+      - name: Upload build files
         uses: actions/upload-artifact@v2
         with:
           name: commistant-build
           path: artifact/commistant
       - name: Rewrite manifest.json
-        shell: pwsh
         run: |
           $content = Get-Content -Path manifest/manifest.json
-          $content = $content -Replace "{{AppId}}", "${{secrets.AZUREAD_APP_ID}}"
-          $content = $content -Replace "{{AppDomain}}", "${{secrets.AZUREAD_APP_DOMAIN}}"
+          $content = $content -Replace '{{AppId}}', '${{env.APP_ID}}'
+          $content = $content -Replace '{{AppDomain}}', '${{env.APP_DOMAIN}}'
           Out-File -FilePath manifest/manifest.json -InputObject $content -Encoding UTF8
-      - name: Upload manifest file
+      - name: Upload manifest files
         uses: actions/upload-artifact@v2
         with:
           name: commistant-manifest
           path: manifest
   deploy:
     needs: build
+    if: contains(github.ref, 'refs/heads/')
     runs-on: windows-latest
     steps:
-      - name: Download build file
+      - name: Set environment variables
+        if: contains(github.ref, 'refs/heads/main')
+        run: |
+          ConvertFrom-Json -InputObject '${{secrets.PRD_GITHUB_ENV}}' `
+            | %{ $_.PSObject.Properties } `
+            | %{ Add-Content -Path $env:GITHUB_ENV -Value ($_.Name + '=' + $_.Value) }
+      - name: Set environment variables
+        if: contains(github.ref, 'refs/heads/develop')
+        run: |
+          ConvertFrom-Json -InputObject '${{secrets.DEV_GITHUB_ENV}}' `
+            | %{ $_.PSObject.Properties } `
+            | %{ Add-Content -Path $env:GITHUB_ENV -Value ($_.Name + '=' + $_.Value) }
+      - name: Download build files
         uses: actions/download-artifact@v2
         with:
           name: commistant-build
@@ -58,22 +86,20 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: commistant
+          app-name: ${{env.APP_NAME}}
           package: artifact
   release:
     needs: build
     if: contains(github.ref, 'refs/tags/')
     runs-on: windows-latest
     steps:
-      - name: Download manifest file
+      - name: Download manifest files
         uses: actions/download-artifact@v2
         with:
           name: commistant-manifest
           path: artifact
-      - name: Archive manifest file
-        shell: pwsh
-        run: |
-          Compress-Archive -Path artifact/* -DestinationPath manifest_${{env.BUILD_VERSION}}.zip
+      - name: Archive manifest files
+        run: Compress-Archive -Path artifact/* -DestinationPath manifest_${{env.BUILD_VERSION}}.zip
       - name: Create release
         uses: softprops/action-gh-release@v1
         env:

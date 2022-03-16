@@ -10,8 +10,8 @@
 		<Copyright>Copyright (c) 2022 karamem0</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
-		<FileVersion>1.0.0</FileVersion>
+		<AssemblyVersion>0.0.0</AssemblyVersion>
+		<FileVersion>0.0.0</FileVersion>
 		<RootNamespace>Karamem0.Commistant</RootNamespace>
 		<Nullable>enable</Nullable>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
@@ -20,11 +20,11 @@
 	<ItemGroup>
 		<PackageReference Include="AdaptiveCards" Version="2.7.3" />
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
 		<PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.15.2" />
 		<PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.15.2" />
 		<PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.15.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.3" />
 	</ItemGroup>
 
 </Project>

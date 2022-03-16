@@ -25,7 +25,7 @@ namespace Karamem0.Commistant
         {
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults((builder) => builder
-                    .ConfigureLogging((logging) => logging
+                    .ConfigureLogging((context, builder) => builder
                         .AddDebug()
                         .AddConsole()
                         .AddAzureWebAppDiagnostics())

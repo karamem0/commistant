@@ -36,6 +36,7 @@ namespace Karamem0.Commistant
                 .AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>()
                 .AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>()
                 .AddTransient<IBot, ActivityBot>()
+                // .AddSingleton<IStorage>(new MemoryStorage())
                 .AddSingleton<IStorage>(new BlobsStorage(
                     configuration.GetValue<string>("AzureBlobStogageConnectionString"),
                     configuration.GetValue<string>("AzureBlobStogageContainerName")

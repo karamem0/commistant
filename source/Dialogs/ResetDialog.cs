@@ -6,9 +6,11 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Logging;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +26,12 @@ namespace Karamem0.Commistant.Dialogs
 
         private readonly ConversationState conversationState;
 
-        public ResetDialog(ConversationState conversationState)
+        private readonly ILogger logger;
+
+        public ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger)
         {
             this.conversationState = conversationState;
+            this.logger = logger;
         }
 
         protected override async Task OnInitializeAsync(DialogContext dc)
@@ -44,6 +49,7 @@ namespace Karamem0.Commistant.Dialogs
 
         private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            this.logger.SettingsResetting(stepContext.Context.Activity);
             return await stepContext.PromptAsync(
                 nameof(this.BeforeConfirmAsync),
                 new PromptOptions()
@@ -63,6 +69,7 @@ namespace Karamem0.Commistant.Dialogs
             var result = (FoundChoice)stepContext.Result;
             if (result.Value == "はい")
             {
+                this.logger.SettingsReseted(stepContext.Context.Activity);
                 await this.conversationState.ClearStateAsync(stepContext.Context, cancellationToken);
                 _ = await stepContext.Context.SendActivityAsync(
                     "設定を初期化しました。",

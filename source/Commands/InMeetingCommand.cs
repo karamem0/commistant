@@ -67,14 +67,14 @@ namespace Karamem0.Commistant.Commands
             }
             if (string.IsNullOrEmpty(property.InMeetingMessage) is not true)
             {
-                this.logger.InMeetingMessageSending(property.InMeetingMessage);
+                this.logger.InMeetingMessageSending(turnContext.Activity, property.InMeetingMessage);
                 _ = await turnContext.SendActivityAsync(
                     MessageFactory.Text(property.InMeetingMessage),
                     cancellationToken: cancellationToken);
             }
             if (string.IsNullOrEmpty(property.InMeetingUrl) is not true)
             {
-                this.logger.InMeetingUrlSending(property.InMeetingUrl);
+                this.logger.InMeetingUrlSending(turnContext.Activity, property.InMeetingUrl);
                 var bytes = await this.qrCodeService.CreateAsync(property.InMeetingUrl);
                 var base64 = Convert.ToBase64String(bytes);
                 var activity = MessageFactory.Text(property.InMeetingUrl);
