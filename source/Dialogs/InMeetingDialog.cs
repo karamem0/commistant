@@ -71,7 +71,17 @@ namespace Karamem0.Commistant.Dialogs
                             new AdaptiveChoice()
                             {
                                 Title = "なし",
-                                Value = "0"
+                                Value = "-1"
+                            },
+                            new AdaptiveChoice()
+                            {
+                                Title = "5 分",
+                                Value = "5"
+                            },
+                            new AdaptiveChoice()
+                            {
+                                Title = "10 分",
+                                Value = "10"
                             },
                             new AdaptiveChoice()
                             {
@@ -180,8 +190,8 @@ namespace Karamem0.Commistant.Dialogs
                                     Value = new Func<string>(() =>
                                         property.InMeetingSchedule switch
                                         {
-                                            0 => "なし",
-                                            _ => $"{property.EndMeetingSchedule} 分"
+                                            -1 => "なし",
+                                            _ => $"{property.InMeetingSchedule} 分"
                                         }
                                     )()
                                 },

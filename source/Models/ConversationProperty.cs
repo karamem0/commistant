@@ -40,7 +40,7 @@ namespace Karamem0.Commistant.Models
 
         public bool InMeeting { get; set; }
 
-        public int InMeetingSchedule { get; set; }
+        public int InMeetingSchedule { get; set; } = -1;
 
         public string? InMeetingMessage { get; set; }
 

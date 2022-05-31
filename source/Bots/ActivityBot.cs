@@ -104,7 +104,7 @@ namespace Karamem0.Commistant.Bots
                     await cd.ExecuteCommandAsync(nameof(StartMeetingCommand), cancellationToken);
                     await cd.ExecuteCommandAsync(nameof(EndMeetingCommand), cancellationToken);
                     await cd.ExecuteCommandAsync(nameof(InMeetingCommand), cancellationToken);
-                    await Task.Delay(TimeSpan.FromSeconds(15));
+                    await Task.Delay(TimeSpan.FromMinutes(1));
                     this.logger.TimerExecuted(turnContext.Activity, meeting.Id);
                 }
                 this.logger.TimerEnded(turnContext.Activity, meeting.Id);
