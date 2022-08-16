@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc",
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "label": "react-start",
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": ".",
+              "file": 1,
+              "line": 1,
+              "message": 1
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "vite v[0-9\\.]+ dev server running at:",
+            "endsPattern": "ready in [0-9]+ms\\.$"
+          }
+        }
+      ],
+      "dependsOn": [
+        "tsc"
+      ]
+    },
+    {
+      "label": "react-terminate",
+      "type": "shell",
+      "command": "${input:terminate}",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "terminate",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "react-start"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.11",
-  "version": "1.0.3",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.13/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.13",
+  "version": "1.1.0",
   "id": "{{AppId}}",
   "packageName": "dev.karamem0.commistant",
   "developer": {
@@ -16,7 +16,7 @@
   },
   "description": {
     "short": "Commistant はコミュニティ イベントのアシスタント ボットです。",
-    "full": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。\n- 会議が開始した後の通知の送信。\n- 会議が終了する前の通知の送信。\n- 会議中の定期的な通知の送信。\n通知にはテキストおよび QR コードつきの URL を添付することができます。"
+    "full": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。\n- 会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。\n通知にはテキストおよび QR コードつきの URL を添付することができます。"
   },
   "icons": {
     "outline": "icon_outline.png",
@@ -68,8 +68,15 @@
   "webApplicationInfo": {
     "id": "{{AppId}}",
     "resource": "api://{{AppDomain}}/{{AppId}}",
-    "applicationPermissions": [
-      "OnlineMeeting.ReadBasic.Chat"
-    ]
-  }
+  },
+  "authorization": {
+    "permissions": {
+      "resourceSpecific": [
+        {
+          "type": "Application",
+          "name": "OnlineMeeting.ReadBasic.Chat"
+        }
+      ]
+    }
+  },
 }

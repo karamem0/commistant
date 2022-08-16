@@ -7,14 +7,14 @@ on:
       - v*.*.*
 
 env:
-  BUILD_VERSION: 1.0.3.${{github.run_number}}
+  BUILD_VERSION: 1.1.0.${{github.run_number}}
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - name: Set environment variables
-        if: contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v') 
+        if: contains(github.ref, 'refs/heads/main')
         run: |
           ConvertFrom-Json -InputObject '${{secrets.PRD_GITHUB_ENV}}' `
             | %{ $_.PSObject.Properties } `
@@ -33,19 +33,31 @@ jobs:
           dotnet-version: 6.x
       - name: Restore source
         run: |
-          dotnet restore source/Karamem0.Commistant.csproj
-      - name: Build source
+          dotnet restore source/server/Karamem0.Commistant.sln
+      - name: Build web
         run: |
-          dotnet publish source/Karamem0.Commistant.csproj `
+          dotnet publish source/server/Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj `
             -c Release `
-            -o artifact/commistant `
+            -o artifact/commistant-web `
             -p:Version=${{env.BUILD_VERSION}} `
             -p:FileVersion=${{env.BUILD_VERSION}}
-      - name: Upload build files
+      - name: Upload web build files
         uses: actions/upload-artifact@v2
         with:
-          name: commistant-build
-          path: artifact/commistant
+          name: commistant-web
+          path: artifact/commistant-web
+      - name: Build functions
+        run: |
+          dotnet publish source/server/Karamem0.Commistant.Functions/Karamem0.Commistant.Functions.csproj `
+            -c Release `
+            -o artifact/commistant-func `
+            -p:Version=${{env.BUILD_VERSION}} `
+            -p:FileVersion=${{env.BUILD_VERSION}}
+      - name: Upload functions build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: commistant-func
+          path: artifact/commistant-func
       - name: Rewrite manifest.json
         run: |
           $content = Get-Content -Path manifest/manifest.json
@@ -63,7 +75,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Set environment variables
-        if: contains(github.ref, 'refs/heads/main') || contains(github.ref, 'refs/tags/v') 
+        if: contains(github.ref, 'refs/heads/main')
         run: |
           ConvertFrom-Json -InputObject '${{secrets.PRD_GITHUB_ENV}}' `
             | %{ $_.PSObject.Properties } `
@@ -74,20 +86,30 @@ jobs:
           ConvertFrom-Json -InputObject '${{secrets.DEV_GITHUB_ENV}}' `
             | %{ $_.PSObject.Properties } `
             | %{ Add-Content -Path $env:GITHUB_ENV -Value ($_.Name + '=' + $_.Value) }
-      - name: Download build files
-        uses: actions/download-artifact@v2
-        with:
-          name: commistant-build
-          path: artifact
       - name: Connect to Azure
         uses: azure/login@v1
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Download web build files
+        uses: actions/download-artifact@v2
+        with:
+          name: commistant-web
+          path: artifact/commistant-web
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{env.APP_NAME}}
-          package: artifact
+          app-name: ${{env.APP_WEB_NAME}}
+          package: artifact/commistant-web
+      - name: Download functions build files
+        uses: actions/download-artifact@v2
+        with:
+          name: commistant-func
+          path: artifact/commistant-func
+      - name: Deploy to Azure Functions
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{env.APP_FUNC_NAME}}
+          package: artifact/commistant-func
   release:
     needs: build
     if: contains(github.ref, 'refs/tags/')

@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "Karamem0.Commistant.Common",
+      "path": "Karamem0.Commistant.Common"
+    },
+    {
+      "name": "Karamem0.Commistant.Functions",
+      "path": "Karamem0.Commistant.Functions"
+    },
+    {
+      "name": "Karamem0.Commistant.Web",
+      "path": "Karamem0.Commistant.Web"
+    }
+  ],
+  "settings": {
+    "azurite.location": ".azurite"
+  }
+}

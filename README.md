@@ -7,17 +7,11 @@ Commistant は Microsoft Teams 会議によるコミュニティ イベントを
 
 ## 機能
 
-Commistant は以下の機能を提供します。
-
-- 会議が開始した後の通知の送信。
-- 会議が終了する前の通知の送信。
-- 会議中の定期的な通知の送信。
-
-通知にはテキストおよび QR コードつきの URL を添付することができます。
+Commistant は会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。通知にはテキストおよび QR コードつきの URL を添付することができます。
 
 ## プレビュー
 
-![プレビュー](./assets/animation.gif)
+![プレビュー](./assets/screenshot1.png)
 
 ## 利用シーン
 
@@ -34,7 +28,7 @@ Commistant は以下の機能を提供します。
 
 事前に通知する内容を設定します。**@Commistant** と入力するとコマンドの一覧が表示されます。
 
-![使用方法](./assets/screenshot1.png)
+![使用方法](./assets/screenshot2.png)
 
 |コマンド名|説明|
 |-|-|
@@ -49,7 +43,7 @@ Commistant は以下の機能を提供します。
 
 **@Commistant 会議開始後** と入力すると設定を変更できます。
 
-![会議開始後](./assets/screenshot2.png)
+![会議開始後](./assets/screenshot3.png)
 
 |項目|内容|
 |-|-|
@@ -73,7 +67,7 @@ Commistant は以下の機能を提供します。
 
 **@Commistant 会議終了前** と入力すると設定を変更できます。
 
-![会議終了前](./assets/screenshot3.png)
+![会議終了前](./assets/screenshot4.png)
 
 |項目|内容|
 |-|-|
@@ -97,7 +91,7 @@ Commistant は以下の機能を提供します。
 
 **@Commistant 会議中** と入力すると設定を変更できます。
 
-![会議中](./assets/screenshot4.png)
+![会議中](./assets/screenshot5.png)
 
 |項目|内容|
 |-|-|
@@ -120,7 +114,7 @@ Commistant は以下の機能を提供します。
 
 **@Commistant 初期化** と入力すると初期化できます。
 
-![初期化](./assets/screenshot5.png)
+![初期化](./assets/screenshot6.png)
 
 ## 注意事項
 

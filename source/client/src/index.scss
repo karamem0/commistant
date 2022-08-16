@@ -1,0 +1,28 @@
+//
+// Copyright (c) 2022 karamem0
+//
+// This software is released under the MIT License.
+//
+// https://github.com/karamem0/commistant/blob/main/LICENSE
+//
+
+@import "../node_modules/normalize.css/normalize.css";
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+}
+
+#root * {
+  box-sizing: border-box;
+}
+
+#root div {
+  line-height: 1.25em;
+}
+
+#root,
+#root > div,
+#root > div > div {
+  min-height: 100vh;
+}
