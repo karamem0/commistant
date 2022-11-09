@@ -6,34 +6,43 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant
+var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
+var services = builder.Services;
+_ = services.AddHttpClient();
+_ = services
+    .AddControllers()
+    .AddNewtonsoftJson();
+_ = services.AddApplicationInsightsTelemetry();
+_ = services.AddBots(configuration);
+_ = services.AddDialogs();
+
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
 {
-
-    public static class Program
-    {
-
-        public static void Main(string[] args)
-        {
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults((builder) => builder
-                    .ConfigureLogging((context, builder) => builder
-                        .AddDebug()
-                        .AddConsole()
-                        .AddAzureWebAppDiagnostics())
-                    .UseStartup<Startup>())
-                .Build()
-                .Run();
-        }
-
-    }
-
+    _ = app.UseDeveloperExceptionPage();
 }
+_ = app.UseDefaultFiles();
+_ = app.UseStaticFiles();
+_ = app.UseWebSockets();
+_ = app.UseRouting();
+_ = app.UseAuthorization();
+_ = app.UseEndpoints(endpoints =>
+{
+    _ = endpoints.MapControllers();
+    _ = endpoints.MapFallbackToFile("/index.html");
+});
+
+app.Run();
