@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Karamem0.Commistant.Function": {
+    "Karamem0.Commistant.Functions": {
       "commandName": "Project",
       "commandLineArgs": "--port 7160",
       "launchBrowser": false,

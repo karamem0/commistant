@@ -1,22 +1,22 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.13/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.13",
-  "version": "1.1.1",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "1.1.2",
   "id": "{{AppId}}",
   "packageName": "dev.karamem0.commistant",
+  "name": {
+    "short": "Commistant",
+    "full": "Commistant"
+  },
   "developer": {
     "name": "karamem0",
     "websiteUrl": "https://github.com/karamem0/commistant",
     "privacyUrl": "https://github.com/karamem0/commistant/blob/main/PRIVACY.md",
     "termsOfUseUrl": "https://github.com/karamem0/commistant/blob/main/TERMS_OF_USE.md"
   },
-  "name": {
-    "short": "Commistant",
-    "full": "Commistant"
-  },
   "description": {
     "short": "Commistant はコミュニティ イベントのアシスタント ボットです。",
-    "full": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。\n- 会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。\n通知にはテキストおよび QR コードつきの URL を添付することができます。"
+    "full": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。通知にはテキストおよび QR コードつきの URL を添付することができます。"
   },
   "icons": {
     "outline": "icon_outline.png",
@@ -27,7 +27,7 @@
     {
       "botId": "{{AppId}}",
       "scopes": [
-        "groupchat"
+        "groupChat"
       ],
       "commandLists": [
         {
@@ -50,16 +50,15 @@
             }
           ],
           "scopes": [
-            "groupchat"
+            "groupChat"
           ]
         }
       ],
-      "isNotificationOnly": false
+      "isNotificationOnly": false,
+      "supportsCalling": false,
+      "supportsVideo": false,
+      "supportsFiles": false
     }
-  ],
-  "permissions": [
-    "identity",
-    "messageTeamMembers"
   ],
   "validDomains": [
     "{{AppDomain}}",
@@ -67,16 +66,16 @@
   ],
   "webApplicationInfo": {
     "id": "{{AppId}}",
-    "resource": "api://{{AppDomain}}/{{AppId}}",
+    "resource": "api://{{AppDomain}}/{{AppId}}"
   },
   "authorization": {
     "permissions": {
       "resourceSpecific": [
         {
-          "type": "Application",
-          "name": "OnlineMeeting.ReadBasic.Chat"
+          "name": "OnlineMeeting.ReadBasic.Chat",
+          "type": "Application"
         }
       ]
     }
-  },
+  }
 }

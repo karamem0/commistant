@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <PackageId>Karamem0.Commistant.Common</PackageId>
     <Version>0.0.0</Version>
     <Authors>karamem0</Authors>
     <Company>karamem0</Company>
     <Product>Commistant</Product>
-    <Copyright>Copyright (c) 2022 karamem0</Copyright>
+    <Copyright>Copyright (c) 2023 karamem0</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -18,9 +18,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.15.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.15.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.20.0" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.20.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.5" />
   </ItemGroup>
 
 </Project>

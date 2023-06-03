@@ -1,6 +1,6 @@
 {
     "azurite.location": ".azurite",
-    "azureFunctions.deploySubpath": "Karamem0.Commistant.Function/bin/Release/net6.0/publish",
+    "azureFunctions.deploySubpath": "bin/Release/net7.0/publish",
     "azureFunctions.preDeployTask": "publish function",
     "azureFunctions.projectLanguage": "C#",
     "azureFunctions.projectRuntime": "~4"

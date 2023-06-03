@@ -1,0 +1,118 @@
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+
+env:
+  BUILD_VERSION: 1.1.2.${{github.run_number}}
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  build:
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v3
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.x
+      - name: Restore web/client
+        run: npm ci
+        working-directory: source/client
+      - name: Restore web/server
+        run: dotnet restore
+        working-directory: source/server/Karamem0.Commistant.Web
+      - name: Build web
+        run: |
+          dotnet publish `
+            -c ${{env.BUILD_CONFIGURATION}} `
+            -p:PublishDir=build `
+            -p:Version=${{env.BUILD_VERSION}} `
+            -p:FileVersion=${{env.BUILD_VERSION}}
+        working-directory: source/server/Karamem0.Commistant.Web
+      - name: Upload web build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: commistant-web
+          path: source/server/Karamem0.Commistant.Web/build
+      - name: Build functions
+        run: |
+          dotnet publish `
+            -c ${{env.BUILD_CONFIGURATION}} `
+            -p:PublishDir=build `
+            -p:Version=${{env.BUILD_VERSION}} `
+            -p:FileVersion=${{env.BUILD_VERSION}}
+        working-directory: source/server/Karamem0.Commistant.Functions
+      - name: Upload functions build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: commistant-func
+          path: source/server/Karamem0.Commistant.Functions/build
+      - name: Rewrite manifest.json
+        run: |
+          $content = Get-Content -Path manifest/manifest.json
+          $content = $content -Replace '{{AppId}}', '${{secrets.APP_ID}}'
+          $content = $content -Replace '{{AppDomain}}', '${{secrets.APP_DOMAIN}}'
+          Out-File -FilePath manifest/manifest.json -InputObject $content -Encoding UTF8
+      - name: Upload manifest files
+        uses: actions/upload-artifact@v3
+        with:
+          name: commistant-manifest
+          path: manifest
+  deploy:
+    needs: build
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Connect to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Download web build files
+        uses: actions/download-artifact@v3
+        with:
+          name: commistant-web
+          path: artifact/commistant-web
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_WEB_NAME}}
+          package: artifact/commistant-web
+      - name: Download functions build files
+        uses: actions/download-artifact@v3
+        with:
+          name: commistant-func
+          path: artifact/commistant-func
+      - name: Deploy to Azure Functions
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_FUNC_NAME}}
+          package: artifact/commistant-func
+  release:
+    needs: build
+    if: contains(github.ref, 'refs/tags/')
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Download manifest files
+        uses: actions/download-artifact@v3
+        with:
+          name: commistant-manifest
+          path: artifact
+      - name: Archive manifest files
+        run: Compress-Archive -Path artifact/* -DestinationPath manifest_${{env.BUILD_VERSION}}.zip
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          files: |
+            manifest_${{env.BUILD_VERSION}}.zip
