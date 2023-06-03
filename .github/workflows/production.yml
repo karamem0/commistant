@@ -6,7 +6,7 @@ on:
       - v*.*.*
 
 env:
-  BUILD_VERSION: 1.1.2.${{github.run_number}}
+  BUILD_VERSION: 1.1.3.${{github.run_number}}
   BUILD_CONFIGURATION: Release
 
 jobs:
@@ -69,6 +69,7 @@ jobs:
           path: manifest
   deploy:
     needs: build
+    if: contains(github.ref, 'refs/heads/main')
     environment: production
     runs-on: windows-latest
     steps:

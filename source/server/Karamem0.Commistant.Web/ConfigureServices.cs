@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Azure.Identity;
+using Azure.Storage;
 using Karamem0.Commistant.Adapters;
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Webs;
@@ -29,31 +31,33 @@ namespace Karamem0.Commistant
 
         public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
         {
-            return services
-                .AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>()
-                .AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>()
-                // .AddSingleton<IStorage>(new MemoryStorage())
-                .AddSingleton<IStorage>(new BlobsStorage(
-                    configuration.GetValue<string>("AzureBlobStogageConnectionString"),
-                    configuration.GetValue<string>("AzureBlobStogageContainerName")))
-                .AddSingleton<ConversationState>()
-                .AddScoped<IBot, ActivityBot>();
+            var blobContainerUrl = configuration.GetValue<string>("AzureBlobStogageContainerUrl") ?? throw new InvalidOperationException();
+            _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
+            _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+            // _ = services.AddSingleton<IStorage>(new MemoryStorage());
+            _ = services.AddSingleton<IStorage>(new BlobsStorage(
+                new Uri(blobContainerUrl),
+                new DefaultAzureCredential(),
+                new StorageTransferOptions()));
+            _ = services.AddSingleton<ConversationState>();
+            _ = services.AddScoped<IBot, ActivityBot>();
+            return services;
         }
 
         public static IServiceCollection AddDialogs(this IServiceCollection services)
         {
-            return services
-                .AddScoped<StartMeetingDialog>()
-                .AddScoped<EndMeetingDialog>()
-                .AddScoped<InMeetingDialog>()
-                .AddScoped<ResetDialog>()
-                .AddScoped(provider => new DialogSet(provider
-                    .GetService<ConversationState>()?
-                    .CreateProperty<DialogState>(nameof(DialogState)))
-                    .Add(provider.GetService<StartMeetingDialog>())
-                    .Add(provider.GetService<EndMeetingDialog>())
-                    .Add(provider.GetService<InMeetingDialog>())
-                    .Add(provider.GetService<ResetDialog>()));
+            _ = services.AddScoped<StartMeetingDialog>();
+            _ = services.AddScoped<EndMeetingDialog>();
+            _ = services.AddScoped<InMeetingDialog>();
+            _ = services.AddScoped<ResetDialog>();
+            _ = services.AddScoped(provider => new DialogSet(provider
+                .GetService<ConversationState>()?
+                .CreateProperty<DialogState>(nameof(DialogState)))
+                .Add(provider.GetService<StartMeetingDialog>())
+                .Add(provider.GetService<EndMeetingDialog>())
+                .Add(provider.GetService<InMeetingDialog>())
+                .Add(provider.GetService<ResetDialog>()));
+            return services;
         }
 
     }

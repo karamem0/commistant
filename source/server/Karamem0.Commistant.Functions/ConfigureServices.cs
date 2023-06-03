@@ -6,6 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Karamem0.Commistant.Commands;
 using Karamem0.Commistant.Commands.Abstraction;
@@ -27,33 +28,30 @@ namespace Karamem0.Commistant
 
         public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
         {
-            return services
-                .AddSingleton(provider => new BlobServiceClient(
-                    configuration.GetValue<string>("AzureBlobStogageConnectionString")))
-                .AddSingleton(provider => provider
-                    .GetService<BlobServiceClient>()?
-                    .GetBlobContainerClient(configuration.GetValue<string>("AzureBlobStogageContainerName"))
-                    ?? throw new InvalidOperationException());
+            var blobContainerUrl = configuration.GetValue<string>("AzureBlobStogageContainerUrl") ?? throw new InvalidOperationException();
+            _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
+            return services;
         }
 
         public static IServiceCollection AddCommands(this IServiceCollection services, IConfiguration configuration)
         {
-            return services
-                .AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
-                    configuration.GetValue<string>("MicrosoftAppId"),
-                    configuration.GetValue<string>("MicrosoftAppPassword")))
-                .AddSingleton<StartMeetingCommand>()
-                .AddSingleton<EndMeetingCommand>()
-                .AddSingleton<InMeetingCommand>()
-                .AddSingleton((provider) => new CommandSet()
-                    .Add(provider.GetService<StartMeetingCommand>())
-                    .Add(provider.GetService<EndMeetingCommand>())
-                    .Add(provider.GetService<InMeetingCommand>()));
+            _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
+                configuration.GetValue<string>("MicrosoftAppId"),
+                configuration.GetValue<string>("MicrosoftAppPassword")));
+            _ = services.AddSingleton<StartMeetingCommand>();
+            _ = services.AddSingleton<EndMeetingCommand>();
+            _ = services.AddSingleton<InMeetingCommand>();
+            _ = services.AddSingleton((provider) => new CommandSet()
+                .Add(provider.GetService<StartMeetingCommand>())
+                .Add(provider.GetService<EndMeetingCommand>())
+                .Add(provider.GetService<InMeetingCommand>()));
+            return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            return services.AddTransient<QrCodeService>();
+            _ = services.AddTransient<QrCodeService>();
+            return services;
         }
 
     }

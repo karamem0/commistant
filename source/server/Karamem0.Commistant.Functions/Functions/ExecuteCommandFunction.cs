@@ -12,7 +12,6 @@ using Karamem0.Commistant.Commands;
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
-using Microsoft.ApplicationInsights;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;

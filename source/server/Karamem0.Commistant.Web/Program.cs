@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+#pragma warning disable CA1852
+
 using Karamem0.Commistant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,10 +41,9 @@ _ = app.UseStaticFiles();
 _ = app.UseWebSockets();
 _ = app.UseRouting();
 _ = app.UseAuthorization();
-_ = app.UseEndpoints(endpoints =>
-{
-    _ = endpoints.MapControllers();
-    _ = endpoints.MapFallbackToFile("/index.html");
-});
+_ = app.MapControllers();
+_ = app.MapFallbackToFile("/index.html");
 
 app.Run();
+
+#pragma warning restore CA1852
