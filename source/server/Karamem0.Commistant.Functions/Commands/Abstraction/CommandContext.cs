@@ -37,7 +37,7 @@ namespace Karamem0.Commistant.Commands.Abstraction
         public async Task ExecuteCommandAsync(string commandId, CancellationToken cancellationToken = default)
         {
             var command = this.commandSet.Find(commandId);
-            if (command != null)
+            if (command is not null)
             {
                 await command.ExecuteAsync(this.property, this.reference, cancellationToken);
             }

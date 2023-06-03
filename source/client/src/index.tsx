@@ -7,15 +7,61 @@
 //
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-import App from './components/app';
+import ReactDOM from 'react-dom/client';
 
-import './index.scss';
+import {
+  BrowserRouter,
+  Route,
+  Routes
+} from 'react-router-dom';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+import { Global } from '@emotion/react';
+import ress from 'ress';
+
+import SnackbarProvider from './common/providers/SnackbarProvider';
+import HomePage from './features/home/pages/HomePage';
+import ConfigurePage from './features/tab/pages/ConfigurePage';
+import PropertyPage from './features/tab/pages/PropertyPage';
+import IntlProvider from './providers/IntlProvider';
+import TeamsProvider from './providers/TeamsProvider';
+import TelemetryProvider from './providers/TelemetryProvider';
+import ThemeProvider from './providers/ThemeProvider';
+
+const element = document.getElementById('root') as HTMLElement;
+const root = ReactDOM.createRoot(element);
+
+root.render(
+  <React.Fragment>
+    <Global styles={ress} />
+    <BrowserRouter>
+      <TelemetryProvider>
+        <IntlProvider>
+          <ThemeProvider>
+            <Routes>
+              <Route
+                path="/"
+                element={(
+                  <HomePage />
+                )} />
+              <Route
+                path="/tab/configure"
+                element={(
+                  <ConfigurePage />
+                )} />
+              <Route
+                path="/tab/property"
+                element={(
+                  <TeamsProvider>
+                    <SnackbarProvider>
+                      <PropertyPage />
+                    </SnackbarProvider>
+                  </TeamsProvider>
+                )} />
+            </Routes>
+          </ThemeProvider>
+        </IntlProvider>
+      </TelemetryProvider>
+    </BrowserRouter>
+  </React.Fragment>
 );

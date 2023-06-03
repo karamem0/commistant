@@ -17,6 +17,10 @@
     }
   },
   "rules": {
+    "arrow-parens": [
+      "error",
+      "always"
+    ],
     "array-bracket-spacing": [
       "error",
       "always",
@@ -38,7 +42,11 @@
     ],
     "linebreak-style": [
       "error",
-      "windows"
+      "unix"
+    ],
+    "multiline-ternary": [
+      "error",
+      "never"
     ],
     "no-alert": "error",
     "no-console": [
@@ -51,6 +59,10 @@
     ],
     "no-use-before-define": "off",
     "no-unused-vars": "off",
+    "operator-linebreak": [
+      "error",
+      "after"
+    ],
     "padded-blocks": "off",
     "quotes": [
       "error",
@@ -59,6 +71,14 @@
     "semi": [
       "error",
       "always"
+    ],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
     ],
     "sort-imports": "off",
     "@typescript-eslint/array-type": [
@@ -86,19 +106,55 @@
       {
         "pathGroups": [
           {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "react-dom/**",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
             "pattern": "react**",
             "group": "builtin",
             "position": "before"
           },
           {
+            "pattern": "@testing-library/**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@automapper/**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
             "pattern": "@fluentui/**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@microsoft/**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@azure/**",
             "group": "builtin",
             "position": "after"
           }
         ],
         "pathGroupsExcludedImportTypes": [
+          "react",
+          "react-dom/**",
           "react**",
-          "@fluentui/**"
+          "@testing-library/**",
+          "@automapper/**",
+          "@fluentui/**",
+          "@microsoft/**",
+          "@azure/**"
         ],
         "alphabetize": {
           "order": "asc"
@@ -131,13 +187,23 @@
     "react/jsx-sort-props": [
       "error",
       {
-        "callbacksLast": true
+        "callbacksLast": true,
+        "multiline": "last",
+        "reservedFirst": true
       }
     ],
     "react/jsx-tag-spacing": [
       "error",
       {
         "beforeSelfClosing": "always"
+      }
+    ],
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": [
+          "css"
+        ]
       }
     ],
     "react/prop-types": "off"

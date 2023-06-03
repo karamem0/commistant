@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <PackageId>Karamem0.Commistant.Bot</PackageId>
+    <Version>0.0.0</Version>
+    <Authors>karamem0</Authors>
+    <Company>karamem0</Company>
+    <Product>Commistant</Product>
+    <Copyright>Copyright (c) 2023 karamem0</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
+    <AssemblyVersion>0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0</FileVersion>
+    <RootNamespace>Karamem0.Commistant</RootNamespace>
+    <Nullable>enable</Nullable>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <UserSecretsId>2eb68d98-313d-4456-9ea3-adf0ea7044d9</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AdaptiveCards" Version="3.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.9.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
+    <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.20.0" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.20.0" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.20.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Karamem0.Commistant.Common\Karamem0.Commistant.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -117,7 +117,7 @@ namespace Karamem0.Commistant.Dialogs
                     "設定を初期化しました。",
                     cancellationToken: cancellationToken);
             }
-            if (stepContext.Context.Activity.ReplyToId != null)
+            if (stepContext.Context.Activity.ReplyToId is not null)
             {
                 var card = new AdaptiveCard("1.3")
                 {

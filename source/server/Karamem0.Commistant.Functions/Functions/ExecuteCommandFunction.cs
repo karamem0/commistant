@@ -7,16 +7,14 @@
 //
 
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Karamem0.Commistant.Commands;
 using Karamem0.Commistant.Commands.Abstraction;
+using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,17 +30,17 @@ namespace Karamem0.Commistant.Functions
 
         private readonly ILogger logger;
 
-        private readonly BlobContainerClient blobClient;
+        private readonly BlobContainerClient botStateClient;
 
         private readonly CommandSet commandSet;
 
         public ExecuteCommandFunction(
             ILoggerFactory loggerFactory,
-            BlobContainerClient blobClient,
+            BlobContainerClient botStateClient,
             CommandSet commandSet)
         {
             this.logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
-            this.blobClient = blobClient;
+            this.botStateClient = botStateClient;
             this.commandSet = commandSet;
         }
 
@@ -52,26 +50,23 @@ namespace Karamem0.Commistant.Functions
             try
             {
                 this.logger.TimerStarted();
-                await foreach (var blobPage in this.blobClient.GetBlobsAsync().AsPages())
+                await foreach (var blobPage in this.botStateClient.GetBlobsAsync().AsPages())
                 {
                     foreach (var blobItem in blobPage.Values)
                     {
-                        var blobClient = this.blobClient.GetBlobClient(blobItem.Name);
-                        var inputStream = await blobClient.DownloadStreamingAsync();
-                        var inputETag = inputStream.GetRawResponse().Headers.ETag;
-                        var inputString = await new StreamReader(inputStream.Value.Content).ReadToEndAsync();
-                        var jsonContent = JsonConvert.DeserializeObject<JObject>(inputString);
-                        if (jsonContent == null)
+                        var blobClient = this.botStateClient.GetBlobClient(blobItem.Name);
+                        var blobContent = await blobClient.GetObjectAsync<Dictionary<string, object>>();
+                        if (blobContent.Data is null)
                         {
                             continue;
                         }
-                        var property = jsonContent.Value<JToken>("ConversationProperty")?.ToObject<ConversationProperty>();
-                        if (property == null)
+                        var property = blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
+                        if (property is null)
                         {
                             continue;
                         }
-                        var reference = jsonContent.Value<JToken>("ConversationReference")?.ToObject<ConversationReference>();
-                        if (reference == null)
+                        var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
+                        if (reference is null)
                         {
                             continue;
                         }
@@ -79,16 +74,7 @@ namespace Karamem0.Commistant.Functions
                         await cd.ExecuteCommandAsync(nameof(StartMeetingCommand));
                         await cd.ExecuteCommandAsync(nameof(EndMeetingCommand));
                         await cd.ExecuteCommandAsync(nameof(InMeetingCommand));
-                        jsonContent["ConversationProperty"] = JToken.FromObject(property);
-                        var outoutString = JsonConvert.SerializeObject(jsonContent);
-                        var outputStream = new MemoryStream(Encoding.UTF8.GetBytes(outoutString));
-                        _ = await blobClient.UploadAsync(outputStream, new BlobUploadOptions()
-                        {
-                            Conditions = new BlobRequestConditions()
-                            {
-                                IfMatch = inputETag
-                            }
-                        });
+                        await blobClient.SetObjectAsync(blobContent);
                     }
                 }
                 this.logger.TimerEnded();

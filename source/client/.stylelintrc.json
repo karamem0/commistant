@@ -1,20 +1,17 @@
 {
-  "customSyntax": "postcss-scss",
   "extends": [
     "stylelint-config-standard-scss",
     "stylelint-config-recess-order"
   ],
   "overrides": [
     {
-      "customSyntax": "@stylelint/postcss-css-in-js",
+      "customSyntax": "postcss-styled-syntax",
       "files": [
-        "src/**/*.{js,ts,jsx,tsx}"
+        "src/**/*.{jsx,tsx}"
       ],
       "rules": {
         "at-rule-empty-line-before": "never",
-        "no-empty-first-line": null,
-        "no-eol-whitespace": null,
-        "no-missing-end-of-source-newline": null
+        "rule-empty-line-before": "never"
       }
     }
   ],

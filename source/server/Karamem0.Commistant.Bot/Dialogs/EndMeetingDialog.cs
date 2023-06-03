@@ -27,14 +27,14 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Dialogs
 {
 
-    public class StartMeetingDialog : ComponentDialog
+    public class EndMeetingDialog : ComponentDialog
     {
 
         private readonly ConversationState conversationState;
 
         private readonly ILogger logger;
 
-        public StartMeetingDialog(ConversationState conversationState, ILogger<StartMeetingDialog> logger)
+        public EndMeetingDialog(ConversationState conversationState, ILogger<EndMeetingDialog> logger)
         {
             this.conversationState = conversationState;
             this.logger = logger;
@@ -80,37 +80,37 @@ namespace Karamem0.Commistant.Dialogs
                             },
                             new AdaptiveChoice()
                             {
-                                Title = "5 分後",
+                                Title = "5 分前",
                                 Value = "5"
                             },
                             new AdaptiveChoice()
                             {
-                                Title = "10 分後",
+                                Title = "10 分前",
                                 Value = "10"
                             },
                             new AdaptiveChoice()
                             {
-                                Title = "15 分後",
+                                Title = "15 分前",
                                 Value = "15"
                             },
                         },
-                        Value = property.StartMeetingSchedule.ToString()
+                        Value = property.EndMeetingSchedule.ToString()
                     },
                     new AdaptiveTextInput()
                     {
                         Id = "Message",
                         Label = "メッセージ",
-                        Placeholder = "開始後に表示されるメッセージ",
+                        Placeholder = "会議後に表示されるメッセージ",
                         Style = AdaptiveTextInputStyle.Text,
-                        Value = property.StartMeetingMessage
+                        Value = property.EndMeetingMessage
                     },
                     new AdaptiveTextInput()
                     {
                         Id = "Url",
                         Label = "URL",
-                        Placeholder = "開始後に表示されるリンクの URL",
+                        Placeholder = "会議後に表示されるリンクの URL",
                         Style = AdaptiveTextInputStyle.Url,
-                        Value = property.StartMeetingUrl
+                        Value = property.EndMeetingUrl
                     }
                 },
                 Actions = new List<AdaptiveAction>()
@@ -161,15 +161,15 @@ namespace Karamem0.Commistant.Dialogs
             var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
             if (value.Value<string>("Button") == "Submit")
             {
-                property.StartMeetingSchedule = value.Value("Schedule", -1);
-                property.StartMeetingMessage = value.Value<string>("Message", null);
-                property.StartMeetingUrl = value.Value<string>("Url", null);
+                property.EndMeetingSchedule = value.Value("Schedule", -1);
+                property.EndMeetingMessage = value.Value<string>("Message", null);
+                property.EndMeetingUrl = value.Value<string>("Url", null);
                 this.logger.SettingsUpdated(stepContext.Context.Activity);
                 _ = await stepContext.Context.SendActivityAsync(
                     "設定を変更しました。",
                     cancellationToken: cancellationToken);
             }
-            if (stepContext.Context.Activity.ReplyToId != null)
+            if (stepContext.Context.Activity.ReplyToId is not null)
             {
                 var card = new AdaptiveCard("1.3")
                 {
@@ -183,23 +183,23 @@ namespace Karamem0.Commistant.Dialogs
                                 {
                                     Title = "スケジュール",
                                     Value = new Func<string>(() =>
-                                        property.StartMeetingSchedule switch
+                                        property.EndMeetingSchedule switch
                                         {
                                             -1 => "なし",
                                             0 => "予定時刻",
-                                            _ => $"{property.StartMeetingSchedule} 分後"
+                                            _ => $"{property.EndMeetingSchedule} 分後"
                                         }
                                     )()
                                 },
                                 new AdaptiveFact()
                                 {
                                     Title = "メッセージ",
-                                    Value = $"{property.StartMeetingMessage}"
+                                    Value = $"{property.EndMeetingMessage}"
                                 },
                                 new AdaptiveFact()
                                 {
                                     Title = "URL",
-                                    Value = $"{property.StartMeetingUrl}"
+                                    Value = $"{property.EndMeetingUrl}"
                                 }
                             }
                         }

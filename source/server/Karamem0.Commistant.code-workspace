@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "Karamem0.Commistant.Bot",
+      "path": "Karamem0.Commistant.Bot"
+    },
+    {
       "name": "Karamem0.Commistant.Common",
       "path": "Karamem0.Commistant.Common"
     },

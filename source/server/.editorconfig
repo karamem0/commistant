@@ -221,6 +221,8 @@ dotnet_diagnostic.IDE0005.severity = none
 dotnet_diagnostic.IDE0010.severity = none
 # IDE0059: Remove unnecessary value assignment
 dotnet_diagnostic.IDE0059.severity = none
+# IDE0074: Use compound assignment
+dotnet_diagnostic.IDE0074.severity = none
 
 dotnet_diagnostic.IDE0120.severity = none
 dotnet_diagnostic.IDE0130.severity = none

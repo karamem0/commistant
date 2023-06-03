@@ -1,0 +1,52 @@
+//
+// Copyright (c) 2023 karamem0
+//
+// This software is released under the MIT License.
+//
+// https://github.com/karamem0/commistant/blob/main/LICENSE
+//
+
+import React from 'react';
+
+import { Dropdown, Option } from '@fluentui/react-components';
+
+import { EventHandler } from '../../../types/Event';
+
+interface ScheduleDropdownProps {
+  options?: Record<string, string>,
+  value?: string,
+  onBlur?: EventHandler,
+  onChange?: EventHandler<string>
+}
+
+function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButtonElement>) {
+
+  const {
+    options,
+    value,
+    onBlur,
+    onChange
+  } = props;
+
+  return (
+    <Dropdown
+      ref={ref}
+      defaultSelectedOptions={value ? [ value ] : undefined}
+      defaultValue={value && options ? options[value] : undefined}
+      onBlur={onBlur}
+      onOptionSelect={(e, data) => onChange?.(e, data.optionValue)}>
+      {
+        options && Object.keys(options).sort((a, b) => Number(a) - Number(b)).map((item) => (
+          <Option
+            key={item}
+            value={item}>
+            {options[item]}
+          </Option>
+        ))
+      }
+    </Dropdown>
+  );
+
+}
+
+export default React.forwardRef(ScheduleDropdown);

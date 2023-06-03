@@ -9,10 +9,11 @@
 #pragma warning disable CA1852
 
 using Karamem0.Commistant;
+using Karamem0.Commistant.Mappings;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,23 +24,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 var services = builder.Services;
-_ = services.AddHttpClient();
-_ = services
-    .AddControllers()
-    .AddNewtonsoftJson();
 _ = services.AddApplicationInsightsTelemetry();
-_ = services.AddBots(configuration);
-_ = services.AddDialogs();
+_ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
+_ = services.AddBlobContainerClient(configuration);
+_ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAD");
+_ = services.AddControllers();
+_ = services.AddHttpClient();
+_ = services.AddCors(options =>
+    options.AddDefaultPolicy(builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()));
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     _ = app.UseDeveloperExceptionPage();
+    _ = app.UseCors();
 }
+_ = app.UseHttpsRedirection();
 _ = app.UseDefaultFiles();
 _ = app.UseStaticFiles();
-_ = app.UseWebSockets();
 _ = app.UseRouting();
+_ = app.UseAuthentication();
 _ = app.UseAuthorization();
 _ = app.MapControllers();
 _ = app.MapFallbackToFile("/index.html");

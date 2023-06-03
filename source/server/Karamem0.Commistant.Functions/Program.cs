@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+#pragma warning disable CA1852
+
 using Karamem0.Commistant;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,10 +31,7 @@ _ = builder.ConfigureAppConfiguration((context, builder) =>
 _ = builder.ConfigureServices((context, services) =>
 {
     _ = services.AddApplicationInsightsTelemetryWorkerService();
-    _ = services.AddLogging(builder =>
-    {
-        _ = builder.AddApplicationInsights();
-    });
+    _ = services.AddLogging(builder => builder.AddApplicationInsights());
     _ = services.AddHttpClient();
     _ = services.AddBlobContainerClient(context.Configuration);
     _ = services.AddCommands(context.Configuration);
@@ -42,3 +41,5 @@ _ = builder.ConfigureServices((context, services) =>
 var app = builder.Build();
 
 app.Run();
+
+#pragma warning restore CA1852

@@ -22,7 +22,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Webs
+namespace Karamem0.Commistant.Bots
 {
 
     public class ActivityBot : TeamsActivityHandler
@@ -49,6 +49,22 @@ namespace Karamem0.Commistant.Webs
             await base.OnTurnAsync(turnContext, cancellationToken);
         }
 
+        protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
+        {
+            foreach (var member in membersAdded)
+            {
+                if (member.Id == turnContext.Activity.Recipient.Id)
+                {
+                    _ = await turnContext.SendActivityAsync(
+                        "<b>Commistant にようこそ！</b>" + "<br/>" +
+                        "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。" +
+                        "会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。" +
+                        "通知にはテキストおよび QR コードつきの URL を添付することができます。",
+                        cancellationToken: cancellationToken);
+                }
+            }
+        }
+
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             var dc = await this.dialogSet.CreateContextAsync(turnContext, cancellationToken);
@@ -65,7 +81,7 @@ namespace Karamem0.Commistant.Webs
                     cancellationToken: cancellationToken);
                 if (participant.Meeting.Role == "Organizer")
                 {
-                    if (dc.ActiveDialog != null)
+                    if (dc.ActiveDialog is not null)
                     {
                         _ = await dc.EndDialogAsync(cancellationToken: cancellationToken);
                     }
@@ -101,7 +117,8 @@ namespace Karamem0.Commistant.Webs
             property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
             await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
             var referenceAccessor = this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
-            await referenceAccessor.SetAsync(turnContext, turnContext.Activity.GetConversationReference(), cancellationToken);
+            var reference = turnContext.Activity.GetConversationReference();
+            await referenceAccessor.SetAsync(turnContext, reference, cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
