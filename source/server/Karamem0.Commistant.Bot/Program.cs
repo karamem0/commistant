@@ -11,6 +11,7 @@
 using Karamem0.Commistant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -42,7 +43,6 @@ _ = app.UseWebSockets();
 _ = app.UseRouting();
 _ = app.UseAuthorization();
 _ = app.MapControllers();
-_ = app.MapFallbackToFile("/index.html");
 
 app.Run();
 

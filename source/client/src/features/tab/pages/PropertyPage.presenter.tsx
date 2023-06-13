@@ -27,6 +27,7 @@ import ScheduleDropdown from '../components/ScheduleDropdown';
 import messages from '../messages';
 
 interface PropertyPageProps {
+  disabled?: boolean,
   value?: ConversationPropertyFormState,
   onSubmit?: EventHandler<ConversationPropertyFormState>
 }
@@ -34,6 +35,7 @@ interface PropertyPageProps {
 function PropertyPage(props: PropertyPageProps) {
 
   const {
+    disabled,
     value,
     onSubmit
   } = props;
@@ -92,6 +94,7 @@ function PropertyPage(props: PropertyPageProps) {
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
                     ref={field.ref}
+                    disabled={disabled}
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
@@ -101,7 +104,7 @@ function PropertyPage(props: PropertyPageProps) {
                       15: intl.formatMessage(messages.MinutesAfter, { value: 15 })
                     }}
                     onBlur={field.onBlur}
-                    onChange={(_, value) => field.onChange(value)} />
+                    onChange={(_, value) => field.onChange(value || '')} />
                 </Field>
               )} />
             <Controller
@@ -110,7 +113,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="startMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
             <Controller
@@ -119,7 +124,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="startMeetingUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
           </div>
@@ -135,6 +142,7 @@ function PropertyPage(props: PropertyPageProps) {
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
                     ref={field.ref}
+                    disabled={disabled}
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
@@ -144,7 +152,7 @@ function PropertyPage(props: PropertyPageProps) {
                       15: intl.formatMessage(messages.MinutesBefore, { value: 15 })
                     }}
                     onBlur={field.onBlur}
-                    onChange={(_, value) => field.onChange(value)} />
+                    onChange={(_, value) => field.onChange(value || '')} />
                 </Field>
               )} />
             <Controller
@@ -153,7 +161,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="endMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
             <Controller
@@ -162,7 +172,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="endMeetingUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
           </div>
@@ -178,6 +190,7 @@ function PropertyPage(props: PropertyPageProps) {
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
                     ref={field.ref}
+                    disabled={disabled}
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
@@ -188,7 +201,7 @@ function PropertyPage(props: PropertyPageProps) {
                       60: intl.formatMessage(messages.Minutes, { value: 60 })
                     }}
                     onBlur={field.onBlur}
-                    onChange={(_, value) => field.onChange(value)} />
+                    onChange={(_, value) => field.onChange(value || '')} />
                 </Field>
               )} />
             <Controller
@@ -197,7 +210,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="inMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
             <Controller
@@ -206,7 +221,9 @@ function PropertyPage(props: PropertyPageProps) {
               name="inMeetingUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={disabled} />
                 </Field>
               )} />
           </div>
@@ -221,7 +238,7 @@ function PropertyPage(props: PropertyPageProps) {
           <Button
             appearance="primary"
             aria-label={intl.formatMessage(messages.Save)}
-            disabled={!form.formState.isDirty}
+            disabled={disabled || !form.formState.isDirty}
             title={intl.formatMessage(messages.Save)}
             type="submit">
             <FormattedMessage {...messages.Save} />

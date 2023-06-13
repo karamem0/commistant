@@ -8,8 +8,6 @@
 
 import React from 'react';
 
-import { useInterval } from 'react-use';
-
 import { useSnackbar } from '../providers/SnackbarProvider';
 
 import Presenter from './Snackbar.presenter';
@@ -23,10 +21,6 @@ function Snackbar() {
   }, [
     setSnackbar
   ]);
-
-  useInterval(() => {
-    setSnackbar(undefined);
-  }, snackbar?.text ? 5000 : undefined);
 
   return (
     <Presenter

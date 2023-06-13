@@ -27,6 +27,7 @@ var services = builder.Services;
 _ = services.AddApplicationInsightsTelemetry();
 _ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
 _ = services.AddBlobContainerClient(configuration);
+_ = services.AddServiceClientCredentials(configuration);
 _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAD");
 _ = services.AddControllers();
 _ = services.AddHttpClient();

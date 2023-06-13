@@ -55,6 +55,10 @@ namespace Karamem0.Commistant.Bots
             {
                 if (member.Id == turnContext.Activity.Recipient.Id)
                 {
+                    var referenceAccessor = this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
+                    var reference = turnContext.Activity.GetConversationReference();
+                    await referenceAccessor.SetAsync(turnContext, reference, cancellationToken);
+                    await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
                     _ = await turnContext.SendActivityAsync(
                         "<b>Commistant にようこそ！</b>" + "<br/>" +
                         "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。" +
@@ -63,6 +67,19 @@ namespace Karamem0.Commistant.Bots
                         cancellationToken: cancellationToken);
                 }
             }
+            await base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
+        }
+
+        protected override async Task OnMembersRemovedAsync(IList<ChannelAccount> membersRemoved, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
+        {
+            foreach (var member in membersRemoved)
+            {
+                if (member.Id == turnContext.Activity.Recipient.Id)
+                {
+                    await this.conversationState.DeleteAsync(turnContext, cancellationToken);
+                }
+            }
+            await base.OnMembersRemovedAsync(membersRemoved, turnContext, cancellationToken);
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -116,9 +133,6 @@ namespace Karamem0.Commistant.Bots
             property.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
             property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
             await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
-            var referenceAccessor = this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
-            var reference = turnContext.Activity.GetConversationReference();
-            await referenceAccessor.SetAsync(turnContext, reference, cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
@@ -133,8 +147,6 @@ namespace Karamem0.Commistant.Bots
             property.ScheduledStartTime = null;
             property.ScheduledEndTime = null;
             await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
-            var referenceAccessor = this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
-            await referenceAccessor.DeleteAsync(turnContext, cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 

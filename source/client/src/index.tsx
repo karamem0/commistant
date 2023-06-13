@@ -10,6 +10,7 @@ import React from 'react';
 
 import ReactDOM from 'react-dom/client';
 
+import { ErrorBoundary } from 'react-error-boundary';
 import {
   BrowserRouter,
   Route,
@@ -20,6 +21,8 @@ import { Global } from '@emotion/react';
 import ress from 'ress';
 
 import SnackbarProvider from './common/providers/SnackbarProvider';
+import Error404Page from './features/error/pages/Error404Page';
+import Error500Page from './features/error/pages/Error500Page';
 import HomePage from './features/home/pages/HomePage';
 import ConfigurePage from './features/tab/pages/ConfigurePage';
 import PropertyPage from './features/tab/pages/PropertyPage';
@@ -38,27 +41,32 @@ root.render(
       <TelemetryProvider>
         <IntlProvider>
           <ThemeProvider>
-            <Routes>
-              <Route
-                path="/"
-                element={(
-                  <HomePage />
+            <ErrorBoundary fallbackRender={(props) => <Error500Page {...props} />}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={(
+                    <HomePage />
                 )} />
-              <Route
-                path="/tab/configure"
-                element={(
-                  <ConfigurePage />
+                <Route
+                  path="/tab/configure"
+                  element={(
+                    <ConfigurePage />
                 )} />
-              <Route
-                path="/tab/property"
-                element={(
-                  <TeamsProvider>
-                    <SnackbarProvider>
-                      <PropertyPage />
-                    </SnackbarProvider>
-                  </TeamsProvider>
+                <Route
+                  path="/tab/property"
+                  element={(
+                    <TeamsProvider>
+                      <SnackbarProvider>
+                        <PropertyPage />
+                      </SnackbarProvider>
+                    </TeamsProvider>
                 )} />
-            </Routes>
+                <Route
+                  element={<Error404Page />}
+                  path="*" />
+              </Routes>
+            </ErrorBoundary>
           </ThemeProvider>
         </IntlProvider>
       </TelemetryProvider>

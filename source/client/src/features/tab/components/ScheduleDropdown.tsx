@@ -13,6 +13,7 @@ import { EventHandler } from '../../../types/Event';
 import Presenter from './ScheduleDropdown.presenter';
 
 interface ScheduleDropdownProps {
+  disabled?: boolean,
   options?: Record<string, string>,
   value?: string,
   onBlur?: EventHandler,
@@ -22,6 +23,7 @@ interface ScheduleDropdownProps {
 function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButtonElement>) {
 
   const {
+    disabled,
     options,
     value,
     onBlur,
@@ -31,6 +33,7 @@ function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButto
   return (
     <Presenter
       ref={ref}
+      disabled={disabled}
       options={options}
       value={value}
       onBlur={onBlur}

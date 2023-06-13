@@ -15,10 +15,10 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Models
 {
 
-    public class ConversationSetPropertyResponse
+    public class SetConversationPropertyResponse
     {
 
-        public ConversationSetPropertyResponse()
+        public SetConversationPropertyResponse()
         {
         }
 

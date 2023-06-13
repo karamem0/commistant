@@ -14,7 +14,7 @@ import { useSnackbar } from '../../../common/providers/SnackbarProvider';
 import { SnackbarType } from '../../../common/types/Snackbar';
 import { mapper } from '../../../mappings/AutoMapperProfile';
 import { useTeams } from '../../../providers/TeamsProvider';
-import { getValue, setValue } from '../../../services/PropertyService';
+import { useGetValue, useSetValue } from '../../../services/PropertyService';
 import { Event } from '../../../types/Event';
 import { ConversationPropertyFormState } from '../../../types/Form';
 import messages from '../messages';
@@ -26,39 +26,49 @@ function PropertyPage() {
   const intl = useIntl();
   const { context } = useTeams();
   const { setSnackbar } = useSnackbar();
+  const getValue = useGetValue();
+  const setValue = useSetValue();
 
+  const [ disabled, setDisabled ] = React.useState<boolean>(true);
   const [ state, setState ] = React.useState<ConversationPropertyFormState>();
 
-  const handleSubmit = React.useCallback(async (_?: Event, data?: ConversationPropertyFormState) => {
-    if (!data) {
-      throw new Error();
-    }
-    try {
-      const conversationId = context?.chat?.id;
-      if (!conversationId) {
+  const handleSubmit = React.useCallback((_?: Event, data?: ConversationPropertyFormState) => {
+    (async () => {
+      if (!data) {
         throw new Error();
       }
-      await setValue(
-        conversationId,
-        mapper.map(
-          data,
-          'ConversationPropertyFormState',
-          'ConversationProperty'
+      try {
+        const conversationId = context?.chat?.id;
+        if (!conversationId) {
+          throw new Error();
+        }
+        const value = await setValue(
+          conversationId,
+          mapper.map(
+            data,
+            'ConversationPropertyFormState',
+            'ConversationProperty'
+          ));
+        setState(mapper.map(
+          value,
+          'ConversationProperty',
+          'ConversationPropertyFormState'
         ));
-      setState(data);
-      setSnackbar({
-        type: SnackbarType.success,
-        text: intl.formatMessage(messages.SaveSucceeded)
-      });
-    } catch (e) {
-      setSnackbar({
-        type: SnackbarType.error,
-        text: intl.formatMessage(messages.SaveFailed)
-      });
-    }
+        setSnackbar({
+          type: SnackbarType.success,
+          text: intl.formatMessage(messages.SaveSucceeded)
+        });
+      } catch (e) {
+        setSnackbar({
+          type: SnackbarType.error,
+          text: intl.formatMessage(messages.SaveFailed)
+        });
+      }
+    })();
   }, [
     context,
     intl,
+    setValue,
     setSnackbar
   ]);
 
@@ -68,18 +78,22 @@ function PropertyPage() {
       if (!conversationId) {
         throw new Error();
       }
+      const value = await getValue(conversationId);
+      setDisabled(!value.isOrganizer);
       setState(mapper.map(
-        await getValue(conversationId),
+        value,
         'ConversationProperty',
         'ConversationPropertyFormState'
       ));
     })();
   }, [
-    context
+    context,
+    getValue
   ]);
 
   return (
     <Presenter
+      disabled={disabled}
       value={state}
       onSubmit={handleSubmit} />
   );

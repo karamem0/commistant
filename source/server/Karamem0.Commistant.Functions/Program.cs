@@ -34,7 +34,8 @@ _ = builder.ConfigureServices((context, services) =>
     _ = services.AddLogging(builder => builder.AddApplicationInsights());
     _ = services.AddHttpClient();
     _ = services.AddBlobContainerClient(context.Configuration);
-    _ = services.AddCommands(context.Configuration);
+    _ = services.AddServiceClientCredentials(context.Configuration);
+    _ = services.AddCommands();
     _ = services.AddServices();
 });
 

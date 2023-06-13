@@ -6,26 +6,47 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+import React from 'react';
+
+import { useAsyncFn, useError } from 'react-use';
+
 import axios from 'axios';
 
 import { ConversationProperty } from '../types/Model';
 
-export function getValue(meetingId: string): Promise<ConversationProperty> {
+function getValue(meetingId: string): Promise<ConversationProperty> {
   return axios
-    .post<ConversationProperty>(
-      '/api/getproperty',
-      {
-        channelId: 'msteams',
-        meetingId
-      }
+    .get<ConversationProperty>(
+      `/api/property?&channelId=msteams&meetingId=${meetingId}`
     )
     .then((response) => response.data);
 }
 
-export function setValue(meetingId: string, value: ConversationProperty): Promise<ConversationProperty> {
+type GetValueFunction = typeof getValue;
+
+export const useGetValue = (): GetValueFunction => {
+
+  const dispatchError = useError();
+  const [ state, fetch ] = useAsyncFn(getValue);
+
+  React.useEffect(() => {
+    if (!state.error) {
+      return;
+    }
+    dispatchError(state.error);
+  }, [
+    dispatchError,
+    state
+  ]);
+
+  return fetch;
+
+};
+
+function setValue(meetingId: string, value: ConversationProperty): Promise<ConversationProperty> {
   return axios
-    .post<ConversationProperty>(
-      '/api/setproperty',
+    .put<ConversationProperty>(
+      '/api/property',
       {
         channelId: 'msteams',
         meetingId,
@@ -34,3 +55,24 @@ export function setValue(meetingId: string, value: ConversationProperty): Promis
     )
     .then((response) => response.data);
 }
+
+type SetValueFunction = typeof setValue;
+
+export const useSetValue = (): SetValueFunction => {
+
+  const dispatchError = useError();
+  const [ state, fetch ] = useAsyncFn(setValue);
+
+  React.useEffect(() => {
+    if (!state.error) {
+      return;
+    }
+    dispatchError(state.error);
+  }, [
+    dispatchError,
+    state
+  ]);
+
+  return fetch;
+
+};

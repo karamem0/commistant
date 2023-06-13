@@ -8,8 +8,10 @@
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,14 @@ namespace Karamem0.Commistant
         {
             var blobContainerUrl = configuration.GetValue<string>("AzureBlobStogageContainerUrl") ?? throw new InvalidOperationException();
             _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
+            return services;
+        }
+
+        public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
+        {
+            _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
+                configuration.GetValue<string>("MicrosoftAppId"),
+                configuration.GetValue<string>("MicrosoftAppPassword")));
             return services;
         }
 

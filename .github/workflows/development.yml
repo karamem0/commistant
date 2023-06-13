@@ -4,7 +4,7 @@ on:
       - develop
 
 env:
-  BUILD_VERSION: 2.0.0.${{github.run_number}}
+  BUILD_VERSION: 2.0.1.${{github.run_number}}
   BUILD_CONFIGURATION: Release
 
 jobs:
@@ -25,10 +25,13 @@ jobs:
       - name: Rewrite web/client/.env
         run: |
           $content = Get-Content -Path source/client/.env
-          $content = $content -replace "{{TELEMETRY_CONNECTION_STRING}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
+          $content = $content -replace "{{TelemetryConnectionString}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
           Out-File -FilePath source/client/.env -InputObject $content -Encoding UTF8
       - name: Restore web/client
         run: npm ci
+        working-directory: source/client
+      - name: Audit web/client
+        run: npm audit --omit=dev
         working-directory: source/client
       - name: Restore web/server
         run: dotnet restore
@@ -46,6 +49,11 @@ jobs:
         with:
           name: commistant-web
           path: source/server/Karamem0.Commistant.Web/build
+      - name: Rewrite web/server/bot/index.html
+        run: |
+          $content = Get-Content -Path source/server/Karamem0.Commistant.Bot/wwwroot/index.html
+          $content = $content -replace "{{AppDomain}}", "${{secrets.APP_DOMAIN}}"
+          Out-File -FilePath source/server/Karamem0.Commistant.Bot/wwwroot/index.html -InputObject $content -Encoding UTF8
       - name: Restore bot
         run: dotnet restore
         working-directory: source/server/Karamem0.Commistant.Bot

@@ -15,16 +15,18 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Models
 {
 
-    public class ConversationGetPropertyResponse
+    public class GetConversationPropertyResponse
     {
 
-        public ConversationGetPropertyResponse()
+        public GetConversationPropertyResponse()
         {
         }
 
         public string? ChannelId { get; set; }
 
         public string? MeetingId { get; set; }
+
+        public bool IsOrganizer { get; set; }
 
         public int StartMeetingSchedule { get; set; } = -1;
 

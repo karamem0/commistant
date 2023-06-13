@@ -8,13 +8,14 @@
 
 import React from 'react';
 
+import { useError } from 'react-use';
+
 import { app, authentication } from '@microsoft/teams-js';
 
 import axios from 'axios';
 
 interface TeamsContextProps {
-  context?: app.Context,
-  authToken?: string
+  context?: app.Context
 }
 
 const TeamsContext = React.createContext<TeamsContextProps | undefined>(undefined);
@@ -37,18 +38,26 @@ function TeamsProvider(props: TeamsProviderProps) {
 
   const [ value, setValue ] = React.useState<TeamsContextProps>({});
 
+  const dispatchError = useError();
+
   React.useEffect(() => {
     (async () => {
-      await app.initialize();
-      const context = await app.getContext();
-      const authToken = await authentication.getAuthToken();
-      setValue({ context, authToken });
-      axios.interceptors.request.use(async (request) => {
-        request.headers.Authorization = `Bearer ${authToken}`;
-        return request;
-      });
+      try {
+        await app.initialize();
+        await authentication.getAuthToken();
+        setValue({ context: await app.getContext() });
+        axios.interceptors.request.use(async (request) => {
+          const authToken = await authentication.getAuthToken();
+          request.headers.Authorization = `Bearer ${authToken}`;
+          return request;
+        });
+      } catch (e) {
+        dispatchError(e as Error);
+      }
     })();
-  }, []);
+  }, [
+    dispatchError
+  ]);
 
   return (
     <TeamsContext.Provider value={value}>

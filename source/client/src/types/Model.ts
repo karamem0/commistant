@@ -7,6 +7,7 @@
 //
 
 export interface ConversationProperty {
+  isOrganizer: boolean,
   startMeetingSchedule: number,
   startMeetingMessage?: string,
   startMeetingUrl?: string,

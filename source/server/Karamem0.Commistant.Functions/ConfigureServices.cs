@@ -34,11 +34,16 @@ namespace Karamem0.Commistant
             return services;
         }
 
-        public static IServiceCollection AddCommands(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
         {
             _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
                 configuration.GetValue<string>("MicrosoftAppId"),
                 configuration.GetValue<string>("MicrosoftAppPassword")));
+            return services;
+        }
+
+        public static IServiceCollection AddCommands(this IServiceCollection services)
+        {
             _ = services.AddSingleton<StartMeetingCommand>();
             _ = services.AddSingleton<EndMeetingCommand>();
             _ = services.AddSingleton<InMeetingCommand>();

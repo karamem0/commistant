@@ -23,12 +23,12 @@ namespace Karamem0.Commistant.Mappings
         public AutoMapperProfile()
         {
             // GetProperty
-            _ = this.CreateMap<ConversationGetPropertyRequest, ConversationGetPropertyResponse>();
-            _ = this.CreateMap<ConversationProperty, ConversationGetPropertyResponse>();
+            _ = this.CreateMap<GetConversationPropertyRequest, GetConversationPropertyResponse>();
+            _ = this.CreateMap<ConversationProperty, GetConversationPropertyResponse>();
             // SetProperty
-            _ = this.CreateMap<ConversationSetPropertyRequest, ConversationSetPropertyResponse>();
-            _ = this.CreateMap<ConversationSetPropertyRequest, ConversationProperty>();
-            _ = this.CreateMap<ConversationProperty, ConversationSetPropertyResponse>();
+            _ = this.CreateMap<SetConversationPropertyRequest, SetConversationPropertyResponse>();
+            _ = this.CreateMap<SetConversationPropertyRequest, ConversationProperty>();
+            _ = this.CreateMap<ConversationProperty, SetConversationPropertyResponse>();
         }
 
     }

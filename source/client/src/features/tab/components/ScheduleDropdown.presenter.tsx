@@ -13,6 +13,7 @@ import { Dropdown, Option } from '@fluentui/react-components';
 import { EventHandler } from '../../../types/Event';
 
 interface ScheduleDropdownProps {
+  disabled?: boolean,
   options?: Record<string, string>,
   value?: string,
   onBlur?: EventHandler,
@@ -22,6 +23,7 @@ interface ScheduleDropdownProps {
 function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButtonElement>) {
 
   const {
+    disabled,
     options,
     value,
     onBlur,
@@ -33,6 +35,7 @@ function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButto
       ref={ref}
       defaultSelectedOptions={value ? [ value ] : undefined}
       defaultValue={value && options ? options[value] : undefined}
+      disabled={disabled}
       onBlur={onBlur}
       onOptionSelect={(e, data) => onChange?.(e, data.optionValue)}>
       {

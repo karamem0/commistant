@@ -13,4 +13,4 @@ export type Event = globalThis.Event | React.SyntheticEvent | React.SyntheticEve
 export type EventHandler<T = never> = (
   event?: Event,
   data?: T
-) => void | Promise<void>;
+) => void;

@@ -23,7 +23,7 @@ const messages = defineMessages({
   SaveFailed: { defaultMessage: '設定を保存できませんでした。' },
   SaveSucceeded: { defaultMessage: '設定を保存しました。' },
   Schedule: { defaultMessage: 'スケジュール' },
-  StartMeeting: { defaultMessage: '会議開始前' },
+  StartMeeting: { defaultMessage: '会議開始後' },
   Url: { defaultMessage: 'URL' }
 });
 
