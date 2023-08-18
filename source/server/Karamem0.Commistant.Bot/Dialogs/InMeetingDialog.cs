@@ -10,6 +10,7 @@ using AdaptiveCards;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -32,11 +33,17 @@ namespace Karamem0.Commistant.Dialogs
 
         private readonly ConversationState conversationState;
 
+        private readonly QrCodeService qrCodeService;
+
         private readonly ILogger logger;
 
-        public InMeetingDialog(ConversationState conversationState, ILogger<InMeetingDialog> logger)
+        public InMeetingDialog(
+            ConversationState conversationState,
+            QrCodeService qrCodeService,
+            ILogger<InMeetingDialog> logger)
         {
             this.conversationState = conversationState;
+            this.qrCodeService = qrCodeService;
             this.logger = logger;
         }
 
@@ -209,6 +216,17 @@ namespace Karamem0.Commistant.Dialogs
                         }
                     }
                 };
+                if (property.InMeetingUrl is not null)
+                {
+                    var bytes = await this.qrCodeService.CreateAsync(property.InMeetingUrl);
+                    var base64 = Convert.ToBase64String(bytes);
+                    card.Body.Add(new AdaptiveImage()
+                    {
+                        AltText = property.InMeetingUrl,
+                        Size = AdaptiveImageSize.Stretch,
+                        Url = new Uri($"data:image/png;base64,{base64}")
+                    });
+                }
                 var activity = MessageFactory.Attachment(new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,

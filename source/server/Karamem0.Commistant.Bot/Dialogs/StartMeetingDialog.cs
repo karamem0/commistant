@@ -10,6 +10,7 @@ using AdaptiveCards;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -32,11 +33,16 @@ namespace Karamem0.Commistant.Dialogs
 
         private readonly ConversationState conversationState;
 
+        private readonly QrCodeService qrCodeService;
         private readonly ILogger logger;
 
-        public StartMeetingDialog(ConversationState conversationState, ILogger<StartMeetingDialog> logger)
+        public StartMeetingDialog(
+            ConversationState conversationState,
+            QrCodeService qrCodeService,
+            ILogger<StartMeetingDialog> logger)
         {
             this.conversationState = conversationState;
+            this.qrCodeService = qrCodeService;
             this.logger = logger;
         }
 
@@ -169,6 +175,13 @@ namespace Karamem0.Commistant.Dialogs
                     "設定を変更しました。",
                     cancellationToken: cancellationToken);
             }
+            if (value.Value<string>("Button") == "Cancel")
+            {
+                this.logger.SettingsCancelled(stepContext.Context.Activity);
+                _ = await stepContext.Context.SendActivityAsync(
+                    "キャンセルしました。設定は変更されていません。",
+                    cancellationToken: cancellationToken);
+            }
             if (stepContext.Context.Activity.ReplyToId is not null)
             {
                 var card = new AdaptiveCard("1.3")
@@ -205,6 +218,17 @@ namespace Karamem0.Commistant.Dialogs
                         }
                     }
                 };
+                if (property.StartMeetingUrl is not null)
+                {
+                    var bytes = await this.qrCodeService.CreateAsync(property.StartMeetingUrl);
+                    var base64 = Convert.ToBase64String(bytes);
+                    card.Body.Add(new AdaptiveImage()
+                    {
+                        AltText = property.StartMeetingUrl,
+                        Size = AdaptiveImageSize.Stretch,
+                        Url = new Uri($"data:image/png;base64,{base64}")
+                    });
+                }
                 var activity = MessageFactory.Attachment(new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,

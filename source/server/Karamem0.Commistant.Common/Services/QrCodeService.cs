@@ -6,6 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,19 +20,18 @@ namespace Karamem0.Commistant.Services
     public class QrCodeService
     {
 
-        private readonly HttpClient httpClient;
+        private readonly QRCodeGenerator qrCodeGenerator;
 
-        public QrCodeService(IHttpClientFactory httpClientFactory)
+        public QrCodeService()
         {
-            this.httpClient = httpClientFactory.CreateClient();
+            this.qrCodeGenerator = new QRCodeGenerator();
         }
 
-        public async Task<byte[]> CreateAsync(string text)
+        public Task<byte[]> CreateAsync(string text)
         {
-            var requestUrl = $"https://chart.apis.google.com/chart?chs=160x160&cht=qr&chl={Uri.EscapeDataString(text)}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-            var responseMessage = await this.httpClient.SendAsync(requestMessage);
-            return await responseMessage.Content.ReadAsByteArrayAsync();
+            return Task.FromResult(
+                new PngByteQRCode(this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q))
+                    .GetGraphic(10));
         }
 
     }

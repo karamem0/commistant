@@ -11,6 +11,7 @@ using Azure.Storage;
 using Karamem0.Commistant.Adapters;
 using Karamem0.Commistant.Bots;
 using Karamem0.Commistant.Dialogs;
+using Karamem0.Commistant.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.Dialogs;
@@ -57,6 +58,12 @@ namespace Karamem0.Commistant
                 .Add(provider.GetService<EndMeetingDialog>())
                 .Add(provider.GetService<InMeetingDialog>())
                 .Add(provider.GetService<ResetDialog>()));
+            return services;
+        }
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            _ = services.AddTransient<QrCodeService>();
             return services;
         }
 

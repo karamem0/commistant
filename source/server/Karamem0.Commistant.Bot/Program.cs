@@ -11,7 +11,6 @@
 using Karamem0.Commistant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -31,6 +30,7 @@ _ = services
 _ = services.AddApplicationInsightsTelemetry();
 _ = services.AddBots(configuration);
 _ = services.AddDialogs();
+_ = services.AddServices();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.20.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.20.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.5" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
 
 </Project>

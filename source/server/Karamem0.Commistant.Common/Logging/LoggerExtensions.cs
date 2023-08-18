@@ -6,6 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Models;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using System;
@@ -117,93 +118,99 @@ namespace Karamem0.Commistant.Logging
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> startMeetingMessageSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> startMeetingMessageNotifying =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1007),
-                "会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}");
+                "会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void StartMeetingMessageSending(this ILogger logger, ConversationReference reference, string? message)
+        public static void StartMeetingMessageNotifying(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            startMeetingMessageSending.Invoke(
+            startMeetingMessageNotifying.Invoke(
                 logger,
                 reference.Conversation.Id,
-                message,
+                property.StartMeetingMessage,
+                property.StartMeetingUrl,
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> startMeetingUrlSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> startMeetingMessageNotified =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1008),
-                "会議開始 URL を送信します。ConversationId: {ConversationId}, Url: {Url}");
+                "会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void StartMeetingUrlSending(this ILogger logger, ConversationReference reference, string? url)
+        public static void StartMeetingMessageNotified(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            startMeetingUrlSending.Invoke(
+            startMeetingMessageNotified.Invoke(
                 logger,
                 reference.Conversation.Id,
-                url,
+                property.StartMeetingMessage,
+                property.StartMeetingUrl,
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> endMeetingMessageSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> endMeetingMessageNotifying =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1009),
-                "会議終了メッセージを送信します。ConversationId: {ConversationId}, Message:  {Message}");
+                "会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void EndMeetingMessageSending(this ILogger logger, ConversationReference reference, string? message)
+        public static void EndMeetingMessageNotifying(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            endMeetingMessageSending.Invoke(
+            endMeetingMessageNotifying.Invoke(
                 logger,
                 reference.Conversation.Id,
-                message,
+                property.EndMeetingMessage,
+                property.EndMeetingUrl,
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> endMeetingUrlSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> endMeetingMessageNotified =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1010),
-                "会議終了 URL を送信します。ConversationId: {ConversationId}, Url: {Url}");
+                "会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void EndMeetingUrlSending(this ILogger logger, ConversationReference reference, string? url)
+        public static void EndMeetingMessageNotified(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            endMeetingUrlSending.Invoke(
+            endMeetingMessageNotified.Invoke(
                 logger,
                 reference.Conversation.Id,
-                url,
+                property.EndMeetingMessage,
+                property.EndMeetingUrl,
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> inMeetingMessageSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> inMeetingMessageNotifying =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1011),
-                "会議中メッセージを送信します。ConversationId: {ConversationId}, Message:  {Message}");
+                "会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void InMeetingMessageSending(this ILogger logger, ConversationReference reference, string? message)
+        public static void InMeetingMessageNotifying(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            inMeetingMessageSending.Invoke(
+            inMeetingMessageNotifying.Invoke(
                 logger,
                 reference.Conversation.Id,
-                message,
+                property.InMeetingMessage,
+                property.InMeetingUrl,
                 null);
         }
 
-        private static readonly Action<ILogger, string, string?, Exception?> inMeetingUrlSending =
-            LoggerMessage.Define<string, string?>(
+        private static readonly Action<ILogger, string, string?, string?, Exception?> inMeetingMessageNotified =
+            LoggerMessage.Define<string, string?, string?>(
                 LogLevel.Information,
                 new EventId(1012),
-                "会議中 URL を送信します。ConversationId: {ConversationId}, Url: {Url}");
+                "会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}");
 
-        public static void InMeetingUrlSending(this ILogger logger, ConversationReference reference, string? url)
+        public static void InMeetingMessageNotified(this ILogger logger, ConversationReference reference, ConversationProperty property)
         {
-            inMeetingUrlSending.Invoke(
+            inMeetingMessageNotified.Invoke(
                 logger,
                 reference.Conversation.Id,
-                url,
+                property.InMeetingMessage,
+                property.InMeetingUrl,
                 null);
         }
 
@@ -258,6 +265,20 @@ namespace Karamem0.Commistant.Logging
         public static void SettingsReseted(this ILogger logger, IActivity activity)
         {
             settingsReseted.Invoke(
+                logger,
+                activity.Conversation.Id,
+                null);
+        }
+
+        private static readonly Action<ILogger, string, Exception?> settingsCancelled =
+            LoggerMessage.Define<string>(
+                LogLevel.Information,
+                new EventId(1017),
+                "キャンセルしました。設定は変更されていません。ConversationId: {ConversationId}");
+
+        public static void SettingsCancelled(this ILogger logger, IActivity activity)
+        {
+            settingsCancelled.Invoke(
                 logger,
                 activity.Conversation.Id,
                 null);

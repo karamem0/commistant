@@ -6,14 +6,18 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using AdaptiveCards;
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,43 +73,47 @@ namespace Karamem0.Commistant.Commands
             {
                 return;
             }
-            var client = new ConnectorClient(new Uri(reference.ServiceUrl), this.credentials);
-            if (string.IsNullOrEmpty(property.EndMeetingMessage) is not true)
+            try
             {
-                this.logger.EndMeetingMessageSending(reference, property.EndMeetingMessage);
-                var activity = Activity.CreateMessageActivity();
+                this.logger.EndMeetingMessageNotifying(reference, property);
+                var card = new AdaptiveCard("1.3");
+                var client = new ConnectorClient(new Uri(reference.ServiceUrl), this.credentials);
+                if (string.IsNullOrEmpty(property.EndMeetingMessage) is not true)
+                {
+                    card.Body.Add(new AdaptiveTextBlock()
+                    {
+                        Text = property.EndMeetingMessage,
+                        Wrap = true
+                    });
+                }
+                if (string.IsNullOrEmpty(property.EndMeetingUrl) is not true)
+                {
+                    var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl);
+                    var base64 = WebEncoders.Base64UrlEncode(bytes);
+                    card.Body.Add(new AdaptiveImage()
+                    {
+                        AltText = property.InMeetingUrl,
+                        Size = AdaptiveImageSize.Stretch,
+                        Url = new Uri($"data:image/png;base64,{base64}")
+                    });
+                }
+                var activity = MessageFactory.Attachment(new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = JsonConvert.DeserializeObject(card.ToJson())
+                });
                 activity.From = reference.Bot;
                 activity.Recipient = reference.User;
                 activity.Conversation = reference.Conversation;
-                activity.Text = property.EndMeetingMessage;
                 _ = await client.Conversations.SendToConversationAsync(
                     (Activity)activity,
                     cancellationToken: cancellationToken);
             }
-            if (string.IsNullOrEmpty(property.EndMeetingUrl) is not true)
+            finally
             {
-                this.logger.EndMeetingUrlSending(reference, property.EndMeetingUrl);
-                var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl);
-                var base64 = Convert.ToBase64String(bytes);
-                var activity = Activity.CreateMessageActivity();
-                activity.From = reference.Bot;
-                activity.Recipient = reference.User;
-                activity.Conversation = reference.Conversation;
-                activity.Text = property.EndMeetingUrl;
-                activity.Attachments = new List<Attachment>()
-                    {
-                        new Attachment()
-                        {
-                            ContentType = "image/png",
-                            ContentUrl = $"data:image/png;base64,{base64}"
-                        }
-                    };
-                _ = await client.Conversations.SendToConversationAsync(
-                    (Activity)activity,
-                    cancellationToken: cancellationToken);
+                this.logger.EndMeetingMessageNotified(reference, property);
             }
             property.EndMeetingSended = true;
-            // await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
     }
