@@ -17,7 +17,6 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +36,8 @@ namespace Karamem0.Commistant.Functions
         public ExecuteCommandFunction(
             ILoggerFactory loggerFactory,
             BlobContainerClient botStateClient,
-            CommandSet commandSet)
+            CommandSet commandSet
+        )
         {
             this.logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
             this.botStateClient = botStateClient;

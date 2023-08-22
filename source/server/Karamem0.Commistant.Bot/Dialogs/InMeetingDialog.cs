@@ -55,7 +55,8 @@ namespace Karamem0.Commistant.Dialogs
                 {
                     this.BeforeConfirmAsync,
                     this.AfterConrifmAsync
-                }));
+                }
+            ));
             _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
             await base.OnInitializeAsync(dc);
         }
@@ -159,7 +160,8 @@ namespace Karamem0.Commistant.Dialogs
                 {
                     Prompt = (Activity)activity
                 },
-                cancellationToken);
+                cancellationToken
+            );
         }
 
         private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -179,7 +181,8 @@ namespace Karamem0.Commistant.Dialogs
                 this.logger.SettingsUpdated(stepContext.Context.Activity);
                 _ = await stepContext.Context.SendActivityAsync(
                     "設定を変更しました。",
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
             }
             if (stepContext.Context.Activity.ReplyToId is not null)
             {
@@ -235,7 +238,8 @@ namespace Karamem0.Commistant.Dialogs
                 activity.Id = stepContext.Context.Activity.ReplyToId;
                 _ = await stepContext.Context.UpdateActivityAsync(
                     activity,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
             }
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }

@@ -42,6 +42,14 @@ namespace Karamem0.Commistant
             return services;
         }
 
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            _ = services.AddTransient<IDateTimeService, DateTimeService>();
+            _ = services.AddTransient<IConnectorClientService, ConnectorClientService>();
+            _ = services.AddTransient<IQrCodeService, QrCodeService>();
+            return services;
+        }
+
         public static IServiceCollection AddCommands(this IServiceCollection services)
         {
             _ = services.AddSingleton<StartMeetingCommand>();
@@ -51,12 +59,6 @@ namespace Karamem0.Commistant
                 .Add(provider.GetService<StartMeetingCommand>())
                 .Add(provider.GetService<EndMeetingCommand>())
                 .Add(provider.GetService<InMeetingCommand>()));
-            return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            _ = services.AddTransient<QrCodeService>();
             return services;
         }
 

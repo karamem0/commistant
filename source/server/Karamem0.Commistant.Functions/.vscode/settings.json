@@ -1,7 +1,0 @@
-{
-    "azurite.location": ".azurite",
-    "azureFunctions.deploySubpath": "bin/Release/net7.0/publish",
-    "azureFunctions.preDeployTask": "publish function",
-    "azureFunctions.projectLanguage": "C#",
-    "azureFunctions.projectRuntime": "~4"
-}

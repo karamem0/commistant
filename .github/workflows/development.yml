@@ -4,7 +4,7 @@ on:
       - develop
 
 env:
-  BUILD_VERSION: 2.1.0.${{github.run_number}}
+  BUILD_VERSION: 2.1.1.${{github.run_number}}
   BUILD_CONFIGURATION: Release
 
 jobs:
@@ -70,6 +70,9 @@ jobs:
         with:
           name: commistant-bot
           path: source/server/Karamem0.Commistant.Bot/build
+      - name: Test func
+        run: dotnet test --filter TestCategory=Karamem0.Commistant.Functions
+        working-directory: source/server
       - name: Build func
         run: |
           dotnet publish `

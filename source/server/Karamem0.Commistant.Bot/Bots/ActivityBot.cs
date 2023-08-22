@@ -64,7 +64,8 @@ namespace Karamem0.Commistant.Bots
                         "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。" +
                         "会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。" +
                         "通知にはテキストおよび QR コードつきの URL を添付することができます。",
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken
+                    );
                 }
             }
             await base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
@@ -118,14 +119,16 @@ namespace Karamem0.Commistant.Bots
                         {
                             _ = await turnContext.SendActivityAsync(
                                 "認識できないコマンドです。",
-                                cancellationToken: cancellationToken);
+                                cancellationToken: cancellationToken
+                            );
                         }
                     }
                     else
                     {
                         _ = await turnContext.SendActivityAsync(
                             "新しいコマンドを開始する前に中断されたコマンドを完了させてください。",
-                            cancellationToken: cancellationToken);
+                            cancellationToken: cancellationToken
+                        );
                     }
                 }
             }
@@ -133,7 +136,8 @@ namespace Karamem0.Commistant.Bots
             {
                 _ = await turnContext.SendActivityAsync(
                     "開催者のみがコマンドを実行できます。",
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
             }
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }

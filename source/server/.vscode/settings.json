@@ -1,0 +1,8 @@
+{
+  "azurite.location": ".azurite",
+  "azureFunctions.preDeployTask": "publish function",
+  "azureFunctions.projectLanguage": "C#",
+  "azureFunctions.projectRuntime": "~4",
+  "dotnetCoreExplorer.searchpatterns": "**/bin/**/*.Tests.dll",
+  "testExplorer.useNativeTesting": true
+}

@@ -46,7 +46,8 @@ namespace Karamem0.Commistant.Controllers
             ILoggerFactory loggerFactory,
             IMapper mapper,
             BlobContainerClient botStateClient,
-            ServiceClientCredentials botCredentials)
+            ServiceClientCredentials botCredentials
+        )
         {
             this.logger = loggerFactory.CreateLogger<PropertyController>();
             this.mapper = mapper;

@@ -47,7 +47,8 @@ namespace Karamem0.Commistant.Extensions
                     {
                         IfMatch = value.ETag
                     }
-                });
+                }
+            );
         }
 
     }

@@ -13,10 +13,8 @@ using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Microsoft.Rest;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,15 +29,23 @@ namespace Karamem0.Commistant.Commands
     public class InMeetingCommand : Command
     {
 
-        private readonly QrCodeService qrCodeService;
+        private readonly IDateTimeService dateTimeService;
+
+        private readonly IConnectorClientService connectorClientService;
+
+        private readonly IQrCodeService qrCodeService;
 
         private readonly ILogger logger;
 
         public InMeetingCommand(
-            ServiceClientCredentials credentials,
-            QrCodeService qrCodeService,
-            ILogger<InMeetingCommand> logger) : base(credentials)
+            IDateTimeService dateTimeService,
+            IConnectorClientService connectorClientService,
+            IQrCodeService qrCodeService,
+            ILogger<InMeetingCommand> logger
+        ) : base()
         {
+            this.dateTimeService = dateTimeService;
+            this.connectorClientService = connectorClientService;
             this.qrCodeService = qrCodeService;
             this.logger = logger;
         }
@@ -47,9 +53,13 @@ namespace Karamem0.Commistant.Commands
         public override async Task ExecuteAsync(
             ConversationProperty property,
             ConversationReference reference,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
+            if (property.InMeeting is not true)
+            {
+                return;
+            }
             if (property.InMeetingSchedule <= 0)
             {
                 return;
@@ -59,7 +69,7 @@ namespace Karamem0.Commistant.Commands
             {
                 return;
             }
-            var currentTime = DateTime.UtcNow;
+            var currentTime = this.dateTimeService.GetCurrentDateTime();
             var timeSpan = currentTime - (DateTime)startTime;
             if (timeSpan.TotalMinutes < 0)
             {
@@ -72,7 +82,6 @@ namespace Karamem0.Commistant.Commands
             try
             {
                 this.logger.InMeetingMessageNotifying(reference, property);
-                var client = new ConnectorClient(new Uri(reference.ServiceUrl), this.credentials);
                 var card = new AdaptiveCard("1.3");
                 if (string.IsNullOrEmpty(property.InMeetingMessage) is not true)
                 {
@@ -101,9 +110,11 @@ namespace Karamem0.Commistant.Commands
                 activity.From = reference.Bot;
                 activity.Recipient = reference.User;
                 activity.Conversation = reference.Conversation;
-                _ = await client.Conversations.SendToConversationAsync(
+                _ = await this.connectorClientService.SendActivityAsync(
+                    new Uri(reference.ServiceUrl),
                     (Activity)activity,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
             }
             finally
             {

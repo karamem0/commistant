@@ -17,7 +17,14 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Services
 {
 
-    public class QrCodeService
+    public interface IQrCodeService
+    {
+
+        Task<byte[]> CreateAsync(string text);
+
+    }
+
+    public class QrCodeService : IQrCodeService
     {
 
         private readonly QRCodeGenerator qrCodeGenerator;
@@ -29,9 +36,9 @@ namespace Karamem0.Commistant.Services
 
         public Task<byte[]> CreateAsync(string text)
         {
-            return Task.FromResult(
-                new PngByteQRCode(this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q))
-                    .GetGraphic(10));
+            var qrCodeData = this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+            var qrCodePngByte = new PngByteQRCode(qrCodeData);
+            return Task.FromResult(qrCodePngByte.GetGraphic(10));
         }
 
     }
