@@ -9,6 +9,8 @@
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Serialization;
+using Karamem0.Commistant.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Teams;
@@ -32,15 +34,20 @@ namespace Karamem0.Commistant.Bots
 
         private readonly DialogSet dialogSet;
 
+        private readonly OpenAIService openAIService;
+
         private readonly ILogger logger;
 
         public ActivityBot(
             ConversationState conversationState,
             DialogSet dialogSet,
-            ILogger<ActivityBot> logger)
+            OpenAIService openAIService,
+            ILogger<ActivityBot> logger
+        )
         {
             this.conversationState = conversationState;
             this.dialogSet = dialogSet;
+            this.openAIService = openAIService;
             this.logger = logger;
         }
 
@@ -88,17 +95,15 @@ namespace Karamem0.Commistant.Bots
             var participant = await TeamsInfo.GetMeetingParticipantAsync(
                 turnContext,
                 participantId: turnContext.Activity.Recipient.AadObjectId,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken
+            );
             if (participant.Meeting.Role == "Organizer")
             {
                 var dc = await this.dialogSet.CreateContextAsync(turnContext, cancellationToken);
                 var command = turnContext.Activity.RemoveRecipientMention();
                 if (command is null)
                 {
-                    if (dc.ActiveDialog is null)
-                    {
-                    }
-                    else
+                    if (dc.ActiveDialog is not null)
                     {
                         _ = await dc.ContinueDialogAsync(cancellationToken);
                     }
@@ -113,7 +118,27 @@ namespace Karamem0.Commistant.Bots
                             "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), cancellationToken: cancellationToken),
                             "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), cancellationToken: cancellationToken),
                             "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
-                            _ => null,
+                            _ => await new Func<Task<DialogTurnResult?>>(async () =>
+                            {
+                                var message = await this.openAIService.ChatCompletionAsync(command, cancellationToken: cancellationToken);
+                                if (message?.FunctionCall is null)
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(message.FunctionCall.Arguments);
+                                    var result = content?.Type switch
+                                    {
+                                        "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), content, cancellationToken: cancellationToken),
+                                        "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), content, cancellationToken: cancellationToken),
+                                        "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), content, cancellationToken: cancellationToken),
+                                        "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+                                        _ => null,
+                                    };
+                                    return result;
+                                }
+                            })()
                         };
                         if (result is null)
                         {
@@ -142,7 +167,11 @@ namespace Karamem0.Commistant.Bots
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
-        protected override async Task OnTeamsMeetingStartAsync(MeetingStartEventDetails meeting, ITurnContext<IEventActivity> turnContext, CancellationToken cancellationToken)
+        protected override async Task OnTeamsMeetingStartAsync(
+            MeetingStartEventDetails meeting,
+            ITurnContext<IEventActivity> turnContext,
+            CancellationToken cancellationToken
+        )
         {
             this.logger.MeetingStarted(turnContext.Activity, meeting.Id);
             var propertyAccessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
@@ -157,7 +186,11 @@ namespace Karamem0.Commistant.Bots
             await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
 
-        protected override async Task OnTeamsMeetingEndAsync(MeetingEndEventDetails meeting, ITurnContext<IEventActivity> turnContext, CancellationToken cancellationToken)
+        protected override async Task OnTeamsMeetingEndAsync(
+            MeetingEndEventDetails meeting,
+            ITurnContext<IEventActivity> turnContext,
+            CancellationToken cancellationToken
+        )
         {
             this.logger.MeetingEnded(turnContext.Activity, meeting.Id);
             var propertyAccessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));

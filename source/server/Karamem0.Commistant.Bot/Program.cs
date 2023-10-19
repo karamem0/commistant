@@ -9,6 +9,7 @@
 #pragma warning disable CA1852
 
 using Karamem0.Commistant;
+using Karamem0.Commistant.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +28,11 @@ _ = services.AddHttpClient();
 _ = services
     .AddControllers()
     .AddNewtonsoftJson();
+_ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
 _ = services.AddApplicationInsightsTelemetry();
 _ = services.AddBots(configuration);
 _ = services.AddDialogs();
-_ = services.AddServices();
+_ = services.AddServices(configuration);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

@@ -7,6 +7,7 @@
 //
 
 using AdaptiveCards;
+using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
@@ -35,15 +36,20 @@ namespace Karamem0.Commistant.Dialogs
 
         private readonly QrCodeService qrCodeService;
 
+        private readonly IMapper mapper;
+
         private readonly ILogger logger;
 
         public EndMeetingDialog(
             ConversationState conversationState,
             QrCodeService qrCodeService,
-            ILogger<EndMeetingDialog> logger)
+            IMapper mapper,
+            ILogger<EndMeetingDialog> logger
+        )
         {
             this.conversationState = conversationState;
             this.qrCodeService = qrCodeService;
+            this.mapper = mapper;
             this.logger = logger;
         }
 
@@ -65,6 +71,8 @@ namespace Karamem0.Commistant.Dialogs
         {
             var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
             var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
+            var options = (ConversationPropertyArguments?)stepContext.Options;
+            var value = this.mapper.Map(options, property.Clone());
             var card = new AdaptiveCard("1.3")
             {
                 Body = new List<AdaptiveElement>()
@@ -76,33 +84,33 @@ namespace Karamem0.Commistant.Dialogs
                         Placeholder = "通知を表示する時間",
                         Choices = new List<AdaptiveChoice>()
                         {
-                            new AdaptiveChoice()
+                            new ()
                             {
                                 Title = "なし",
                                 Value = "-1"
                             },
-                            new AdaptiveChoice()
+                            new ()
                             {
                                 Title = "予定時刻",
                                 Value = "0"
                             },
-                            new AdaptiveChoice()
+                            new ()
                             {
                                 Title = "5 分前",
                                 Value = "5"
                             },
-                            new AdaptiveChoice()
+                            new ()
                             {
                                 Title = "10 分前",
                                 Value = "10"
                             },
-                            new AdaptiveChoice()
+                            new ()
                             {
                                 Title = "15 分前",
                                 Value = "15"
                             },
                         },
-                        Value = property.EndMeetingSchedule.ToString()
+                        Value = value.EndMeetingSchedule.ToString()
                     },
                     new AdaptiveTextInput()
                     {
@@ -110,7 +118,7 @@ namespace Karamem0.Commistant.Dialogs
                         Label = "メッセージ",
                         Placeholder = "会議後に表示されるメッセージ",
                         Style = AdaptiveTextInputStyle.Text,
-                        Value = property.EndMeetingMessage
+                        Value = value.EndMeetingMessage
                     },
                     new AdaptiveTextInput()
                     {
@@ -118,7 +126,7 @@ namespace Karamem0.Commistant.Dialogs
                         Label = "URL",
                         Placeholder = "会議後に表示されるリンクの URL",
                         Style = AdaptiveTextInputStyle.Url,
-                        Value = property.EndMeetingUrl
+                        Value = value.EndMeetingUrl
                     }
                 },
                 Actions = new List<AdaptiveAction>()
@@ -197,7 +205,7 @@ namespace Karamem0.Commistant.Dialogs
                         {
                             Facts = new List<AdaptiveFact>()
                             {
-                                new AdaptiveFact()
+                                new ()
                                 {
                                     Title = "スケジュール",
                                     Value = new Func<string>(() =>
@@ -209,12 +217,12 @@ namespace Karamem0.Commistant.Dialogs
                                         }
                                     )()
                                 },
-                                new AdaptiveFact()
+                                new ()
                                 {
                                     Title = "メッセージ",
                                     Value = $"{property.EndMeetingMessage}"
                                 },
-                                new AdaptiveFact()
+                                new ()
                                 {
                                     Title = "URL",
                                     Value = $"{property.EndMeetingUrl}"
@@ -225,7 +233,7 @@ namespace Karamem0.Commistant.Dialogs
                 };
                 if (property.EndMeetingUrl is not null)
                 {
-                    var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl);
+                    var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl, cancellationToken);
                     var base64 = Convert.ToBase64String(bytes);
                     card.Body.Add(new AdaptiveImage()
                     {

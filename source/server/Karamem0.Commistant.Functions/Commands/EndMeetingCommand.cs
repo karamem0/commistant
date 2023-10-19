@@ -97,7 +97,7 @@ namespace Karamem0.Commistant.Commands
                 }
                 if (string.IsNullOrEmpty(property.EndMeetingUrl) is not true)
                 {
-                    var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl);
+                    var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl, cancellationToken);
                     var base64 = WebEncoders.Base64UrlEncode(bytes);
                     card.Body.Add(new AdaptiveImage()
                     {

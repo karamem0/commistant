@@ -6,6 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Azure.AI.OpenAI;
 using Azure.Identity;
 using Azure.Storage;
 using Karamem0.Commistant.Adapters;
@@ -19,6 +20,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +41,8 @@ namespace Karamem0.Commistant
             _ = services.AddSingleton<IStorage>(new BlobsStorage(
                 new Uri(blobContainerUrl),
                 new DefaultAzureCredential(),
-                new StorageTransferOptions()));
+                new StorageTransferOptions()
+            ));
             _ = services.AddSingleton<ConversationState>();
             _ = services.AddScoped<IBot, ActivityBot>();
             return services;
@@ -61,9 +64,16 @@ namespace Karamem0.Commistant
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            _ = services.AddTransient<QrCodeService>();
+            var openAIEndpointUrl = configuration.GetValue<string>("AzureOpenAIEndpointUrl") ?? throw new InvalidOperationException();
+            _ = services.AddScoped(provider => new OpenAIClient(
+                new Uri(openAIEndpointUrl),
+                new DefaultAzureCredential()
+            ));
+            _ = services.AddScoped<OpenAIService>();
+            _ = services.AddScoped<QRCodeGenerator>();
+            _ = services.AddScoped<QrCodeService>();
             return services;
         }
 

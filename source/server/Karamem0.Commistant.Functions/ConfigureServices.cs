@@ -15,6 +15,7 @@ using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Rest;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,10 @@ namespace Karamem0.Commistant
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            _ = services.AddTransient<IDateTimeService, DateTimeService>();
-            _ = services.AddTransient<IConnectorClientService, ConnectorClientService>();
-            _ = services.AddTransient<IQrCodeService, QrCodeService>();
+            _ = services.AddScoped<IDateTimeService, DateTimeService>();
+            _ = services.AddScoped<IConnectorClientService, ConnectorClientService>();
+            _ = services.AddScoped<QRCodeGenerator>();
+            _ = services.AddScoped<IQrCodeService, QrCodeService>();
             return services;
         }
 
