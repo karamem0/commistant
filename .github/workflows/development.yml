@@ -4,7 +4,7 @@ on:
       - develop
 
 env:
-  BUILD_VERSION: 3.0.0.${{github.run_number}}
+  BUILD_VERSION: 3.0.1.${{github.run_number}}
   BUILD_CONFIGURATION: Release
 
 jobs:
@@ -25,7 +25,8 @@ jobs:
       - name: Rewrite web/client/.env
         run: |
           $content = Get-Content -Path source/client/.env
-          $content = $content -replace "{{TelemetryConnectionString}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
+          $content = $content -replace "{{PUBLIC_URL}}", "${{secrets.PUBLIC_URL}}"
+          $content = $content -replace "{{TELEMETRY_CONNECTION_STRING}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
           Out-File -FilePath source/client/.env -InputObject $content -Encoding UTF8
       - name: Restore web/client
         run: npm ci
