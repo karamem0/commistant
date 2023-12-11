@@ -30,9 +30,12 @@ namespace Karamem0.Commistant.Services
 
         private readonly OpenAIClient openAIClient;
 
-        public OpenAIService(OpenAIClient openAIClient)
+        private readonly string openAIModelName;
+
+        public OpenAIService(OpenAIClient openAIClient, string openAIModelName)
         {
             this.openAIClient = openAIClient;
+            this.openAIModelName = openAIModelName;
         }
 
         public async Task<ChatMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
@@ -66,7 +69,7 @@ namespace Karamem0.Commistant.Services
             chatCompletionsOptions.Temperature = 0.3f;
             chatCompletionsOptions.Messages.Add(new ChatMessage(ChatRole.User, text));
             var chatCompletions = await this.openAIClient.GetChatCompletionsAsync(
-                "gpt-35-turbo-0613",
+                this.openAIModelName,
                 chatCompletionsOptions,
                 cancellationToken
             );

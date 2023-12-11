@@ -34,7 +34,7 @@ namespace Karamem0.Commistant
 
         public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
         {
-            var blobContainerUrl = configuration.GetValue<string>("AzureBlobStogageContainerUrl") ?? throw new InvalidOperationException();
+            var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
             _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
             _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
             // _ = services.AddSingleton<IStorage>(new MemoryStorage());
@@ -67,11 +67,15 @@ namespace Karamem0.Commistant
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var openAIEndpointUrl = configuration.GetValue<string>("AzureOpenAIEndpointUrl") ?? throw new InvalidOperationException();
+            var openAIModelName = configuration.GetValue<string>("AzureOpenAIModelName") ?? throw new InvalidOperationException();
             _ = services.AddScoped(provider => new OpenAIClient(
                 new Uri(openAIEndpointUrl),
                 new DefaultAzureCredential()
             ));
-            _ = services.AddScoped<OpenAIService>();
+            _ = services.AddScoped(provider => new OpenAIService(
+                provider.GetService<OpenAIClient>() ?? throw new InvalidOperationException(),
+                openAIModelName
+            ));
             _ = services.AddScoped<QRCodeGenerator>();
             _ = services.AddScoped<QrCodeService>();
             return services;

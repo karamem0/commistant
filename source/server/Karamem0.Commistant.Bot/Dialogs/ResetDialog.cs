@@ -8,6 +8,7 @@
 
 using AdaptiveCards;
 using Karamem0.Commistant.Logging;
+using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -114,7 +115,8 @@ namespace Karamem0.Commistant.Dialogs
             if (value.Value<string>("Button") == "Yes")
             {
                 this.logger.SettingsReseted(stepContext.Context.Activity);
-                await this.conversationState.ClearStateAsync(stepContext.Context, cancellationToken);
+                var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+                await accessor.SetAsync(stepContext.Context, new(), cancellationToken);
                 _ = await stepContext.Context.SendActivityAsync(
                     "設定を初期化しました。",
                     cancellationToken: cancellationToken
@@ -133,12 +135,23 @@ namespace Karamem0.Commistant.Dialogs
                 {
                     Body = new List<AdaptiveElement>()
                     {
-                        new AdaptiveTextBlock()
+                        new AdaptiveFactSet()
                         {
-                            Id = "Message",
-                            Text = "すべての設定を初期化します。よろしいですか？: "
-                                 + value.Value<string>("Button") == "Yes" ? "はい" : "いいえ",
-                            Wrap = true
+                            Facts = new List<AdaptiveFact>()
+                            {
+                                new ()
+                                {
+                                    Title = "応答",
+                                    Value = new Func<string>(() =>
+                                        value.Value<string>("Button") switch
+                                        {
+                                            "Yes" => "はい",
+                                            "No" => "いいえ",
+                                            _ => ""
+                                        }
+                                    )()
+                                }
+                            }
                         }
                     }
                 };

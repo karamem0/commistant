@@ -32,7 +32,7 @@ interface TeamsProviderProps {
   children?: React.ReactNode
 }
 
-function TeamsProvider(props: TeamsProviderProps) {
+function TeamsProvider(props: Readonly<TeamsProviderProps>) {
 
   const { children } = props;
 

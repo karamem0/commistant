@@ -30,7 +30,7 @@ namespace Karamem0.Commistant
 
         public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
         {
-            var blobContainerUrl = configuration.GetValue<string>("AzureBlobStogageContainerUrl") ?? throw new InvalidOperationException();
+            var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
             _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
             return services;
         }

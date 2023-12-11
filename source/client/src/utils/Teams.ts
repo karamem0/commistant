@@ -8,7 +8,7 @@
 
 export function inTeams(): boolean {
   if (window.parent === window.self &&
-      Object.prototype.hasOwnProperty.call(window, 'nativeInterface')) {
+      Object.hasOwn(window, 'nativeInterface')) {
     return true;
   }
   if (window.navigator.userAgent.includes('Teams/')) {
