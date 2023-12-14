@@ -6,11 +6,11 @@ on:
       - v*.*.*
 
 env:
-  BUILD_VERSION: 3.0.2.${{github.run_number}}
+  BUILD_VERSION: 3.0.3.${{github.run_number}}
   BUILD_CONFIGURATION: Release
 
 jobs:
-  build:
+  build-web:
     environment: production
     runs-on: windows-latest
     steps:
@@ -24,22 +24,27 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 7.x
-      - name: Rewrite web/client/.env
+      - name: Rewrite .env
+        shell: pwsh
         run: |
-          $content = Get-Content -Path source/client/.env
+          $content = Get-Content -Path .env
           $content = $content -replace "{{PUBLIC_URL}}", "${{secrets.PUBLIC_URL}}"
           $content = $content -replace "{{TELEMETRY_CONNECTION_STRING}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
-          Out-File -FilePath source/client/.env -InputObject $content -Encoding UTF8
-      - name: Restore web/client
+          Out-File -FilePath .env -InputObject $content -Encoding UTF8
+        working-directory: source/client
+      - name: Restore client
         run: npm ci
         working-directory: source/client
-      - name: Audit web/client
+      - name: Audit client
         run: npm audit --omit=dev
         working-directory: source/client
-      - name: Restore web/server
+      - name: Restore server
         run: dotnet restore
         working-directory: source/server/Karamem0.Commistant.Web
-      - name: Build web
+      - name: Test source
+        run: dotnet test --filter TestCategory=Karamem0.Commistant.Web
+        working-directory: source/server
+      - name: Build source
         run: |
           dotnet publish `
             -c ${{env.BUILD_CONFIGURATION}} `
@@ -47,36 +52,28 @@ jobs:
             -p:Version=${{env.BUILD_VERSION}} `
             -p:FileVersion=${{env.BUILD_VERSION}}
         working-directory: source/server/Karamem0.Commistant.Web
-      - name: Upload web build files
+      - name: Upload build files
         uses: actions/upload-artifact@v3
         with:
           name: commistant-web
           path: source/server/Karamem0.Commistant.Web/build
-      - name: Rewrite web/server/bot/index.html
-        run: |
-          $content = Get-Content -Path source/server/Karamem0.Commistant.Bot/wwwroot/index.html
-          $content = $content -replace "{{AppDomain}}", "${{secrets.APP_DOMAIN}}"
-          Out-File -FilePath source/server/Karamem0.Commistant.Bot/wwwroot/index.html -InputObject $content -Encoding UTF8
-      - name: Restore bot
-        run: dotnet restore
-        working-directory: source/server/Karamem0.Commistant.Bot
-      - name: Build bot
-        run: |
-          dotnet publish `
-            -c ${{env.BUILD_CONFIGURATION}} `
-            -p:PublishDir=build `
-            -p:Version=${{env.BUILD_VERSION}} `
-            -p:FileVersion=${{env.BUILD_VERSION}}
-        working-directory: source/server/Karamem0.Commistant.Bot
-      - name: Upload bot build files
-        uses: actions/upload-artifact@v3
+  build-func:
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
         with:
-          name: commistant-bot
-          path: source/server/Karamem0.Commistant.Bot/build
-      - name: Test func
+          dotnet-version: 7.x
+      - name: Restore source
+        run: dotnet restore
+        working-directory: source/server/Karamem0.Commistant.Functions
+      - name: Test source
         run: dotnet test --filter TestCategory=Karamem0.Commistant.Functions
         working-directory: source/server
-      - name: Build func
+      - name: Build source
         run: |
           dotnet publish `
             -c ${{env.BUILD_CONFIGURATION}} `
@@ -84,24 +81,71 @@ jobs:
             -p:Version=${{env.BUILD_VERSION}} `
             -p:FileVersion=${{env.BUILD_VERSION}}
         working-directory: source/server/Karamem0.Commistant.Functions
-      - name: Upload func build files
+      - name: Upload build files
         uses: actions/upload-artifact@v3
         with:
           name: commistant-func
           path: source/server/Karamem0.Commistant.Functions/build
-      - name: Rewrite manifest.json
+  build-bot:
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.x
+      - name: Rewrite index.html
+        shell: pwsh
         run: |
-          $content = Get-Content -Path manifest/manifest.json
+          $content = Get-Content -Path wwwroot/index.html
+          $content = $content -replace "{{AppDomain}}", "${{secrets.APP_DOMAIN}}"
+          Out-File -FilePath wwwroot/index.html -InputObject $content -Encoding UTF8
+        working-directory: source/server/Karamem0.Commistant.Bot
+      - name: Restore source
+        run: dotnet restore
+        working-directory: source/server/Karamem0.Commistant.Bot
+      - name: Test source
+        run: dotnet test --filter TestCategory=Karamem0.Commistant.Bot
+        working-directory: source/server
+      - name: Build source
+        run: |
+          dotnet publish `
+            -c ${{env.BUILD_CONFIGURATION}} `
+            -p:PublishDir=build `
+            -p:Version=${{env.BUILD_VERSION}} `
+            -p:FileVersion=${{env.BUILD_VERSION}}
+        working-directory: source/server/Karamem0.Commistant.Bot
+      - name: Upload build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: commistant-bot
+          path: source/server/Karamem0.Commistant.Bot/build
+  build-manifest:
+    environment: production
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v3
+      - name: Rewrite manifest.json
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path manifest.json
           $content = $content -Replace '{{AppId}}', '${{secrets.APP_ID}}'
           $content = $content -Replace '{{AppDomain}}', '${{secrets.APP_DOMAIN}}'
-          Out-File -FilePath manifest/manifest.json -InputObject $content -Encoding UTF8
+          Out-File -FilePath manifest.json -InputObject $content -Encoding UTF8
+        working-directory: manifest
       - name: Upload manifest files
         uses: actions/upload-artifact@v3
         with:
           name: commistant-manifest
           path: manifest
   deploy:
-    needs: build
+    needs:
+      - build-web
+      - build-func
+      - build-bot
     if: contains(github.ref, 'refs/heads/main')
     environment: production
     runs-on: windows-latest
@@ -141,7 +185,8 @@ jobs:
           app-name: ${{secrets.AZURE_FUNC_NAME}}
           package: artifact/commistant-func
   release:
-    needs: build
+    needs:
+      - build-manifest
     if: contains(github.ref, 'refs/tags/')
     environment: production
     runs-on: windows-latest
