@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -26,18 +26,12 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Dialogs
 {
 
-    public class ResetDialog : ComponentDialog
+    public class ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger) : ComponentDialog
     {
 
-        private readonly ConversationState conversationState;
+        private readonly ConversationState conversationState = conversationState;
 
-        private readonly ILogger logger;
-
-        public ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger)
-        {
-            this.conversationState = conversationState;
-            this.logger = logger;
-        }
+        private readonly ILogger logger = logger;
 
         protected override async Task OnInitializeAsync(DialogContext dc)
         {
@@ -58,17 +52,17 @@ namespace Karamem0.Commistant.Dialogs
             this.logger.SettingsResetting(stepContext.Context.Activity);
             var card = new AdaptiveCard("1.3")
             {
-                Body = new List<AdaptiveElement>()
-                {
+                Body =
+                [
                     new AdaptiveTextBlock()
                     {
                         Id = "Message",
                         Text = "すべての設定を初期化します。よろしいですか？",
                         Wrap = true
                     },
-                },
-                Actions = new List<AdaptiveAction>()
-                {
+                ],
+                Actions =
+                [
                     new AdaptiveSubmitAction()
                     {
                         Id = "Yes",
@@ -87,7 +81,7 @@ namespace Karamem0.Commistant.Dialogs
                             Button = "No"
                         }
                     }
-                }
+                ]
             };
             var activity = MessageFactory.Attachment(new Attachment()
             {
@@ -133,13 +127,13 @@ namespace Karamem0.Commistant.Dialogs
             {
                 var card = new AdaptiveCard("1.3")
                 {
-                    Body = new List<AdaptiveElement>()
-                    {
+                    Body =
+                    [
                         new AdaptiveFactSet()
                         {
-                            Facts = new List<AdaptiveFact>()
-                            {
-                                new ()
+                            Facts =
+                            [
+                                new()
                                 {
                                     Title = "応答",
                                     Value = new Func<string>(() =>
@@ -151,9 +145,9 @@ namespace Karamem0.Commistant.Dialogs
                                         }
                                     )()
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 };
                 var activity = MessageFactory.Attachment(new Attachment()
                 {

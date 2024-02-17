@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -20,18 +20,12 @@ namespace Karamem0.Commistant.Controllers
 
     [Route("api/messages")]
     [ApiController()]
-    public class BotController : ControllerBase
+    public class BotController(IBotFrameworkHttpAdapter adapter, IBot bot) : ControllerBase
     {
 
-        private readonly IBotFrameworkHttpAdapter adapter;
+        private readonly IBotFrameworkHttpAdapter adapter = adapter;
 
-        private readonly IBot bot;
-
-        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
-        {
-            this.adapter = adapter;
-            this.bot = bot;
-        }
+        private readonly IBot bot = bot;
 
         [HttpPost()]
         public async Task PostAsync()

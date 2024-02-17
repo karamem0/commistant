@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -21,11 +21,11 @@ namespace Karamem0.Commistant.Commands.Abstraction
     public class CommandSet
     {
 
-        private readonly IDictionary<string, Command> commands;
+        private readonly Dictionary<string, Command> commands;
 
         public CommandSet()
         {
-            this.commands = new Dictionary<string, Command>();
+            this.commands = [];
         }
 
         public Task<CommandContext> CreateContextAsync(

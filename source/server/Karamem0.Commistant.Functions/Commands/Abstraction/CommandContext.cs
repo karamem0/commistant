@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -18,21 +18,18 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Commands.Abstraction
 {
 
-    public class CommandContext
+    public class CommandContext(
+        CommandSet commandSet,
+        ConversationProperty property,
+        ConversationReference reference
+    )
     {
 
-        private readonly CommandSet commandSet;
+        private readonly CommandSet commandSet = commandSet;
 
-        private readonly ConversationProperty property;
+        private readonly ConversationProperty property = property;
 
-        private readonly ConversationReference reference;
-
-        public CommandContext(CommandSet commandSet, ConversationProperty property, ConversationReference reference)
-        {
-            this.commandSet = commandSet;
-            this.property = property;
-            this.reference = reference;
-        }
+        private readonly ConversationReference reference = reference;
 
         public async Task ExecuteCommandAsync(string commandId, CancellationToken cancellationToken = default)
         {

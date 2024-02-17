@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -24,25 +24,18 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Functions
 {
 
-    public class ExecuteCommandFunction
+    public class ExecuteCommandFunction(
+        ILoggerFactory loggerFactory,
+        BlobContainerClient botStateClient,
+        CommandSet commandSet
+    )
     {
 
-        private readonly ILogger logger;
+        private readonly ILogger logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
 
-        private readonly BlobContainerClient botStateClient;
+        private readonly BlobContainerClient botStateClient = botStateClient;
 
-        private readonly CommandSet commandSet;
-
-        public ExecuteCommandFunction(
-            ILoggerFactory loggerFactory,
-            BlobContainerClient botStateClient,
-            CommandSet commandSet
-        )
-        {
-            this.logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
-            this.botStateClient = botStateClient;
-            this.commandSet = commandSet;
-        }
+        private readonly CommandSet commandSet = commandSet;
 
         [Function("ExecuteCommand")]
         public async Task Run([TimerTrigger("0 */1 * * * *")] object timerInfo)

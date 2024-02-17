@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -27,31 +27,23 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Bots
 {
 
-    public class ActivityBot : TeamsActivityHandler
+    public class ActivityBot(
+        ConversationState conversationState,
+        DialogSet dialogSet,
+        OpenAIService openAIService,
+        ILogger<ActivityBot> logger
+    ) : TeamsActivityHandler
     {
 
-        private readonly ConversationState conversationState;
+        private readonly ConversationState conversationState = conversationState;
 
-        private readonly DialogSet dialogSet;
+        private readonly DialogSet dialogSet = dialogSet;
 
-        private readonly OpenAIService openAIService;
+        private readonly OpenAIService openAIService = openAIService;
 
-        private readonly ILogger logger;
+        private readonly ILogger logger = logger;
 
-        public ActivityBot(
-            ConversationState conversationState,
-            DialogSet dialogSet,
-            OpenAIService openAIService,
-            ILogger<ActivityBot> logger
-        )
-        {
-            this.conversationState = conversationState;
-            this.dialogSet = dialogSet;
-            this.openAIService = openAIService;
-            this.logger = logger;
-        }
-
-        public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken)
+        public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
         {
             await base.OnTurnAsync(turnContext, cancellationToken);
         }

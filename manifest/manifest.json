@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
   "manifestVersion": "1.16",
-  "version": "3.0.3",
+  "version": "{{AppVersion}}",
   "id": "{{AppId}}",
   "packageName": "dev.karamem0.commistant",
   "name": {

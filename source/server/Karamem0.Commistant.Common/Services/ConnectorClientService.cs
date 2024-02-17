@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -30,15 +30,10 @@ namespace Karamem0.Commistant.Services
 
     }
 
-    public class ConnectorClientService : IConnectorClientService
+    public class ConnectorClientService(ServiceClientCredentials credentials) : IConnectorClientService
     {
 
-        private readonly ServiceClientCredentials credentials;
-
-        public ConnectorClientService(ServiceClientCredentials credentials)
-        {
-            this.credentials = credentials;
-        }
+        private readonly ServiceClientCredentials credentials = credentials;
 
         public async Task<ResourceResponse> SendActivityAsync(
             Uri url,

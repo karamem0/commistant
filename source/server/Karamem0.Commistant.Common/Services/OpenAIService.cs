@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -21,26 +21,26 @@ namespace Karamem0.Commistant.Services
     public interface IOpenAIService
     {
 
-        Task<ChatMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default);
+        Task<ChatResponseMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default);
 
     }
 
-    public class OpenAIService : IOpenAIService
+    public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : IOpenAIService
     {
 
-        private readonly OpenAIClient openAIClient;
+        private readonly OpenAIClient openAIClient = openAIClient;
 
-        private readonly string openAIModelName;
+        private readonly string openAIModelName = openAIModelName;
 
-        public OpenAIService(OpenAIClient openAIClient, string openAIModelName)
+        public async Task<ChatResponseMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
         {
-            this.openAIClient = openAIClient;
-            this.openAIModelName = openAIModelName;
-        }
-
-        public async Task<ChatMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
-        {
-            var chatCompletionsOptions = new ChatCompletionsOptions();
+            var chatCompletionsOptions = new ChatCompletionsOptions(
+                this.openAIModelName,
+                new[]
+                {
+                    new ChatRequestUserMessage(text)
+                }
+            );
             chatCompletionsOptions.Functions.Add(new FunctionDefinition()
             {
                 Name = "StartMeeting",
@@ -67,9 +67,7 @@ namespace Karamem0.Commistant.Services
             });
             chatCompletionsOptions.FunctionCall = FunctionDefinition.Auto;
             chatCompletionsOptions.Temperature = 0.3f;
-            chatCompletionsOptions.Messages.Add(new ChatMessage(ChatRole.User, text));
             var chatCompletions = await this.openAIClient.GetChatCompletionsAsync(
-                this.openAIModelName,
                 chatCompletionsOptions,
                 cancellationToken
             );

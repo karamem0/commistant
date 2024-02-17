@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -56,7 +56,7 @@ namespace Karamem0.Commistant.Functions.Commands.Tests
                 .Returns(new ResourceResponse());
             var qrCodeService = Substitute.For<IQrCodeService>();
             _ = qrCodeService.CreateAsync("https://www.example.com")
-                .Returns(Array.Empty<byte>());
+                .Returns([]);
             var logger = Substitute.For<ILogger<InMeetingCommand>>();
             logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
             logger.InMeetingMessageNotified(conversationReference, conversationProperty);
@@ -109,7 +109,7 @@ namespace Karamem0.Commistant.Functions.Commands.Tests
                 .Returns(new ResourceResponse());
             var qrCodeService = Substitute.For<IQrCodeService>();
             _ = qrCodeService.CreateAsync("https://www.example.com")
-                .Returns(Array.Empty<byte>());
+                .Returns([]);
             var logger = Substitute.For<ILogger<InMeetingCommand>>();
             logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
             logger.InMeetingMessageNotified(conversationReference, conversationProperty);
@@ -162,7 +162,7 @@ namespace Karamem0.Commistant.Functions.Commands.Tests
                 .Returns(new ResourceResponse());
             var qrCodeService = Substitute.For<IQrCodeService>();
             _ = qrCodeService.CreateAsync("https://www.example.com")
-                .Returns(Array.Empty<byte>());
+                .Returns([]);
             var logger = Substitute.For<ILogger<InMeetingCommand>>();
             logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
             logger.InMeetingMessageNotified(conversationReference, conversationProperty);

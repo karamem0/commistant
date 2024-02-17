@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -26,29 +26,21 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Commands
 {
 
-    public class EndMeetingCommand : Command
+    public class EndMeetingCommand(
+        IDateTimeService dateTimeService,
+        IConnectorClientService connectorClientService,
+        IQrCodeService qrCodeService,
+        ILogger<EndMeetingCommand> logger
+    ) : Command()
     {
 
-        private readonly IDateTimeService dateTimeService;
+        private readonly IDateTimeService dateTimeService = dateTimeService;
 
-        private readonly IConnectorClientService connectorClientService;
+        private readonly IConnectorClientService connectorClientService = connectorClientService;
 
-        private readonly IQrCodeService qrCodeService;
+        private readonly IQrCodeService qrCodeService = qrCodeService;
 
-        private readonly ILogger logger;
-
-        public EndMeetingCommand(
-            IDateTimeService dateTimeService,
-            IConnectorClientService connectorClientService,
-            IQrCodeService qrCodeService,
-            ILogger<EndMeetingCommand> logger
-        ) : base()
-        {
-            this.dateTimeService = dateTimeService;
-            this.connectorClientService = connectorClientService;
-            this.qrCodeService = qrCodeService;
-            this.logger = logger;
-        }
+        private readonly ILogger logger = logger;
 
         public override async Task ExecuteAsync(
             ConversationProperty property,

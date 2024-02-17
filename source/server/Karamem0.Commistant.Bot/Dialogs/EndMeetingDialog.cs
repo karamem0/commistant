@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -29,29 +29,21 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Dialogs
 {
 
-    public class EndMeetingDialog : ComponentDialog
+    public class EndMeetingDialog(
+        ConversationState conversationState,
+        QrCodeService qrCodeService,
+        IMapper mapper,
+        ILogger<EndMeetingDialog> logger
+    ) : ComponentDialog
     {
 
-        private readonly ConversationState conversationState;
+        private readonly ConversationState conversationState = conversationState;
 
-        private readonly QrCodeService qrCodeService;
+        private readonly QrCodeService qrCodeService = qrCodeService;
 
-        private readonly IMapper mapper;
+        private readonly IMapper mapper = mapper;
 
-        private readonly ILogger logger;
-
-        public EndMeetingDialog(
-            ConversationState conversationState,
-            QrCodeService qrCodeService,
-            IMapper mapper,
-            ILogger<EndMeetingDialog> logger
-        )
-        {
-            this.conversationState = conversationState;
-            this.qrCodeService = qrCodeService;
-            this.mapper = mapper;
-            this.logger = logger;
-        }
+        private readonly ILogger logger = logger;
 
         protected override async Task OnInitializeAsync(DialogContext dc)
         {
@@ -75,41 +67,41 @@ namespace Karamem0.Commistant.Dialogs
             var value = this.mapper.Map(options, property.Clone());
             var card = new AdaptiveCard("1.3")
             {
-                Body = new List<AdaptiveElement>()
-                {
+                Body =
+                [
                     new AdaptiveChoiceSetInput()
                     {
                         Id = "Schedule",
                         Label = "スケジュール",
                         Placeholder = "通知を表示する時間",
-                        Choices = new List<AdaptiveChoice>()
-                        {
-                            new ()
+                        Choices =
+                        [
+                            new()
                             {
                                 Title = "なし",
                                 Value = "-1"
                             },
-                            new ()
+                            new()
                             {
                                 Title = "予定時刻",
                                 Value = "0"
                             },
-                            new ()
+                            new()
                             {
                                 Title = "5 分前",
                                 Value = "5"
                             },
-                            new ()
+                            new()
                             {
                                 Title = "10 分前",
                                 Value = "10"
                             },
-                            new ()
+                            new()
                             {
                                 Title = "15 分前",
                                 Value = "15"
                             },
-                        },
+                        ],
                         Value = value.EndMeetingSchedule.ToString()
                     },
                     new AdaptiveTextInput()
@@ -128,9 +120,9 @@ namespace Karamem0.Commistant.Dialogs
                         Style = AdaptiveTextInputStyle.Url,
                         Value = value.EndMeetingUrl
                     }
-                },
-                Actions = new List<AdaptiveAction>()
-                {
+                ],
+                Actions =
+                [
                     new AdaptiveSubmitAction()
                     {
                         Id = "Submit",
@@ -149,7 +141,7 @@ namespace Karamem0.Commistant.Dialogs
                             Button = "Cancel"
                         }
                     }
-                }
+                ]
             };
             var activity = MessageFactory.Attachment(new Attachment()
             {
@@ -199,13 +191,13 @@ namespace Karamem0.Commistant.Dialogs
             {
                 var card = new AdaptiveCard("1.3")
                 {
-                    Body = new List<AdaptiveElement>()
-                    {
+                    Body =
+                    [
                         new AdaptiveFactSet()
                         {
-                            Facts = new List<AdaptiveFact>()
-                            {
-                                new ()
+                            Facts =
+                            [
+                                new()
                                 {
                                     Title = "スケジュール",
                                     Value = new Func<string>(() =>
@@ -217,19 +209,19 @@ namespace Karamem0.Commistant.Dialogs
                                         }
                                     )()
                                 },
-                                new ()
+                                new()
                                 {
                                     Title = "メッセージ",
                                     Value = $"{property.EndMeetingMessage}"
                                 },
-                                new ()
+                                new()
                                 {
                                     Title = "URL",
                                     Value = $"{property.EndMeetingUrl}"
                                 }
-                            }
+                            ]
                         }
-                    }
+                    ]
                 };
                 if (property.EndMeetingUrl is not null)
                 {

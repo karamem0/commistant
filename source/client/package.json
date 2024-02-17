@@ -1,7 +1,7 @@
 {
   "name": "commistant",
   "private": true,
-  "version": "3.0.3",
+  "version": "0.0.0",
   "dependencies": {
     "@automapper/pojos": "^8.7.7",
     "@emotion/react": "^11.11.1",
@@ -55,6 +55,6 @@
     "formatjs:compile": "formatjs compile 'src/translations/ja.json' --out-file 'src/translations/compiled/ja.json' --ast --format simple"
   },
   "volta": {
-    "node": "18.17.1"
+    "node": "20.11.1"
   }
 }

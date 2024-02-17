@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -20,11 +20,11 @@ namespace Karamem0.Commistant.Mappings
     public class AutoMapperProfile : Profile
     {
 
-        private static readonly int[] StartMeetingSchedules = new int[] { 0, 5, 10, 15 };
+        private static readonly int[] StartMeetingSchedules = [0, 5, 10, 15];
 
-        private static readonly int[] EndMeetingSchedules = new int[] { 0, 5, 10, 15 };
+        private static readonly int[] EndMeetingSchedules = [0, 5, 10, 15];
 
-        private static readonly int[] InMeetingSchedules = new int[] { 5, 10, 15, 30, 60 };
+        private static readonly int[] InMeetingSchedules = [5, 10, 15, 30, 60];
 
         public AutoMapperProfile()
         {

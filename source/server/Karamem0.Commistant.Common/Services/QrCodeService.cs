@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 karamem0
+// Copyright (c) 2022-2024 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -24,17 +24,12 @@ namespace Karamem0.Commistant.Services
 
     }
 
-    public class QrCodeService : IQrCodeService
+    public class QrCodeService(QRCodeGenerator qrCodeGenerator) : IQrCodeService
     {
 
-        private readonly QRCodeGenerator qrCodeGenerator;
+        private readonly QRCodeGenerator qrCodeGenerator = qrCodeGenerator;
 
-        public QrCodeService(QRCodeGenerator qrCodeGenerator)
-        {
-            this.qrCodeGenerator = qrCodeGenerator;
-        }
-
-        public Task<byte[]> CreateAsync(string text, CancellationToken _ = default)
+        public Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default)
         {
             var qrCodeData = this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
             var qrCodePngByte = new PngByteQRCode(qrCodeData);
