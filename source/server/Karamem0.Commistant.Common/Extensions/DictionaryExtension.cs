@@ -24,7 +24,10 @@ namespace Karamem0.Commistant.Extensions
             {
                 return (T)value;
             }
-            return default;
+            else
+            {
+                return default;
+            }
         }
 
     }

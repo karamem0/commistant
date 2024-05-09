@@ -22,7 +22,7 @@ namespace Karamem0.Commistant.Adapters
     public class AdapterWithErrorHandler : CloudAdapter
     {
 
-        public AdapterWithErrorHandler(BotFrameworkAuthentication auth, ILogger<IBotFrameworkHttpAdapter> logger)
+        public AdapterWithErrorHandler(BotFrameworkAuthentication auth, ILogger<AdapterWithErrorHandler> logger)
             : base(auth, logger)
         {
             this.OnTurnError = async (turnContext, exception) =>
