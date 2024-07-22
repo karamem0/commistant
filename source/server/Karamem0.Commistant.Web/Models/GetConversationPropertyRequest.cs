@@ -12,20 +12,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Models
+namespace Karamem0.Commistant.Models;
+
+public class GetConversationPropertyRequest
 {
 
-    public class GetConversationPropertyRequest
+    public GetConversationPropertyRequest()
     {
-
-        public GetConversationPropertyRequest()
-        {
-        }
-
-        public string? ChannelId { get; set; }
-
-        public string? MeetingId { get; set; }
-
     }
+
+    public string? ChannelId { get; set; }
+
+    public string? MeetingId { get; set; }
 
 }

@@ -17,6 +17,7 @@ using Microsoft.Identity.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,6 +53,6 @@ _ = app.UseAuthorization();
 _ = app.MapControllers();
 _ = app.MapFallbackToFile("/index.html");
 
-app.Run();
+await app.RunAsync();
 
 #pragma warning restore CA1852

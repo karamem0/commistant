@@ -46,6 +46,6 @@ _ = app.UseRouting();
 _ = app.UseAuthorization();
 _ = app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
 #pragma warning restore CA1852

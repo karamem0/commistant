@@ -15,22 +15,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Commands.Abstraction
+namespace Karamem0.Commistant.Commands.Abstraction;
+
+
+public abstract class Command
 {
 
-    public abstract class Command
+    protected Command()
     {
-
-        protected Command()
-        {
-        }
-
-        public abstract Task ExecuteAsync(
-            ConversationProperty property,
-            ConversationReference reference,
-            CancellationToken cancellationToken = default
-        );
-
     }
+
+    public abstract Task ExecuteAsync(
+        ConversationProperty property,
+        ConversationReference reference,
+        CancellationToken cancellationToken = default
+    );
 
 }

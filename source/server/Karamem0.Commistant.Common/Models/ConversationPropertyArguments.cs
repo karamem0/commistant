@@ -12,20 +12,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Models
+namespace Karamem0.Commistant.Models;
+
+public class ConversationPropertyArguments
 {
 
-    public class ConversationPropertyArguments
+    public ConversationPropertyArguments()
     {
-
-        public ConversationPropertyArguments()
-        {
-        }
-
-        public string? Type { get; set; }
-
-        public ConversationPropertyArgumentsValue? Value { get; set; }
-
     }
+
+    public string? Type { get; set; }
+
+    public ConversationPropertyArgumentsValue? Value { get; set; }
 
 }

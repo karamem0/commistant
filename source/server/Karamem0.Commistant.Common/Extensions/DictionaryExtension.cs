@@ -12,24 +12,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Extensions
+namespace Karamem0.Commistant.Extensions;
+
+public static class DictionaryExtension
 {
 
-    public static class DictionaryExtension
+    public static T? GetValueOrDefault<T>(this IDictionary<string, object> target, string key)
     {
-
-        public static T? GetValueOrDefault<T>(this IDictionary<string, object> target, string key)
+        if (target.TryGetValue(key, out var value))
         {
-            if (target.TryGetValue(key, out var value))
-            {
-                return (T)value;
-            }
-            else
-            {
-                return default;
-            }
+            return (T)value;
         }
-
+        else
+        {
+            return default;
+        }
     }
 
 }

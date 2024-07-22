@@ -16,38 +16,35 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Services
+namespace Karamem0.Commistant.Services;
+
+public interface IConnectorClientService
 {
 
-    public interface IConnectorClientService
-    {
+    Task<ResourceResponse> SendActivityAsync(
+        Uri url,
+        Activity activity,
+        CancellationToken cancellationToken = default
+    );
 
-        Task<ResourceResponse> SendActivityAsync(
-            Uri url,
-            Activity activity,
-            CancellationToken cancellationToken = default
+}
+
+public class ConnectorClientService(ServiceClientCredentials credentials) : IConnectorClientService
+{
+
+    private readonly ServiceClientCredentials credentials = credentials;
+
+    public async Task<ResourceResponse> SendActivityAsync(
+        Uri url,
+        Activity activity,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var client = new ConnectorClient(url, this.credentials);
+        return await client.Conversations.SendToConversationAsync(
+            activity,
+            cancellationToken: cancellationToken
         );
-
-    }
-
-    public class ConnectorClientService(ServiceClientCredentials credentials) : IConnectorClientService
-    {
-
-        private readonly ServiceClientCredentials credentials = credentials;
-
-        public async Task<ResourceResponse> SendActivityAsync(
-            Uri url,
-            Activity activity,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var client = new ConnectorClient(url, this.credentials);
-            return await client.Conversations.SendToConversationAsync(
-                activity,
-                cancellationToken: cancellationToken
-            );
-        }
-
     }
 
 }

@@ -16,22 +16,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Adapters
+namespace Karamem0.Commistant.Adapters;
+
+public class AdapterWithErrorHandler : CloudAdapter
 {
 
-    public class AdapterWithErrorHandler : CloudAdapter
+    public AdapterWithErrorHandler(BotFrameworkAuthentication auth, ILogger<AdapterWithErrorHandler> logger)
+        : base(auth, logger)
     {
-
-        public AdapterWithErrorHandler(BotFrameworkAuthentication auth, ILogger<AdapterWithErrorHandler> logger)
-            : base(auth, logger)
+        this.OnTurnError = async (turnContext, exception) =>
         {
-            this.OnTurnError = async (turnContext, exception) =>
-            {
-                logger.UnhandledError(exception);
-                _ = await turnContext.SendActivityAsync("予期しない問題が発生しました。");
-            };
-        }
-
+            logger.UnhandledError(exception);
+            _ = await turnContext.SendActivityAsync("予期しない問題が発生しました。");
+        };
     }
 
 }

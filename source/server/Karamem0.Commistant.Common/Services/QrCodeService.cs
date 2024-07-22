@@ -14,28 +14,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Services
+namespace Karamem0.Commistant.Services;
+
+public interface IQrCodeService
 {
 
-    public interface IQrCodeService
+    Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default);
+
+}
+
+public class QrCodeService(QRCodeGenerator qrCodeGenerator) : IQrCodeService
+{
+
+    private readonly QRCodeGenerator qrCodeGenerator = qrCodeGenerator;
+
+    public Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default)
     {
-
-        Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default);
-
-    }
-
-    public class QrCodeService(QRCodeGenerator qrCodeGenerator) : IQrCodeService
-    {
-
-        private readonly QRCodeGenerator qrCodeGenerator = qrCodeGenerator;
-
-        public Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default)
-        {
-            var qrCodeData = this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-            var qrCodePngByte = new PngByteQRCode(qrCodeData);
-            return Task.FromResult(qrCodePngByte.GetGraphic(10));
-        }
-
+        var qrCodeData = this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+        var qrCodePngByte = new PngByteQRCode(qrCodeData);
+        return Task.FromResult(qrCodePngByte.GetGraphic(10));
     }
 
 }

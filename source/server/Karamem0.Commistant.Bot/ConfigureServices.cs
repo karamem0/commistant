@@ -26,61 +26,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant
+namespace Karamem0.Commistant;
+
+public static class ConfigureServices
 {
 
-    public static class ConfigureServices
+    public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
     {
+        var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
+        _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
+        _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+        _ = services.AddSingleton<IStorage>(new BlobsStorage(
+            new Uri(blobContainerUrl),
+            new DefaultAzureCredential(),
+            new StorageTransferOptions()
+        ));
+        _ = services.AddSingleton<ConversationState>();
+        _ = services.AddScoped<IBot, ActivityBot>();
+        return services;
+    }
 
-        public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
-        {
-            var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
-            _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
-            _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
-            // _ = services.AddSingleton<IStorage>(new MemoryStorage());
-            _ = services.AddSingleton<IStorage>(new BlobsStorage(
-                new Uri(blobContainerUrl),
-                new DefaultAzureCredential(),
-                new StorageTransferOptions()
-            ));
-            _ = services.AddSingleton<ConversationState>();
-            _ = services.AddScoped<IBot, ActivityBot>();
-            return services;
-        }
+    public static IServiceCollection AddDialogs(this IServiceCollection services)
+    {
+        _ = services.AddScoped<StartMeetingDialog>();
+        _ = services.AddScoped<EndMeetingDialog>();
+        _ = services.AddScoped<InMeetingDialog>();
+        _ = services.AddScoped<ResetDialog>();
+        _ = services.AddScoped(provider => new DialogSet(provider
+            .GetService<ConversationState>()?
+            .CreateProperty<DialogState>(nameof(DialogState)))
+            .Add(provider.GetService<StartMeetingDialog>())
+            .Add(provider.GetService<EndMeetingDialog>())
+            .Add(provider.GetService<InMeetingDialog>())
+            .Add(provider.GetService<ResetDialog>()));
+        return services;
+    }
 
-        public static IServiceCollection AddDialogs(this IServiceCollection services)
-        {
-            _ = services.AddScoped<StartMeetingDialog>();
-            _ = services.AddScoped<EndMeetingDialog>();
-            _ = services.AddScoped<InMeetingDialog>();
-            _ = services.AddScoped<ResetDialog>();
-            _ = services.AddScoped(provider => new DialogSet(provider
-                .GetService<ConversationState>()?
-                .CreateProperty<DialogState>(nameof(DialogState)))
-                .Add(provider.GetService<StartMeetingDialog>())
-                .Add(provider.GetService<EndMeetingDialog>())
-                .Add(provider.GetService<InMeetingDialog>())
-                .Add(provider.GetService<ResetDialog>()));
-            return services;
-        }
-
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            var openAIEndpointUrl = configuration.GetValue<string>("AzureOpenAIEndpointUrl") ?? throw new InvalidOperationException();
-            var openAIModelName = configuration.GetValue<string>("AzureOpenAIModelName") ?? throw new InvalidOperationException();
-            _ = services.AddScoped(provider => new OpenAIClient(
-                new Uri(openAIEndpointUrl),
-                new DefaultAzureCredential()
-            ));
-            _ = services.AddScoped(provider => new OpenAIService(
-                provider.GetService<OpenAIClient>() ?? throw new InvalidOperationException(),
-                openAIModelName
-            ));
-            _ = services.AddScoped<QRCodeGenerator>();
-            _ = services.AddScoped<QrCodeService>();
-            return services;
-        }
-
+    public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var openAIEndpointUrl = configuration.GetValue<string>("AzureOpenAIEndpointUrl") ?? throw new InvalidOperationException();
+        var openAIModelName = configuration.GetValue<string>("AzureOpenAIModelName") ?? throw new InvalidOperationException();
+        _ = services.AddScoped(provider => new AzureOpenAIClient(
+            new Uri(openAIEndpointUrl),
+            new DefaultAzureCredential()
+        ));
+        _ = services.AddScoped(provider => new OpenAIService(
+            provider.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException(),
+            openAIModelName
+        ));
+        _ = services.AddScoped<QRCodeGenerator>();
+        _ = services.AddScoped<QrCodeService>();
+        return services;
     }
 
 }

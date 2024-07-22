@@ -12,54 +12,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Models
+namespace Karamem0.Commistant.Models;
+
+public class ConversationProperty : ICloneable
 {
 
-    public class ConversationProperty : ICloneable
+    public ConversationProperty()
     {
+    }
 
-        public ConversationProperty()
-        {
-        }
+    public bool StartMeetingSended { get; set; }
 
-        public bool StartMeetingSended { get; set; }
+    public int StartMeetingSchedule { get; set; } = -1;
 
-        public int StartMeetingSchedule { get; set; } = -1;
+    public string? StartMeetingMessage { get; set; }
 
-        public string? StartMeetingMessage { get; set; }
+    public string? StartMeetingUrl { get; set; }
 
-        public string? StartMeetingUrl { get; set; }
+    public bool EndMeetingSended { get; set; }
 
-        public bool EndMeetingSended { get; set; }
+    public int EndMeetingSchedule { get; set; } = -1;
 
-        public int EndMeetingSchedule { get; set; } = -1;
+    public string? EndMeetingMessage { get; set; }
 
-        public string? EndMeetingMessage { get; set; }
+    public string? EndMeetingUrl { get; set; }
 
-        public string? EndMeetingUrl { get; set; }
+    public bool InMeeting { get; set; }
 
-        public bool InMeeting { get; set; }
+    public int InMeetingSchedule { get; set; } = -1;
 
-        public int InMeetingSchedule { get; set; } = -1;
+    public string? InMeetingMessage { get; set; }
 
-        public string? InMeetingMessage { get; set; }
+    public string? InMeetingUrl { get; set; }
 
-        public string? InMeetingUrl { get; set; }
+    public DateTime? ScheduledEndTime { get; set; }
 
-        public DateTime? ScheduledEndTime { get; set; }
+    public DateTime? ScheduledStartTime { get; set; }
 
-        public DateTime? ScheduledStartTime { get; set; }
+    object ICloneable.Clone()
+    {
+        return this.MemberwiseClone();
+    }
 
-        object ICloneable.Clone()
-        {
-            return this.MemberwiseClone();
-        }
-
-        public ConversationProperty Clone()
-        {
-            return (ConversationProperty)this.MemberwiseClone();
-        }
-
+    public ConversationProperty Clone()
+    {
+        return (ConversationProperty)this.MemberwiseClone();
     }
 
 }

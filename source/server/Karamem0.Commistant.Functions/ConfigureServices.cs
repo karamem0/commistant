@@ -22,48 +22,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant
+namespace Karamem0.Commistant;
+
+
+public static class ConfigureServices
 {
 
-    public static class ConfigureServices
+    public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
     {
+        var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
+        _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
+        return services;
+    }
 
-        public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
-        {
-            var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
-            _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
-            return services;
-        }
+    public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
+    {
+        _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
+            configuration.GetValue<string>("MicrosoftAppId"),
+            configuration.GetValue<string>("MicrosoftAppPassword")));
+        return services;
+    }
 
-        public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
-        {
-            _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
-                configuration.GetValue<string>("MicrosoftAppId"),
-                configuration.GetValue<string>("MicrosoftAppPassword")));
-            return services;
-        }
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        _ = services.AddScoped<IDateTimeService, DateTimeService>();
+        _ = services.AddScoped<IConnectorClientService, ConnectorClientService>();
+        _ = services.AddScoped<QRCodeGenerator>();
+        _ = services.AddScoped<IQrCodeService, QrCodeService>();
+        return services;
+    }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            _ = services.AddScoped<IDateTimeService, DateTimeService>();
-            _ = services.AddScoped<IConnectorClientService, ConnectorClientService>();
-            _ = services.AddScoped<QRCodeGenerator>();
-            _ = services.AddScoped<IQrCodeService, QrCodeService>();
-            return services;
-        }
-
-        public static IServiceCollection AddCommands(this IServiceCollection services)
-        {
-            _ = services.AddSingleton<StartMeetingCommand>();
-            _ = services.AddSingleton<EndMeetingCommand>();
-            _ = services.AddSingleton<InMeetingCommand>();
-            _ = services.AddSingleton((provider) => new CommandSet()
-                .Add(provider.GetService<StartMeetingCommand>())
-                .Add(provider.GetService<EndMeetingCommand>())
-                .Add(provider.GetService<InMeetingCommand>()));
-            return services;
-        }
-
+    public static IServiceCollection AddCommands(this IServiceCollection services)
+    {
+        _ = services.AddSingleton<StartMeetingCommand>();
+        _ = services.AddSingleton<EndMeetingCommand>();
+        _ = services.AddSingleton<InMeetingCommand>();
+        _ = services.AddSingleton((provider) => new CommandSet()
+            .Add(provider.GetService<StartMeetingCommand>())
+            .Add(provider.GetService<EndMeetingCommand>())
+            .Add(provider.GetService<InMeetingCommand>()));
+        return services;
     }
 
 }

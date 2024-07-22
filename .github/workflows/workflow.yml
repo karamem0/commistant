@@ -7,7 +7,7 @@ on:
       - v*.*.*
 
 env:
-  BUILD_VERSION: '3.0.5'
+  BUILD_VERSION: '3.0.6'
   BUILD_CONFIGURATION: Release
 
 jobs:

@@ -21,63 +21,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Functions
+namespace Karamem0.Commistant.Functions;
+
+
+public class ExecuteCommandFunction(
+    ILoggerFactory loggerFactory,
+    BlobContainerClient botStateClient,
+    CommandSet commandSet
+)
 {
 
-    public class ExecuteCommandFunction(
-        ILoggerFactory loggerFactory,
-        BlobContainerClient botStateClient,
-        CommandSet commandSet
-    )
+    private readonly ILogger logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
+
+    private readonly BlobContainerClient botStateClient = botStateClient;
+
+    private readonly CommandSet commandSet = commandSet;
+
+    [Function("ExecuteCommand")]
+    public async Task Run([TimerTrigger("0 */1 * * * *")] object timerInfo)
     {
-
-        private readonly ILogger logger = loggerFactory.CreateLogger<ExecuteCommandFunction>();
-
-        private readonly BlobContainerClient botStateClient = botStateClient;
-
-        private readonly CommandSet commandSet = commandSet;
-
-        [Function("ExecuteCommand")]
-        public async Task Run([TimerTrigger("0 */1 * * * *")] object timerInfo)
+        try
         {
-            try
+            this.logger.TimerStarted();
+            await foreach (var blobPage in this.botStateClient.GetBlobsAsync().AsPages())
             {
-                this.logger.TimerStarted();
-                await foreach (var blobPage in this.botStateClient.GetBlobsAsync().AsPages())
+                foreach (var blobItem in blobPage.Values)
                 {
-                    foreach (var blobItem in blobPage.Values)
+                    var blobClient = this.botStateClient.GetBlobClient(blobItem.Name);
+                    var blobContent = await blobClient.GetObjectAsync<Dictionary<string, object>>();
+                    if (blobContent.Data is null)
                     {
-                        var blobClient = this.botStateClient.GetBlobClient(blobItem.Name);
-                        var blobContent = await blobClient.GetObjectAsync<Dictionary<string, object>>();
-                        if (blobContent.Data is null)
-                        {
-                            continue;
-                        }
-                        var property = blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
-                        if (property is null)
-                        {
-                            continue;
-                        }
-                        var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
-                        if (reference is null)
-                        {
-                            continue;
-                        }
-                        var cd = await this.commandSet.CreateContextAsync(property, reference);
-                        await cd.ExecuteCommandAsync(nameof(StartMeetingCommand));
-                        await cd.ExecuteCommandAsync(nameof(EndMeetingCommand));
-                        await cd.ExecuteCommandAsync(nameof(InMeetingCommand));
-                        await blobClient.SetObjectAsync(blobContent);
+                        continue;
                     }
+                    var property = blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
+                    if (property is null)
+                    {
+                        continue;
+                    }
+                    var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
+                    if (reference is null)
+                    {
+                        continue;
+                    }
+                    var cd = await this.commandSet.CreateContextAsync(property, reference);
+                    await cd.ExecuteCommandAsync(nameof(StartMeetingCommand));
+                    await cd.ExecuteCommandAsync(nameof(EndMeetingCommand));
+                    await cd.ExecuteCommandAsync(nameof(InMeetingCommand));
+                    await blobClient.SetObjectAsync(blobContent);
                 }
-                this.logger.TimerEnded();
             }
-            catch (Exception ex)
-            {
-                this.logger.UnhandledError(ex);
-            }
+            this.logger.TimerEnded();
         }
-
+        catch (Exception ex)
+        {
+            this.logger.UnhandledError(ex);
+        }
     }
 
 }

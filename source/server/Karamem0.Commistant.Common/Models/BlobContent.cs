@@ -13,20 +13,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Models
+namespace Karamem0.Commistant.Models;
+
+public class BlobContent<T>
 {
 
-    public class BlobContent<T>
+    public BlobContent()
     {
-
-        public BlobContent()
-        {
-        }
-
-        public T? Data { get; set; }
-
-        public ETag? ETag { get; set; }
-
     }
+
+    public T? Data { get; set; }
+
+    public ETag? ETag { get; set; }
 
 }

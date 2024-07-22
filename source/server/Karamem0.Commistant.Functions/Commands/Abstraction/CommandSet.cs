@@ -15,44 +15,42 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Commands.Abstraction
+namespace Karamem0.Commistant.Commands.Abstraction;
+
+
+public class CommandSet
 {
 
-    public class CommandSet
+    private readonly Dictionary<string, Command> commands;
+
+    public CommandSet()
     {
+        this.commands = [];
+    }
 
-        private readonly Dictionary<string, Command> commands;
+    public Task<CommandContext> CreateContextAsync(
+        ConversationProperty property,
+        ConversationReference reference
+    )
+    {
+        return Task.Run(() => new CommandContext(this, property, reference));
+    }
 
-        public CommandSet()
+    public CommandSet Add(Command? command)
+    {
+        _ = command ?? throw new ArgumentNullException(nameof(command));
+        this.commands.Add(command.GetType().Name, command);
+        return this;
+    }
+
+    public Command? Find(string? commandId)
+    {
+        _ = commandId ?? throw new ArgumentNullException(nameof(commandId));
+        if (this.commands.TryGetValue(commandId, out var command))
         {
-            this.commands = [];
+            return command;
         }
-
-        public Task<CommandContext> CreateContextAsync(
-            ConversationProperty property,
-            ConversationReference reference
-        )
-        {
-            return Task.Run(() => new CommandContext(this, property, reference));
-        }
-
-        public CommandSet Add(Command? command)
-        {
-            _ = command ?? throw new ArgumentNullException(nameof(command));
-            this.commands.Add(command.GetType().Name, command);
-            return this;
-        }
-
-        public Command? Find(string? commandId)
-        {
-            _ = commandId ?? throw new ArgumentNullException(nameof(commandId));
-            if (this.commands.TryGetValue(commandId, out var command))
-            {
-                return command;
-            }
-            return null;
-        }
-
+        return null;
     }
 
 }

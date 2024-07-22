@@ -18,7 +18,7 @@ import {
 } from 'react-router-dom';
 
 import { Global } from '@emotion/react';
-import ress from 'ress';
+import * as ress from 'ress';
 
 import SnackbarProvider from './common/providers/SnackbarProvider';
 import Error404Page from './features/error/pages/Error404Page';

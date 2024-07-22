@@ -14,23 +14,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Mappings
+namespace Karamem0.Commistant.Mappings;
+
+public class AutoMapperProfile : Profile
 {
 
-    public class AutoMapperProfile : Profile
+    public AutoMapperProfile()
     {
-
-        public AutoMapperProfile()
-        {
-            // GetProperty
-            _ = this.CreateMap<GetConversationPropertyRequest, GetConversationPropertyResponse>();
-            _ = this.CreateMap<ConversationProperty, GetConversationPropertyResponse>();
-            // SetProperty
-            _ = this.CreateMap<SetConversationPropertyRequest, SetConversationPropertyResponse>();
-            _ = this.CreateMap<SetConversationPropertyRequest, ConversationProperty>();
-            _ = this.CreateMap<ConversationProperty, SetConversationPropertyResponse>();
-        }
-
+        // GetProperty
+        _ = this.CreateMap<GetConversationPropertyRequest, GetConversationPropertyResponse>();
+        _ = this.CreateMap<ConversationProperty, GetConversationPropertyResponse>();
+        // SetProperty
+        _ = this.CreateMap<SetConversationPropertyRequest, SetConversationPropertyResponse>();
+        _ = this.CreateMap<SetConversationPropertyRequest, ConversationProperty>();
+        _ = this.CreateMap<ConversationProperty, SetConversationPropertyResponse>();
     }
 
 }

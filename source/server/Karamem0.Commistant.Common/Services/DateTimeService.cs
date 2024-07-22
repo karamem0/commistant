@@ -12,28 +12,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Services
+namespace Karamem0.Commistant.Services;
+
+public interface IDateTimeService
 {
 
-    public interface IDateTimeService
+    DateTime GetCurrentDateTime();
+
+}
+
+public class DateTimeService : IDateTimeService
+{
+
+    public DateTimeService()
     {
-
-        DateTime GetCurrentDateTime();
-
     }
 
-    public class DateTimeService : IDateTimeService
+    public DateTime GetCurrentDateTime()
     {
-
-        public DateTimeService()
-        {
-        }
-
-        public DateTime GetCurrentDateTime()
-        {
-            return DateTime.UtcNow;
-        }
-
+        return DateTime.UtcNow;
     }
 
 }

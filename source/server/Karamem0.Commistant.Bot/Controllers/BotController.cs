@@ -15,24 +15,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Controllers
+namespace Karamem0.Commistant.Controllers;
+
+[Route("api/messages")]
+[ApiController()]
+public class BotController(IBotFrameworkHttpAdapter adapter, IBot bot) : ControllerBase
 {
 
-    [Route("api/messages")]
-    [ApiController()]
-    public class BotController(IBotFrameworkHttpAdapter adapter, IBot bot) : ControllerBase
+    private readonly IBotFrameworkHttpAdapter adapter = adapter;
+
+    private readonly IBot bot = bot;
+
+    [HttpPost()]
+    public async Task PostAsync()
     {
-
-        private readonly IBotFrameworkHttpAdapter adapter = adapter;
-
-        private readonly IBot bot = bot;
-
-        [HttpPost()]
-        public async Task PostAsync()
-        {
-            await this.adapter.ProcessAsync(this.Request, this.Response, this.bot);
-        }
-
+        await this.adapter.ProcessAsync(this.Request, this.Response, this.bot);
     }
 
 }

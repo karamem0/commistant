@@ -13,35 +13,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Serialization
+namespace Karamem0.Commistant.Serialization;
+
+public static class JsonSerializer
 {
 
-    public static class JsonSerializer
+    private static readonly JsonSerializerSettings settings = new()
     {
+        TypeNameHandling = TypeNameHandling.All
+    };
 
-        private static readonly JsonSerializerSettings settings = new()
+    public static T? Deserialize<T>(string? value)
+    {
+        if (value is null)
         {
-            TypeNameHandling = TypeNameHandling.All
-        };
-
-        public static T? Deserialize<T>(string? value)
-        {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            return JsonConvert.DeserializeObject<T>(value, settings);
+            throw new ArgumentNullException(nameof(value));
         }
+        return JsonConvert.DeserializeObject<T>(value, settings);
+    }
 
-        public static string Serialize<T>(T? value)
+    public static string Serialize<T>(T? value)
+    {
+        if (value is null)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            return JsonConvert.SerializeObject(value, settings);
+            throw new ArgumentNullException(nameof(value));
         }
-
+        return JsonConvert.SerializeObject(value, settings);
     }
 
 }

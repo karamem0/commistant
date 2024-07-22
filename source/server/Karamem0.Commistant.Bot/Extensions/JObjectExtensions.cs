@@ -13,24 +13,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Extensions
+namespace Karamem0.Commistant.Extensions;
+
+public static class JObjectExtensions
 {
 
-    public static class JObjectExtensions
+    public static T? Value<T>(this JObject target, string propertyName, T? defaultValue)
     {
-
-        public static T? Value<T>(this JObject target, string propertyName, T? defaultValue)
+        if (target.ContainsKey(propertyName))
         {
-            if (target.ContainsKey(propertyName))
-            {
-                return target.Value<T>(propertyName);
-            }
-            else
-            {
-                return defaultValue;
-            }
+            return target.Value<T>(propertyName);
         }
-
+        else
+        {
+            return defaultValue;
+        }
     }
 
 }

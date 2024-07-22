@@ -8,6 +8,8 @@
 
 using Azure.AI.OpenAI;
 using Karamem0.Commistant.Resources;
+using OpenAI;
+using OpenAI.Chat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,65 +17,59 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Services
+namespace Karamem0.Commistant.Services;
+
+public interface IOpenAIService
 {
 
-    public interface IOpenAIService
+    Task<ChatCompletion> ChatCompletionAsync(string text, CancellationToken cancellationToken = default);
+
+}
+
+public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : IOpenAIService
+{
+
+    private readonly OpenAIClient openAIClient = openAIClient;
+
+    private readonly string openAIModelName = openAIModelName;
+
+    public async Task<ChatCompletion> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
     {
-
-        Task<ChatResponseMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default);
-
-    }
-
-    public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : IOpenAIService
-    {
-
-        private readonly OpenAIClient openAIClient = openAIClient;
-
-        private readonly string openAIModelName = openAIModelName;
-
-        public async Task<ChatResponseMessage?> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
+        var chatCompletionsOptions = new ChatCompletionOptions()
         {
-            var chatCompletionsOptions = new ChatCompletionsOptions(
-                this.openAIModelName,
-                new[]
-                {
-                    new ChatRequestUserMessage(text)
-                }
-            );
-            chatCompletionsOptions.Functions.Add(new FunctionDefinition()
-            {
-                Name = "StartMeeting",
-                Description = "Update the schedule, text, and URL of messages sent the start of the meeting.",
-                Parameters = BinaryData.FromString(StringResources.StartMeetingJson)
-            });
-            chatCompletionsOptions.Functions.Add(new FunctionDefinition()
-            {
-                Name = "EndMeeting",
-                Description = "Update the schedule, text, and URL of messages sent the end of the meeting.",
-                Parameters = BinaryData.FromString(StringResources.EndMeetingJson)
-            });
-            chatCompletionsOptions.Functions.Add(new FunctionDefinition()
-            {
-                Name = "InMeeting",
-                Description = "Update the schedule, text, and URL of messages sent during the meeting.",
-                Parameters = BinaryData.FromString(StringResources.InMeetingJson)
-            });
-            chatCompletionsOptions.Functions.Add(new FunctionDefinition()
-            {
-                Name = "Reset",
-                Description = "Reset all settings.",
-                Parameters = BinaryData.FromString(StringResources.ResetJson)
-            });
-            chatCompletionsOptions.FunctionCall = FunctionDefinition.Auto;
-            chatCompletionsOptions.Temperature = 0.3f;
-            var chatCompletions = await this.openAIClient.GetChatCompletionsAsync(
-                chatCompletionsOptions,
-                cancellationToken
-            );
-            return chatCompletions.Value.Choices.Select(_ => _.Message).FirstOrDefault();
-        }
-
+            Temperature = 0.3f,
+            Tools = {
+                ChatTool.CreateFunctionTool(
+                    "StartMeeting",
+                    "Update the schedule, text, and URL of messages sent the start of the meeting.",
+                    BinaryData.FromString(StringResources.StartMeetingJson)
+                ),
+                ChatTool.CreateFunctionTool(
+                    "EndMeeting",
+                    "Update the schedule, text, and URL of messages sent the end of the meeting.",
+                    BinaryData.FromString(StringResources.EndMeetingJson)
+                ),
+                ChatTool.CreateFunctionTool(
+                    "InMeeting",
+                    "Update the schedule, text, and URL of messages sent during the meeting.",
+                    BinaryData.FromString(StringResources.InMeetingJson)
+                ),
+                ChatTool.CreateFunctionTool(
+                    "Reset",
+                    "Reset all settings.",
+                    BinaryData.FromString(StringResources.ResetJson)
+                ),
+            }
+        };
+        var chatClient = this.openAIClient.GetChatClient(this.openAIModelName);
+        var chatCompletion = await chatClient.CompleteChatAsync(
+            [
+                new UserChatMessage(text)
+            ],
+            chatCompletionsOptions,
+            cancellationToken
+        );
+        return chatCompletion.Value;
     }
 
 }

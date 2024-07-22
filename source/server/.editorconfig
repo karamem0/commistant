@@ -3,6 +3,16 @@
 indent_size = 4
 indent_style = tab
 
+# ResX files
+[*.resx]
+indent_size = 4
+indent_style = space
+
+# XAML files
+[*.xaml]
+indent_size = 4
+indent_style = space
+
 # C# files
 [*.cs]
 
@@ -95,7 +105,7 @@ csharp_style_expression_bodied_operators = false:warning
 csharp_style_expression_bodied_properties = true:warning
 
 # Pattern matching preferences
-csharp_style_pattern_matching_over_as_with_null_check = true:warning
+csharp_style_pattern_matching_over_as_with_null_check = false:warning
 csharp_style_pattern_matching_over_is_with_cast_check = true:warning
 csharp_style_prefer_not_pattern = true:warning
 csharp_style_prefer_pattern_matching = true:warning
@@ -125,6 +135,9 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:war
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace:warning
+
+# Namecpace preferences
+csharp_style_namespace_declarations = file_scoped
 
 #### C# Formatting Rules ####
 
@@ -223,6 +236,9 @@ dotnet_diagnostic.IDE0010.severity = none
 dotnet_diagnostic.IDE0059.severity = none
 # IDE0074: Use compound assignment
 dotnet_diagnostic.IDE0074.severity = none
-
+# IDE0120: Simplify LINQ expression
 dotnet_diagnostic.IDE0120.severity = none
+# IDE0130: Namespace does not match folder structure
 dotnet_diagnostic.IDE0130.severity = none
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
