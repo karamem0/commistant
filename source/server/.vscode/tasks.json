@@ -3,10 +3,11 @@
   "tasks": [
     {
       "label": "clean",
-      "command": "dotnet",
       "type": "shell",
+      "command": "dotnet",
       "args": [
         "clean",
+        "${workspaceFolder}/Karamem0.Commistant.sln",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -14,10 +15,15 @@
     },
     {
       "label": "build",
-      "command": "dotnet",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "type": "shell",
+      "command": "dotnet",
       "args": [
         "build",
+        "${workspaceFolder}/Karamem0.Commistant.sln",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],

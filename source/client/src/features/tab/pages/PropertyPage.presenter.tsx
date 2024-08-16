@@ -98,10 +98,10 @@ function PropertyPage(props: PropertyPageProps) {
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
-                      0: intl.formatMessage(messages.InTime),
-                      5: intl.formatMessage(messages.MinutesAfter, { value: 5 }),
-                      10: intl.formatMessage(messages.MinutesAfter, { value: 10 }),
-                      15: intl.formatMessage(messages.MinutesAfter, { value: 15 })
+                      '0': intl.formatMessage(messages.InTime),
+                      '5': intl.formatMessage(messages.MinutesAfter, { value: 5 }),
+                      '10': intl.formatMessage(messages.MinutesAfter, { value: 10 }),
+                      '15': intl.formatMessage(messages.MinutesAfter, { value: 15 })
                     }}
                     onBlur={field.onBlur}
                     onChange={(_, value) => field.onChange(value || '')} />
@@ -146,10 +146,10 @@ function PropertyPage(props: PropertyPageProps) {
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
-                      0: intl.formatMessage(messages.InTime),
-                      5: intl.formatMessage(messages.MinutesBefore, { value: 5 }),
-                      10: intl.formatMessage(messages.MinutesBefore, { value: 10 }),
-                      15: intl.formatMessage(messages.MinutesBefore, { value: 15 })
+                      '0': intl.formatMessage(messages.InTime),
+                      '5': intl.formatMessage(messages.MinutesBefore, { value: 5 }),
+                      '10': intl.formatMessage(messages.MinutesBefore, { value: 10 }),
+                      '15': intl.formatMessage(messages.MinutesBefore, { value: 15 })
                     }}
                     onBlur={field.onBlur}
                     onChange={(_, value) => field.onChange(value || '')} />
@@ -194,11 +194,11 @@ function PropertyPage(props: PropertyPageProps) {
                     value={field.value}
                     options={{
                       '-1': intl.formatMessage(messages.None),
-                      5: intl.formatMessage(messages.Minutes, { value: 5 }),
-                      10: intl.formatMessage(messages.Minutes, { value: 10 }),
-                      15: intl.formatMessage(messages.Minutes, { value: 15 }),
-                      30: intl.formatMessage(messages.Minutes, { value: 30 }),
-                      60: intl.formatMessage(messages.Minutes, { value: 60 })
+                      '5': intl.formatMessage(messages.Minutes, { value: 5 }),
+                      '10': intl.formatMessage(messages.Minutes, { value: 10 }),
+                      '15': intl.formatMessage(messages.Minutes, { value: 15 }),
+                      '30': intl.formatMessage(messages.Minutes, { value: 30 }),
+                      '60': intl.formatMessage(messages.Minutes, { value: 60 })
                     }}
                     onBlur={field.onBlur}
                     onChange={(_, value) => field.onChange(value || '')} />

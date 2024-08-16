@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "Debug (Chrome)",
+      "name": "Launch Web",
       "type": "chrome",
       "request": "launch",
       "url": "https://localhost:5173",

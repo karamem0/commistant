@@ -3,16 +3,9 @@
   "configurations": [
     {
       "name": "Launch Bot",
-      "type": "coreclr",
+      "type": "dotnet",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Karamem0.Commistant.Bot/bin/Debug/net8.0/Karamem0.Commistant.Bot.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/Karamem0.Commistant.Bot",
-      "stopAtEntry": false,
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "projectPath": "${workspaceFolder}//Karamem0.Commistant.Bot/Karamem0.Commistant.Bot.csproj"
     },
     {
       "name": "Launch Functions",
@@ -22,16 +15,9 @@
     },
     {
       "name": "Launch Web",
-      "type": "coreclr",
+      "type": "dotnet",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Karamem0.Commistant.Web/bin/Debug/net8.0/Karamem0.Commistant.Web.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/Karamem0.Commistant.Web",
-      "stopAtEntry": false,
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "projectPath": "${workspaceFolder}//Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj"
     }
   ]
 }
