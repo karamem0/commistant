@@ -47,12 +47,12 @@ root.render(
                   path="/"
                   element={(
                     <HomePage />
-                )} />
+                  )} />
                 <Route
                   path="/tab/configure"
                   element={(
                     <ConfigurePage />
-                )} />
+                  )} />
                 <Route
                   path="/tab/property"
                   element={(
@@ -61,7 +61,7 @@ root.render(
                         <PropertyPage />
                       </SnackbarProvider>
                     </TeamsProvider>
-                )} />
+                  )} />
                 <Route
                   element={<Error404Page />}
                   path="*" />

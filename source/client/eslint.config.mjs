@@ -9,11 +9,10 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
+import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import hooks from 'eslint-plugin-hooks';
-import sonarjs from 'eslint-plugin-sonarjs';
 import globals from 'globals';
 
 const compat = new FlatCompat({
@@ -24,17 +23,16 @@ const compat = new FlatCompat({
 
 export default [
   ...fixupConfigRules(compat.extends(
-    'eslint:recommended',
+    'plugin:@stylistic/recommended-extends',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:sonarjs/recommended-legacy',
-    'standard'
+    'plugin:sonarjs/recommended-legacy'
   )),
   {
     'plugins': {
-      hooks,
-      'sonarjs': fixupPluginRules(sonarjs)
+      hooks
     },
     'languageOptions': {
       'globals': {
@@ -48,24 +46,145 @@ export default [
       }
     },
     'rules': {
-      'array-bracket-spacing': [
-        'error',
-        'always',
-        {
-          'arraysInArrays': false
-        }
-      ],
-      'arrow-parens': [
-        'error',
-        'always'
-      ],
-      'arrow-spacing': 'error',
       'dot-notation': [
         'error',
         {
           'allowPattern': '^[a-z]+(_[a-z]+)+$'
         }
       ],
+      'key-spacing': [
+        'error',
+        {
+          'afterColon': true
+        }
+      ],
+      'linebreak-style': [
+        'error',
+        'unix'
+      ],
+      'no-alert': 'error',
+      'no-console': [
+        'warn',
+        {
+          'allow': [
+            'error'
+          ]
+        }
+      ],
+      'no-unused-vars': 'off',
+      'no-use-before-define': 'off',
+      'no-var': 'error',
+      'sort-imports': 'off',
+      'space-before-function-paren': [
+        'error',
+        {
+          'anonymous': 'never',
+          'named': 'never',
+          'asyncArrow': 'always'
+        }
+      ],
+      '@stylistic/arrow-parens': [
+        'error',
+        'always'
+      ],
+      '@stylistic/arrow-spacing': 'error',
+      '@stylistic/array-bracket-spacing': [
+        'error',
+        'always',
+        {
+          'arraysInArrays': false
+        }
+      ],
+      '@stylistic/brace-style': [
+        'error',
+        '1tbs'
+      ],
+      '@stylistic/comma-dangle': [
+        'error',
+        'never'
+      ],
+      '@stylistic/indent': [
+        'error',
+        2
+      ],
+      '@stylistic/indent-binary-ops': [
+        'error',
+        4
+      ],
+      '@stylistic/jsx-closing-bracket-location': [
+        'error',
+        'after-props'
+      ],
+      '@stylistic/jsx-first-prop-new-line': [
+        'error',
+        'multiline'
+      ],
+      '@stylistic/jsx-indent-props': [
+        'error',
+        2
+      ],
+      '@stylistic/jsx-max-props-per-line': [
+        'error',
+        {
+          'maximum': 1
+        }
+      ],
+      '@stylistic/jsx-sort-props': [
+        'error',
+        {
+          'callbacksLast': true,
+          'multiline': 'last',
+          'reservedFirst': true
+        }
+      ],
+      '@stylistic/jsx-tag-spacing': [
+        'error',
+        {
+          'beforeSelfClosing': 'always'
+        }
+      ],
+      '@stylistic/member-delimiter-style': [
+        'error',
+        {
+          'multiline': {
+            'delimiter': 'comma',
+            'requireLast': false
+          },
+          'singleline': {
+            'delimiter': 'comma',
+            'requireLast': false
+          }
+        }
+      ],
+      '@stylistic/multiline-ternary': [
+        'error',
+        'never'
+      ],
+      '@stylistic/operator-linebreak': [
+        'error',
+        'after'
+      ],
+      '@stylistic/padded-blocks': 'off',
+      '@stylistic/quotes': [
+        'error',
+        'single'
+      ],
+      '@stylistic/quote-props': [
+        'error',
+        'consistent'
+      ],
+      '@stylistic/semi': [
+        'error',
+        'always'
+      ],
+      '@typescript-eslint/array-type': [
+        'error',
+        {
+          'default': 'array'
+        }
+      ],
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-use-before-define': 'error',
       'hooks/sort': [
         'error',
         {
@@ -80,77 +199,11 @@ export default [
           ]
         }
       ],
-      'key-spacing': [
-        'error',
-        {
-          'afterColon': true
-        }
-      ],
-      'linebreak-style': [
-        'error',
-        'unix'
-      ],
-      'multiline-ternary': [
-        'error',
-        'never'
-      ],
-      'no-alert': 'error',
-      'no-console': [
-        'warn',
-        {
-          'allow': [
-            'error'
-          ]
-        }
-      ],
-      'no-unused-vars': 'off',
-      'no-use-before-define': 'off',
-      'no-var': 'error',
-      'operator-linebreak': [
-        'error',
-        'after'
-      ],
-      'padded-blocks': 'off',
-      'quote-props': [
-        'error',
-        'consistent'
-      ],
-      'quotes': [
-        'error', 'single'
-      ],
-      'semi': [
-        'error', 'always'
-      ],
-      'sort-imports': 'off',
-      'space-before-function-paren': [
-        'error',
-        {
-          'anonymous': 'never',
-          'named': 'never',
-          'asyncArrow': 'always'
-        }
-      ],
-      '@typescript-eslint/array-type': [
-        'error',
-        {
-          'default': 'array'
-        }
-      ],
-      '@typescript-eslint/member-delimiter-style': [
-        'error',
-        {
-          'multiline': {
-            'delimiter': 'comma',
-            'requireLast': false
-          },
-          'singleline': {
-            'delimiter': 'comma',
-            'requireLast': false
-          }
-        }
-      ],
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-use-before-define': 'error',
+      'import/default': 'off',
+      'import/namespace': 'off',
+      'import/no-named-as-default': 'off',
+      'import/no-named-as-default-member': 'off',
+      'import/no-unresolved': 'off',
       'import/order': [
         'error',
         {
@@ -204,42 +257,6 @@ export default [
             'order': 'asc'
           },
           'newlines-between': 'always'
-        }
-      ],
-      'react/jsx-closing-bracket-location': [
-        'error',
-        'after-props'
-      ],
-      'react/jsx-first-prop-new-line': [
-        'error',
-        'multiline'
-      ],
-      'react/jsx-indent': [
-        'error',
-        2
-      ],
-      'react/jsx-indent-props': [
-        'error',
-        2
-      ],
-      'react/jsx-max-props-per-line': [
-        'error',
-        {
-          'maximum': 1
-        }
-      ],
-      'react/jsx-sort-props': [
-        'error',
-        {
-          'callbacksLast': true,
-          'multiline': 'last',
-          'reservedFirst': true
-        }
-      ],
-      'react/jsx-tag-spacing': [
-        'error',
-        {
-          'beforeSelfClosing': 'always'
         }
       ],
       'react/no-unknown-property': [
