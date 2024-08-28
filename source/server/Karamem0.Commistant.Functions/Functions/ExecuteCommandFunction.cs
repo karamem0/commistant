@@ -23,7 +23,6 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Functions;
 
-
 public class ExecuteCommandFunction(
     ILoggerFactory loggerFactory,
     BlobContainerClient botStateClient,
@@ -36,6 +35,8 @@ public class ExecuteCommandFunction(
     private readonly BlobContainerClient botStateClient = botStateClient;
 
     private readonly CommandSet commandSet = commandSet;
+
+#pragma warning disable IDE0060
 
     [Function("ExecuteCommand")]
     public async Task Run([TimerTrigger("0 */1 * * * *")] object timerInfo)
@@ -77,5 +78,7 @@ public class ExecuteCommandFunction(
             this.logger.UnhandledError(ex);
         }
     }
+
+#pragma warning restore IDE0060
 
 }

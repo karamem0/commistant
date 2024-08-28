@@ -43,7 +43,7 @@ public class AutoMapperProfile : Profile
                         {
                             return -1;
                         }
-                        if (StartMeetingSchedules.All(_ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(StartMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return -1;
                         }
@@ -112,7 +112,7 @@ public class AutoMapperProfile : Profile
                         {
                             return -1;
                         }
-                        if (EndMeetingSchedules.All(_ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(EndMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return -1;
                         }
@@ -181,7 +181,7 @@ public class AutoMapperProfile : Profile
                         {
                             return -1;
                         }
-                        if (InMeetingSchedules.All(_ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(InMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return -1;
                         }

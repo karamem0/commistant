@@ -8,11 +8,9 @@
 
 import React from 'react';
 
-import { useError } from 'react-use';
-
 import { app, authentication } from '@microsoft/teams-js';
-
 import axios from 'axios';
+import { useError } from 'react-use';
 
 interface TeamsContextProps {
   context?: app.Context

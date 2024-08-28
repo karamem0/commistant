@@ -9,19 +9,16 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-
 import { Text } from '@fluentui/react-components';
-
 import { css } from '@emotion/react';
-
-import { useTheme } from '../../../providers/ThemeProvider';
 import messages from '../messages';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 interface Error404PageProps {
   error?: string
 }
 
-function Error404Page(props: Error404PageProps) {
+function Error404Page(props: Readonly<Error404PageProps>) {
 
   const { error } = props;
 

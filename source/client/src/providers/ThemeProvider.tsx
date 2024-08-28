@@ -10,16 +10,13 @@ import React from 'react';
 
 import {
   FluentProvider as Provider,
+  Theme,
   teamsDarkTheme,
   teamsHighContrastTheme,
-  teamsLightTheme,
-  Theme
+  teamsLightTheme
 } from '@fluentui/react-components';
-
 import { app } from '@microsoft/teams-js';
-
 import { css } from '@emotion/react';
-
 import { inTeams } from '../utils/Teams';
 
 interface ThemeContextProps {
@@ -40,7 +37,7 @@ interface ThemeProviderProps {
   children?: React.ReactNode
 }
 
-function ThemeProvider(props: ThemeProviderProps) {
+function ThemeProvider(props: Readonly<ThemeProviderProps>) {
 
   const { children } = props;
 

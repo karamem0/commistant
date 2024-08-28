@@ -24,7 +24,6 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant;
 
-
 public static class ConfigureServices
 {
 

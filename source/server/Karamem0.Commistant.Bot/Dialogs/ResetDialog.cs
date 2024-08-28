@@ -36,11 +36,10 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
     {
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
-            new WaterfallStep[]
-            {
+            [
                 this.BeforeConfirmAsync,
                 this.AfterConrifmAsync
-            }
+            ]
         ));
         _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);

@@ -29,6 +29,17 @@
       ],
       "dependsOn": "clean",
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "func",
+      "type": "func",
+      "command": "host start",
+      "options": {
+        "cwd": "${workspaceFolder}/Karamem0.Commistant.Functions/bin/Debug/net8.0"
+      },
+      "isBackground": true,
+      "dependsOn": "build",
+      "problemMatcher": "$func-dotnet-watch"
     }
   ]
 }

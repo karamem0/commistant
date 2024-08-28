@@ -8,12 +8,12 @@
 
 import React from 'react';
 
+import { MessageBarIntent } from '@fluentui/react-components';
 import Snackbar from '../components/Snackbar';
-import { SnackbarType } from '../types/Snackbar';
 
 interface SnackbarProps {
-  text?: string,
-  type?: SnackbarType
+  intent?: MessageBarIntent,
+  text?: string
 }
 
 interface SnackbarContextProps {
@@ -35,7 +35,7 @@ interface SnackbarProviderProps {
   children?: React.ReactNode
 }
 
-function SnackbarProvider(props: SnackbarProviderProps) {
+function SnackbarProvider(props: Readonly<SnackbarProviderProps>) {
 
   const { children } = props;
 

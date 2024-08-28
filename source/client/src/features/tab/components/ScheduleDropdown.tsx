@@ -9,7 +9,6 @@
 import React from 'react';
 
 import { EventHandler } from '../../../types/Event';
-
 import Presenter from './ScheduleDropdown.presenter';
 
 interface ScheduleDropdownProps {
@@ -20,7 +19,7 @@ interface ScheduleDropdownProps {
   onChange?: EventHandler<string>
 }
 
-function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButtonElement>) {
+function ScheduleDropdown(props: Readonly<ScheduleDropdownProps>, ref: React.Ref<HTMLButtonElement>) {
 
   const {
     disabled,

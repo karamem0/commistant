@@ -8,16 +8,14 @@
 
 import React from 'react';
 
-import { useIntl } from 'react-intl';
-
-import { useSnackbar } from '../../../common/providers/SnackbarProvider';
-import { SnackbarType } from '../../../common/types/Snackbar';
-import { mapper } from '../../../mappings/AutoMapperProfile';
-import { useTeams } from '../../../providers/TeamsProvider';
 import { useGetValue, useSetValue } from '../../../services/PropertyService';
-import { Event } from '../../../types/Event';
 import { ConversationPropertyFormState } from '../../../types/Form';
+import { Event } from '../../../types/Event';
+import { mapper } from '../../../mappings/AutoMapperProfile';
 import messages from '../messages';
+import { useIntl } from 'react-intl';
+import { useSnackbar } from '../../../common/providers/SnackbarProvider';
+import { useTeams } from '../../../providers/TeamsProvider';
 
 import Presenter from './PropertyPage.presenter';
 
@@ -55,12 +53,12 @@ function PropertyPage() {
           'ConversationPropertyFormState'
         ));
         setSnackbar({
-          type: SnackbarType.success,
+          intent: 'success',
           text: intl.formatMessage(messages.SaveSucceeded)
         });
       } catch (e) {
         setSnackbar({
-          type: SnackbarType.error,
+          intent: 'error',
           text: intl.formatMessage(messages.SaveFailed)
         });
       }

@@ -9,9 +9,9 @@
 import React from 'react';
 
 import {
+  MessageFormatElement,
   IntlProvider as Provider,
-  createIntl,
-  MessageFormatElement
+  createIntl
 } from 'react-intl';
 
 import ja from '../translations/compiled/ja.json';
@@ -26,7 +26,7 @@ const intl = createIntl({
   messages: translations[window.navigator.language.substring(0, 2)]
 });
 
-function IntlProvider(props: React.PropsWithChildren<unknown>) {
+function IntlProvider(props: Readonly<React.PropsWithChildren<unknown>>) {
 
   const { children } = props;
 

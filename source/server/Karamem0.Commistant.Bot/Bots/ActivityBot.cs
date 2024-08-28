@@ -104,35 +104,27 @@ public class ActivityBot(
             {
                 if (dc.ActiveDialog is null)
                 {
-                    var result = command switch
+                    var result = new Func<Task<DialogTurnResult?>>(async () =>
                     {
-                        "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), cancellationToken: cancellationToken),
-                        "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), cancellationToken: cancellationToken),
-                        "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), cancellationToken: cancellationToken),
-                        "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
-                        _ => await new Func<Task<DialogTurnResult?>>(async () =>
+                        var message = await this.openAIService.ChatCompletionAsync(command, cancellationToken: cancellationToken);
+                        if (message.FinishReason == ChatFinishReason.ToolCalls)
                         {
-                            var message = await this.openAIService.ChatCompletionAsync(command, cancellationToken: cancellationToken);
-                            if (message.FinishReason == ChatFinishReason.ToolCalls)
+                            var arguments = message.ToolCalls.Select(item => item.FunctionArguments).First();
+                            var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(arguments);
+                            return content?.Type switch
                             {
-                                var arguments = message.ToolCalls.Select(item => item.FunctionArguments).First();
-                                var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(arguments);
-                                var result = content?.Type switch
-                                {
-                                    "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), content, cancellationToken: cancellationToken),
-                                    "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), content, cancellationToken: cancellationToken),
-                                    "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), content, cancellationToken: cancellationToken),
-                                    "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
-                                    _ => null,
-                                };
-                                return result;
-                            }
-                            else
-                            {
-                                return null;
-                            }
-                        })()
-                    };
+                                "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), content, cancellationToken: cancellationToken),
+                                "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), content, cancellationToken: cancellationToken),
+                                "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), content, cancellationToken: cancellationToken),
+                                "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+                                _ => null,
+                            };
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    })();
                     if (result is null)
                     {
                         _ = await turnContext.SendActivityAsync(

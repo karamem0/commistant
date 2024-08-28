@@ -1,6 +1,6 @@
 {
   "azurite.location": ".azurite",
-  "azureFunctions.preDeployTask": "publish function",
   "azureFunctions.projectLanguage": "C#",
-  "azureFunctions.projectRuntime": "~4"
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
 }

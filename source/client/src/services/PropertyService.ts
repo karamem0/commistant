@@ -9,10 +9,8 @@
 import React from 'react';
 
 import { useAsyncFn, useError } from 'react-use';
-
-import axios from 'axios';
-
 import { ConversationProperty } from '../types/Model';
+import axios from 'axios';
 
 function getValue(meetingId: string): Promise<ConversationProperty> {
   return axios

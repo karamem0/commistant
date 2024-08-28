@@ -9,7 +9,6 @@
 import React from 'react';
 
 import { Dropdown, Option } from '@fluentui/react-components';
-
 import { EventHandler } from '../../../types/Event';
 
 interface ScheduleDropdownProps {
@@ -20,7 +19,7 @@ interface ScheduleDropdownProps {
   onChange?: EventHandler<string>
 }
 
-function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButtonElement>) {
+function ScheduleDropdown(props: Readonly<ScheduleDropdownProps>, ref: React.Ref<HTMLButtonElement>) {
 
   const {
     disabled,
@@ -52,4 +51,4 @@ function ScheduleDropdown(props: ScheduleDropdownProps, ref: React.Ref<HTMLButto
 
 }
 
-export default React.forwardRef(ScheduleDropdown);
+export default React.memo(React.forwardRef(ScheduleDropdown));

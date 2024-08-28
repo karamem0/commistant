@@ -8,13 +8,10 @@
 
 import React from 'react';
 
-import { useIntl } from 'react-intl';
-
 import { app, pages } from '@microsoft/teams-js';
-
-import messages from '../messages';
-
 import Presenter from './ConfigurePage.presenter';
+import messages from '../messages';
+import { useIntl } from 'react-intl';
 
 function ConfigurePage() {
 
@@ -23,7 +20,7 @@ function ConfigurePage() {
   React.useEffect(() => {
     (async () => {
       await app.initialize();
-      pages.config.registerOnSaveHandler((e: pages.config.SaveEvent) => {
+      pages.config.registerOnSaveHandler((e: pages.config.SaveEvent) =>
         pages.config
           .setConfig({
             websiteUrl: window.origin,
@@ -32,8 +29,8 @@ function ConfigurePage() {
             suggestedDisplayName: intl.formatMessage(messages.AppName)
           })
           .then(() => e.notifySuccess())
-          .catch((error) => e.notifyFailure(error));
-      });
+          .catch((error) => e.notifyFailure(error))
+      );
       pages.config.setValidityState(true);
     })();
   }, [

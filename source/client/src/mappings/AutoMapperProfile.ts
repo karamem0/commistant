@@ -6,16 +6,15 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+import { PojosMetadataMap, pojos } from '@automapper/pojos';
 import {
   createMap,
   createMapper,
   forMember,
   mapFrom
 } from '@automapper/core';
-import { pojos, PojosMetadataMap } from '@automapper/pojos';
-
-import { ConversationPropertyFormState } from '../types/Form';
 import { ConversationProperty } from '../types/Model';
+import { ConversationPropertyFormState } from '../types/Form';
 
 export const mapper = createMapper({
   strategyInitializer: pojos()

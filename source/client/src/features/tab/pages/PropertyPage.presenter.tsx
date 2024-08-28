@@ -8,23 +8,20 @@
 
 import React from 'react';
 
-import { Controller, useForm } from 'react-hook-form';
-import { FormattedMessage, useIntl } from 'react-intl';
-
 import {
   Button,
   Field,
   Input,
   Subtitle2
 } from '@fluentui/react-components';
-
-import { css } from '@emotion/react';
-
-import { useTheme } from '../../../providers/ThemeProvider';
-import { EventHandler } from '../../../types/Event';
+import { Controller, useForm } from 'react-hook-form';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { ConversationPropertyFormState } from '../../../types/Form';
+import { EventHandler } from '../../../types/Event';
 import ScheduleDropdown from '../components/ScheduleDropdown';
+import { css } from '@emotion/react';
 import messages from '../messages';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 interface PropertyPageProps {
   disabled?: boolean,
@@ -32,7 +29,7 @@ interface PropertyPageProps {
   onSubmit?: EventHandler<ConversationPropertyFormState>
 }
 
-function PropertyPage(props: PropertyPageProps) {
+function PropertyPage(props: Readonly<PropertyPageProps>) {
 
   const {
     disabled,

@@ -9,19 +9,16 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-
 import { Text } from '@fluentui/react-components';
-
 import { css } from '@emotion/react';
-
-import { useTheme } from '../../../providers/ThemeProvider';
 import messages from '../messages';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 interface Error500PageProps {
   error?: string
 }
 
-function Error500Page(props: Error500PageProps) {
+function Error500Page(props: Readonly<Error500PageProps>) {
 
   const { error } = props;
 

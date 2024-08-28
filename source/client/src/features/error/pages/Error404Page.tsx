@@ -14,7 +14,7 @@ interface Error404PageProps {
   error?: Error
 }
 
-function Error404Page(props: Error404PageProps) {
+function Error404Page(props: Readonly<Error404PageProps>) {
 
   const { error } = props;
 

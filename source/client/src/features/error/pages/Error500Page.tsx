@@ -14,7 +14,7 @@ interface Error500PageProps {
   error?: Error
 }
 
-function Error500Page(props: Error500PageProps) {
+function Error500Page(props: Readonly<Error500PageProps>) {
 
   const { error } = props;
 

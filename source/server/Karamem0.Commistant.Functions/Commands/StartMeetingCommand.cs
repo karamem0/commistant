@@ -90,7 +90,7 @@ public class StartMeetingCommand(
             if (string.IsNullOrEmpty(property.StartMeetingUrl) is not true)
             {
                 var bytes = await this.qrCodeService.CreateAsync(property.StartMeetingUrl);
-                var base64 = WebEncoders.Base64UrlEncode(bytes);
+                var base64 = Convert.ToBase64String(bytes);
                 card.Body.Add(new AdaptiveImage()
                 {
                     AltText = property.InMeetingUrl,

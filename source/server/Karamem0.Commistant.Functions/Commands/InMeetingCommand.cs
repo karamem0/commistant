@@ -86,7 +86,7 @@ public class InMeetingCommand(
             if (string.IsNullOrEmpty(property.InMeetingUrl) is not true)
             {
                 var bytes = await this.qrCodeService.CreateAsync(property.InMeetingUrl);
-                var base64 = WebEncoders.Base64UrlEncode(bytes);
+                var base64 = Convert.ToBase64String(bytes);
                 card.Body.Add(new AdaptiveImage()
                 {
                     AltText = property.InMeetingUrl,

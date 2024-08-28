@@ -9,13 +9,10 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-
 import { Text } from '@fluentui/react-components';
-
 import { css } from '@emotion/react';
-
-import { useTheme } from '../../../providers/ThemeProvider';
 import messages from '../messages';
+import { useTheme } from '../../../providers/ThemeProvider';
 
 function ConfigurePage() {
 

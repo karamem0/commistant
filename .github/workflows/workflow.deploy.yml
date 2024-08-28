@@ -1,0 +1,283 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      APP_CLIENT_ID:
+        required: true
+      APP_DOMAIN_NAME:
+        required: true
+      AZURE_BOT_NAME:
+        required: true
+      AZURE_FUNC_NAME:
+        required: true
+      AZURE_WEB_NAME:
+        required: true
+      AZURE_CREDENTIALS:
+        required: true
+      CODECOV_TOKEN:
+        required: true
+      TELEMETRY_CONNECTION_STRING:
+        required: true
+
+jobs:
+  build-web:
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v4
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Update .env
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path ${{env.FILE_PATH}}
+          $content = $content -replace "{{APP_DOMAIN_NAME}}", "${{secrets.APP_DOMAIN_NAME}}"
+          $content = $content -replace "{{TELEMETRY_CONNECTION_STRING}}", "${{secrets.TELEMETRY_CONNECTION_STRING}}"
+          Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
+        env:
+          FILE_PATH: source/client/.env
+      - name: Update package.json
+        run: npm version ${{vars.BUILD_VERSION}} --no-git-tag-version
+        working-directory: source/client
+      - name: Restore client
+        run: npm ci
+        working-directory: source/client
+      - name: Audit client
+        run: npm audit --omit=dev
+        working-directory: source/client
+      - name: Restore server
+        run: dotnet restore
+        working-directory: source/server
+      - name: Test source
+        shell: pwsh
+        run: |
+          dotnet test `
+            Karamem0.Commistant.Tests/Karamem0.Commistant.Tests.csproj `
+            --filter TestCategory=Karamem0.Commistant.Web `
+            -p:AltCover=true `
+            -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
+        working-directory: source/server
+      - name: Build source
+        shell: pwsh
+        run: |
+          dotnet publish `
+            Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj `
+            -c Release `
+            -p:PublishDir=${{github.workspace}}/source/server/build `
+            -p:Version=${{vars.BUILD_VERSION}}.${{github.run_number}} `
+            -p:FileVersion=${{vars.BUILD_VERSION}}.${{github.run_number}}
+        working-directory: source/server
+      - name: Upload build files
+        uses: actions/upload-artifact@v4
+        with:
+          name: commistant-web
+          path: source/server/build
+      - name: Upload test results
+        uses: enricomi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: source/server/test/*.xml
+          check_name: web-test-results
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          fail_ci_if_error: true
+          token: ${{secrets.CODECOV_TOKEN}}
+          slug: karamem0/commistant
+  deploy-web:
+    needs: build-web
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: commistant-web
+          path: artifact
+      - name: Connect to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Deploy artifacts
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_WEB_NAME}}
+          package: artifact
+  build-func:
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Restore source
+        run: dotnet restore
+        working-directory: source/server
+      - name: Test source
+        shell: pwsh
+        run: |
+          dotnet test `
+          Karamem0.Commistant.Tests/Karamem0.Commistant.Tests.csproj `
+          --filter TestCategory=Karamem0.Commistant.Functions `
+          -p:AltCover=true `
+          -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
+        working-directory: source/server
+      - name: Build source
+        shell: pwsh
+        run: |
+          dotnet publish `
+            Karamem0.Commistant.Functions/Karamem0.Commistant.Functions.csproj `
+            -c Release `
+            -p:PublishDir=${{github.workspace}}/source/server/build `
+            -p:Version=${{vars.BUILD_VERSION}}.${{github.run_number}} `
+            -p:FileVersion=${{vars.BUILD_VERSION}}.${{github.run_number}}
+        working-directory: source/server
+      - name: Upload build files
+        uses: actions/upload-artifact@v4
+        with:
+          name: commistant-func
+          path: source/server/build
+      - name: Upload test results
+        uses: enricomi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: source/server/test/*.xml
+          check_name: func-test-results
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          fail_ci_if_error: true
+          token: ${{secrets.CODECOV_TOKEN}}
+          slug: karamem0/commistant
+  deploy-func:
+    needs: build-func
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: commistant-func
+          path: artifact
+      - name: Connect to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Deploy artifacts
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_FUNC_NAME}}
+          package: artifact
+  build-bot:
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Update index.html
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path ${{env.FILE_PATH}}
+          $content = $content -replace "{{APP_DOMAIN_NAME}}", "${{secrets.APP_DOMAIN_NAME}}"
+          Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
+        env:
+          FILE_PATH: source/server/Karamem0.Commistant.Bot/wwwroot/index.html
+      - name: Restore source
+        run: dotnet restore
+        working-directory: source/server
+      - name: Test source
+        shell: pwsh
+        run: |
+          dotnet test `
+            Karamem0.Commistant.Tests/Karamem0.Commistant.Tests.csproj `
+            --filter TestCategory=Karamem0.Commistant.Bot `
+            -p:AltCover=true `
+            -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
+        working-directory: source/server
+      - name: Build source
+        shell: pwsh
+        run: |
+          dotnet publish `
+            Karamem0.Commistant.Bot/Karamem0.Commistant.Bot.csproj `
+            -c Release `
+            -p:PublishDir=${{github.workspace}}/source/server/build `
+            -p:Version=${{vars.BUILD_VERSION}}.${{github.run_number}} `
+            -p:FileVersion=${{vars.BUILD_VERSION}}.${{github.run_number}}
+        working-directory: source/server
+      - name: Upload build files
+        uses: actions/upload-artifact@v4
+        with:
+          name: commistant-bot
+          path: source/server/build
+      - name: Upload test results
+        uses: enricomi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: source/server/test/*.xml
+          check_name: bot-test-results
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          fail_ci_if_error: true
+          token: ${{secrets.CODECOV_TOKEN}}
+          slug: karamem0/commistant
+  deploy-bot:
+    needs: build-bot
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: commistant-bot
+          path: artifact
+      - name: Connect to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: Deploy artifacts
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.AZURE_BOT_NAME}}
+          package: artifact
+  build-manifest:
+    environment: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repos
+        uses: actions/checkout@v4
+      - name: Update manifest.json
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path ${{env.FILE_PATH}}
+          $content = $content -Replace '{{APP_CLIENT_ID}}', '${{secrets.APP_CLIENT_ID}}'
+          $content = $content -Replace '{{APP_DOMAIN_NAME}}', '${{secrets.APP_DOMAIN_NAME}}'
+          $content = $content -Replace "{{APP_VERSION}}", "${{vars.BUILD_VERSION}}"
+          Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
+        env:
+          FILE_PATH: manifest/manifest.json
+      - name: Upload manifest files
+        uses: actions/upload-artifact@v4
+        with:
+          name: commistant-manifest
+          path: manifest

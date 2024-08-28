@@ -10,23 +10,21 @@ import React from 'react';
 
 import ReactDOM from 'react-dom/client';
 
-import { ErrorBoundary } from 'react-error-boundary';
+import * as ress from 'ress';
 import {
   BrowserRouter,
   Route,
   Routes
 } from 'react-router-dom';
-
-import { Global } from '@emotion/react';
-import * as ress from 'ress';
-
-import SnackbarProvider from './common/providers/SnackbarProvider';
+import ConfigurePage from './features/tab/pages/ConfigurePage';
 import Error404Page from './features/error/pages/Error404Page';
 import Error500Page from './features/error/pages/Error500Page';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Global } from '@emotion/react';
 import HomePage from './features/home/pages/HomePage';
-import ConfigurePage from './features/tab/pages/ConfigurePage';
-import PropertyPage from './features/tab/pages/PropertyPage';
 import IntlProvider from './providers/IntlProvider';
+import PropertyPage from './features/tab/pages/PropertyPage';
+import SnackbarProvider from './common/providers/SnackbarProvider';
 import TeamsProvider from './providers/TeamsProvider';
 import TelemetryProvider from './providers/TelemetryProvider';
 import ThemeProvider from './providers/ThemeProvider';
