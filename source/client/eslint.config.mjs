@@ -211,6 +211,7 @@ export default [
         }
       ],
       'react/prop-types': 'off',
+      'sonarjs/max-switch-cases': 'warn',
       'sonarjs/no-collapsible-if': 'warn',
       'sonarjs/no-duplicate-string': 'off',
       'sonarjs/no-small-switch': 'warn',

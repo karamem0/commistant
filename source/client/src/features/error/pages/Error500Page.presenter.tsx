@@ -8,8 +8,8 @@
 
 import React from 'react';
 
-import { FormattedMessage } from 'react-intl';
-import { Text } from '@fluentui/react-components';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Image, Text } from '@fluentui/react-components';
 import { css } from '@emotion/react';
 import messages from '../messages';
 import { useTheme } from '../../../providers/ThemeProvider';
@@ -22,6 +22,7 @@ function Error500Page(props: Readonly<Error500PageProps>) {
 
   const { error } = props;
 
+  const intl = useIntl();
   const { theme } = useTheme();
 
   return (
@@ -38,18 +39,18 @@ function Error500Page(props: Readonly<Error500PageProps>) {
         css={css`
           display: flex;
           flex-direction: column;
-          grid-gap: 0.5rem;
+          grid-gap: 1rem;
           align-items: center;
           justify-content: center;
         `}>
-        <Text
-          as="h1"
-          css={css`
-            font-size: 3rem;
-            line-height: calc(3rem * 1.25);
-            color: ${theme.colorNeutralForegroundDisabled};
-          `}>
-          <FormattedMessage {...messages.Error500Title} />
+        <Text as="h1">
+          <Image
+            alt={intl.formatMessage(messages.Error500Title)}
+            src="/assets/errors/500.svg"
+            css={css`
+              max-width: 32rem;
+              max-height: 24rem;
+            `} />
         </Text>
         <Text
           css={css`

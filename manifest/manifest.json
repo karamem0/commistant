@@ -1,9 +1,8 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.16",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.17",
   "version": "{{APP_VERSION}}",
   "id": "{{APP_CLIENT_ID}}",
-  "packageName": "dev.karamem0.commistant",
   "name": {
     "short": "Commistant",
     "full": "Commistant"
@@ -11,7 +10,7 @@
   "developer": {
     "name": "karamem0",
     "websiteUrl": "https://github.com/karamem0/commistant",
-    "privacyUrl": "https://github.com/karamem0/commistant/blob/main/PRIVACY.md",
+    "privacyUrl": "https://github.com/karamem0/commistant/blob/main/PRIVACY_POLICY.md",
     "termsOfUseUrl": "https://github.com/karamem0/commistant/blob/main/TERMS_OF_USE.md"
   },
   "description": {

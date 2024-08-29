@@ -82,6 +82,7 @@ jobs:
         with:
           name: commistant-web
           path: source/server/build
+          include-hidden-files: true
       - name: Upload test results
         uses: enricomi/publish-unit-test-result-action/linux@v2
         if: always()
@@ -151,6 +152,7 @@ jobs:
         with:
           name: commistant-func
           path: source/server/build
+          include-hidden-files: true
       - name: Upload test results
         uses: enricomi/publish-unit-test-result-action/linux@v2
         if: always()
@@ -228,6 +230,7 @@ jobs:
         with:
           name: commistant-bot
           path: source/server/build
+          include-hidden-files: true
       - name: Upload test results
         uses: enricomi/publish-unit-test-result-action/linux@v2
         if: always()
@@ -281,3 +284,4 @@ jobs:
         with:
           name: commistant-manifest
           path: manifest
+          include-hidden-files: true

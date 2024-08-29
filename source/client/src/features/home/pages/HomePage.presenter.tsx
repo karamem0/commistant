@@ -120,7 +120,7 @@ function HomePage(props: Readonly<HomePageProps>) {
             </div>
             <Image
               fit="contain"
-              src="/assets/screenshot1.png"
+              src="/assets/screenshots/001.png"
               css={css`
                 height: auto;
               `} />
