@@ -9,11 +9,11 @@ on:
         required: true
       APP_DOMAIN_NAME:
         required: true
-      AZURE_BOT_NAME:
+      AZURE_APP_SERVICE_NAME_BOT:
         required: true
-      AZURE_FUNC_NAME:
+      AZURE_APP_SERVICE_NAME_FUNC:
         required: true
-      AZURE_WEB_NAME:
+      AZURE_APP_SERVICE_NAME_WEB:
         required: true
       AZURE_CREDENTIALS:
         required: true
@@ -112,7 +112,7 @@ jobs:
       - name: Deploy artifacts
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{secrets.AZURE_WEB_NAME}}
+          app-name: ${{secrets.AZURE_APP_SERVICE_NAME_WEB}}
           package: artifact
   build-func:
     environment: ${{inputs.environment}}
@@ -181,7 +181,7 @@ jobs:
       - name: Deploy artifacts
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{secrets.AZURE_FUNC_NAME}}
+          app-name: ${{secrets.AZURE_APP_SERVICE_NAME_FUNC}}
           package: artifact
   build-bot:
     environment: ${{inputs.environment}}
@@ -258,7 +258,7 @@ jobs:
       - name: Deploy artifacts
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{secrets.AZURE_BOT_NAME}}
+          app-name: ${{secrets.AZURE_APP_SERVICE_NAME_BOT}}
           package: artifact
   build-manifest:
     environment: ${{inputs.environment}}
