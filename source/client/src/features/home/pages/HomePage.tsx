@@ -8,29 +8,37 @@
 
 import React from 'react';
 
-import { Event } from '../../../types/Event';
 import Presenter from './HomePage.presenter';
+import messages from '../messages';
+import { useIntl } from 'react-intl';
 
 function HomePage() {
 
-  const handleLinkClick = React.useCallback((_?: Event, data?: string) => {
-    switch (data) {
-      case 'GitHub':
-        window.open('https://github.com/karamem0/commistant', '_blank');
-        break;
-      case 'TermsOfUse':
-        window.open('https://github.com/karamem0/commistant/blob/main/TERMS_OF_USE.md', '_blank');
-        break;
-      case 'PrivacyPolicy':
-        window.open('https://github.com/karamem0/commistant/blob/main/PRIVACY.md', '_blank');
-        break;
-      default:
-        break;
-    }
-  }, []);
+  const intl = useIntl();
+
+  const handleLinkToGitHub = React.useCallback(() => {
+    window.open(intl.formatMessage(messages.GitHubLink), '_blank', 'noreferrer');
+  }, [
+    intl
+  ]);
+
+  const handleLinkToPrivacyPolicy = React.useCallback(() => {
+    window.open(intl.formatMessage(messages.PrivacyPolicyLink), '_blank', 'noreferrer');
+  }, [
+    intl
+  ]);
+
+  const handleLinkToTermsOfUse = React.useCallback(() => {
+    window.open(intl.formatMessage(messages.TermsOfUseLink), '_blank', 'noreferrer');
+  }, [
+    intl
+  ]);
 
   return (
-    <Presenter onLinkClick={handleLinkClick} />
+    <Presenter
+      onLinkToGitHub={handleLinkToGitHub}
+      onLinkToPrivacyPolicy={handleLinkToPrivacyPolicy}
+      onLinkToTermsOfUse={handleLinkToTermsOfUse} />
   );
 
 }

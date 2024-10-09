@@ -10,9 +10,9 @@ import { FlatCompat } from '@eslint/eslintrc';
 import { fileURLToPath } from 'url';
 import { fixupConfigRules } from '@eslint/compat';
 import globals from 'globals';
-import hooks from 'eslint-plugin-hooks';
 import js from '@eslint/js';
 import path from 'path';
+import pluginHooks from 'eslint-plugin-hooks';
 
 const compat = new FlatCompat({
   baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
@@ -30,12 +30,15 @@ export default [
   )),
   {
     'plugins': {
-      hooks
+      'hooks': pluginHooks
     },
     'languageOptions': {
       'globals': {
         ...globals.browser,
         ...globals.jest
+      },
+      'parserOptions': {
+        'warnOnUnsupportedTypeScriptVersion': false
       }
     },
     'settings': {
@@ -112,7 +115,7 @@ export default [
       ],
       '@stylistic/indent-binary-ops': [
         'error',
-        4
+        2
       ],
       '@stylistic/jsx-closing-bracket-location': [
         'error',
@@ -186,7 +189,12 @@ export default [
           'default': 'array'
         }
       ],
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          'varsIgnorePattern': '^_'
+        }
+      ],
       '@typescript-eslint/no-use-before-define': 'error',
       'hooks/sort': [
         'error',
@@ -215,7 +223,9 @@ export default [
       'sonarjs/no-collapsible-if': 'warn',
       'sonarjs/no-duplicate-string': 'off',
       'sonarjs/no-small-switch': 'warn',
-      'sonarjs/prefer-single-boolean-return': 'off'
+      'sonarjs/no-unknown-property': 'off',
+      'sonarjs/prefer-single-boolean-return': 'off',
+      'sonarjs/sonar-no-unused-vars': 'off'
     }
   }
 ];

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <PackageId>Karamem0.Commistant.Tests</PackageId>
     <Version>0.0.0</Version>
     <Authors>karamem0</Authors>

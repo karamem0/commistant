@@ -56,7 +56,7 @@ function PropertyPage() {
           intent: 'success',
           text: intl.formatMessage(messages.SaveSucceeded)
         });
-      } catch (e) {
+      } catch {
         setSnackbar({
           intent: 'error',
           text: intl.formatMessage(messages.SaveFailed)

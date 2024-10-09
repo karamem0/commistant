@@ -17,7 +17,6 @@ import {
 } from '@fluentui/react-components';
 import { app } from '@microsoft/teams-js';
 import { css } from '@emotion/react';
-import { inTeams } from '../utils/Teams';
 
 interface ThemeContextProps {
   theme: Theme
@@ -58,15 +57,13 @@ function ThemeProvider(props: Readonly<ThemeProviderProps>) {
   };
 
   React.useEffect(() => {
-    if (!inTeams()) {
-      return;
+    if (app.isInitialized()) {
+      (async () => {
+        const context = await app.getContext();
+        handleThemeChange(context.app.theme);
+        app.registerOnThemeChangeHandler(handleThemeChange);
+      })();
     }
-    (async () => {
-      await app.initialize();
-      const context = await app.getContext();
-      handleThemeChange(context.app.theme);
-      app.registerOnThemeChangeHandler(handleThemeChange);
-    })();
   }, []);
 
   return (

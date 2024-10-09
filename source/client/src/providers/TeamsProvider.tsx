@@ -41,7 +41,6 @@ function TeamsProvider(props: Readonly<TeamsProviderProps>) {
   React.useEffect(() => {
     (async () => {
       try {
-        await app.initialize();
         await authentication.getAuthToken();
         setValue({ context: await app.getContext() });
         axios.interceptors.request.use(async (request) => {

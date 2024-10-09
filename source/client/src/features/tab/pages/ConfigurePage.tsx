@@ -17,24 +17,30 @@ function ConfigurePage() {
 
   const intl = useIntl();
 
+  const handleSave = React.useCallback(async (event: pages.config.SaveEvent) => {
+    try {
+      await pages.config.setConfig({
+        websiteUrl: window.origin,
+        contentUrl: `${window.origin}/tab/property`,
+        entityId: '55da67fc-cfa4-481c-a77f-de2c0b6deaed',
+        suggestedDisplayName: intl.formatMessage(messages.AppName)
+      });
+      event.notifySuccess();
+    } catch (error) {
+      event.notifyFailure(error instanceof Error ? error.message : Object.prototype.toString.call(error));
+    }
+  }, [
+    intl
+  ]);
+
   React.useEffect(() => {
     (async () => {
       await app.initialize();
-      pages.config.registerOnSaveHandler((e: pages.config.SaveEvent) =>
-        pages.config
-          .setConfig({
-            websiteUrl: window.origin,
-            contentUrl: `${window.origin}/tab/property`,
-            entityId: '55da67fc-cfa4-481c-a77f-de2c0b6deaed',
-            suggestedDisplayName: intl.formatMessage(messages.AppName)
-          })
-          .then(() => e.notifySuccess())
-          .catch((error) => e.notifyFailure(error))
-      );
+      pages.config.registerOnSaveHandler(handleSave);
       pages.config.setValidityState(true);
     })();
   }, [
-    intl
+    handleSave
   ]);
 
   return (

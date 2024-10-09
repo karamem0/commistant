@@ -2,7 +2,7 @@
   "profiles": {
     "Karamem0.Commistant.Bot": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "http://localhost:3978",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

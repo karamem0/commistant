@@ -22,12 +22,18 @@ import messages from '../messages';
 import { useTheme } from '../../../providers/ThemeProvider';
 
 interface HomePageProps {
-  onLinkClick: EventHandler<string>
+  onLinkToGitHub?: EventHandler,
+  onLinkToPrivacyPolicy?: EventHandler,
+  onLinkToTermsOfUse?: EventHandler
 }
 
 function HomePage(props: Readonly<HomePageProps>) {
 
-  const { onLinkClick } = props;
+  const {
+    onLinkToGitHub,
+    onLinkToPrivacyPolicy,
+    onLinkToTermsOfUse
+  } = props;
 
   const { theme } = useTheme();
 
@@ -63,8 +69,8 @@ function HomePage(props: Readonly<HomePageProps>) {
                   height: 1rem;
                 `} />
             )}
-            onClick={(e) => onLinkClick?.(e, 'GitHub')}>
-            GitHub
+            onClick={onLinkToGitHub}>
+            <FormattedMessage {...messages.GitHub} />
           </Button>
         </header>
         <section
@@ -200,8 +206,8 @@ function HomePage(props: Readonly<HomePageProps>) {
           `}>
           <Link
             as="button"
-            onClick={(e) => onLinkClick?.(e, 'TermsOfUse')}>
-            <FormattedMessage {...messages.TermsOfUseTitle} />
+            onClick={onLinkToTermsOfUse}>
+            <FormattedMessage {...messages.TermsOfUse} />
           </Link>
           <Text
             css={css`
@@ -211,8 +217,8 @@ function HomePage(props: Readonly<HomePageProps>) {
           </Text>
           <Link
             as="button"
-            onClick={(e) => onLinkClick?.(e, 'PrivacyPolicy')}>
-            <FormattedMessage {...messages.PrivacyPolicyTitle} />
+            onClick={onLinkToPrivacyPolicy}>
+            <FormattedMessage {...messages.PrivacyPolicy} />
           </Link>
         </footer>
       </div>

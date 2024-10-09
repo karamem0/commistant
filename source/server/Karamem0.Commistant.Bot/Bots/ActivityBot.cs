@@ -104,13 +104,13 @@ public class ActivityBot(
             {
                 if (dc.ActiveDialog is null)
                 {
-                    var result = new Func<Task<DialogTurnResult?>>(async () =>
+                    var result = await new Func<Task<DialogTurnResult?>>(async () =>
                     {
                         var message = await this.openAIService.ChatCompletionAsync(command, cancellationToken: cancellationToken);
                         if (message.FinishReason == ChatFinishReason.ToolCalls)
                         {
                             var arguments = message.ToolCalls.Select(item => item.FunctionArguments).First();
-                            var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(arguments);
+                            var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(arguments?.ToString());
                             return content?.Type switch
                             {
                                 "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), content, cancellationToken: cancellationToken),

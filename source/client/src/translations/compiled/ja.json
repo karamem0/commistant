@@ -39,12 +39,6 @@
       "value": "会議中"
     }
   ],
-  "9cQLm9": [
-    {
-      "type": 0,
-      "value": "500"
-    }
-  ],
   "C9K+wz": [
     {
       "type": 1,
@@ -59,12 +53,6 @@
     {
       "type": 0,
       "value": "なし"
-    }
-  ],
-  "DRXWXB": [
-    {
-      "type": 0,
-      "value": "404"
     }
   ],
   "GOuwUo": [
@@ -83,6 +71,12 @@
     {
       "type": 0,
       "value": "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。通知にはテキストおよび QR コードつきの URL を添付することができます。"
+    }
+  ],
+  "JqiqNj": [
+    {
+      "type": 0,
+      "value": "Something went wrong"
     }
   ],
   "LYZ42q": [
@@ -109,6 +103,18 @@
       "value": "Commistant は会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。"
     }
   ],
+  "QRccCM": [
+    {
+      "type": 0,
+      "value": "Page not found"
+    }
+  ],
+  "R3Qa6e": [
+    {
+      "type": 0,
+      "value": "https://github.com/karamem0/commistant"
+    }
+  ],
   "ShGnGr": [
     {
       "type": 0,
@@ -119,6 +125,12 @@
     {
       "type": 0,
       "value": "Commistant"
+    }
+  ],
+  "U+u68G": [
+    {
+      "type": 0,
+      "value": "https://github.com/karamem0/commistant/blob/main/TERMS_OF_USE.md"
     }
   ],
   "UwOKR3": [
@@ -149,6 +161,12 @@
     {
       "type": 0,
       "value": "URL"
+    }
+  ],
+  "esH1NI": [
+    {
+      "type": 0,
+      "value": "https://github.com/karamem0/commistant/blob/main/PRIVACY_POLICY.md"
     }
   ],
   "iw4mFu": [
