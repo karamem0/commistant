@@ -48,7 +48,7 @@ public class InMeetingCommand(
         CancellationToken cancellationToken = default
     )
     {
-        if (property.InMeeting is not true)
+        if (property.InMeeting is false)
         {
             return;
         }
@@ -75,7 +75,7 @@ public class InMeetingCommand(
         {
             this.logger.InMeetingMessageNotifying(reference, property);
             var card = new AdaptiveCard("1.3");
-            if (string.IsNullOrEmpty(property.InMeetingMessage) is not true)
+            if (string.IsNullOrEmpty(property.InMeetingMessage) is false)
             {
                 card.Body.Add(new AdaptiveTextBlock()
                 {
@@ -83,15 +83,20 @@ public class InMeetingCommand(
                     Wrap = true
                 });
             }
-            if (string.IsNullOrEmpty(property.InMeetingUrl) is not true)
+            if (Uri.TryCreate(property.InMeetingUrl, UriKind.Absolute, out var url))
             {
-                var bytes = await this.qrCodeService.CreateAsync(property.InMeetingUrl);
+                var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);
                 card.Body.Add(new AdaptiveImage()
                 {
-                    AltText = property.InMeetingUrl,
+                    AltText = url.ToString(),
                     Size = AdaptiveImageSize.Stretch,
                     Url = new Uri($"data:image/png;base64,{base64}")
+                });
+                card.Actions.Add(new AdaptiveOpenUrlAction()
+                {
+                    Title = "URL を開く",
+                    Url = url,
                 });
             }
             var activity = MessageFactory.Attachment(new Attachment()
@@ -105,7 +110,7 @@ public class InMeetingCommand(
             _ = await this.connectorClientService.SendActivityAsync(
                 new Uri(reference.ServiceUrl),
                 (Activity)activity,
-                cancellationToken: cancellationToken
+                cancellationToken
             );
         }
         finally

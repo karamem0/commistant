@@ -36,7 +36,7 @@ public class InMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -45,16 +45,16 @@ public class InMeetingCommandTests
             ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
             InMeetingSchedule = 10,
             InMeetingMessage = "",
-            InMeetingUrl = "https://www.example.com",
+            InMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 20, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<InMeetingCommand>>();
         logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -73,10 +73,10 @@ public class InMeetingCommandTests
         // Assert
         _ = connectorClientService
             .Received()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .Received()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -89,7 +89,7 @@ public class InMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -98,16 +98,16 @@ public class InMeetingCommandTests
             ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
             InMeetingSchedule = 10,
             InMeetingMessage = "",
-            InMeetingUrl = "https://www.example.com",
+            InMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 25, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<InMeetingCommand>>();
         logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -126,10 +126,10 @@ public class InMeetingCommandTests
         // Assert
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -142,7 +142,7 @@ public class InMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -151,16 +151,16 @@ public class InMeetingCommandTests
             ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
             InMeetingSchedule = 10,
             InMeetingMessage = "",
-            InMeetingUrl = "https://www.example.com",
+            InMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 20, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<InMeetingCommand>>();
         logger.InMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -179,10 +179,10 @@ public class InMeetingCommandTests
         // Assert
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
 }

@@ -33,19 +33,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議開始後");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return -1;
+                            return d.StartMeetingSchedule;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return -1;
+                            return d.StartMeetingSchedule;
                         }
                         if (Array.TrueForAll(StartMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
-                            return -1;
+                            return d.StartMeetingSchedule;
                         }
                         return s.Value.Schedule;
                     });
@@ -56,19 +56,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議開始後");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.StartMeetingMessage;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.StartMeetingMessage;
                         }
                         if (string.IsNullOrEmpty(s.Value.Message))
                         {
-                            return null;
+                            return d.StartMeetingMessage;
                         }
                         return s.Value.Message;
                     });
@@ -79,19 +79,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議開始後");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.StartMeetingUrl;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.StartMeetingUrl;
                         }
                         if (string.IsNullOrEmpty(s.Value.Url))
                         {
-                            return null;
+                            return d.StartMeetingUrl;
                         }
                         return s.Value.Url;
                     });
@@ -102,19 +102,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議終了前");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return -1;
+                            return d.EndMeetingSchedule;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return -1;
+                            return d.EndMeetingSchedule;
                         }
                         if (Array.TrueForAll(EndMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
-                            return -1;
+                            return d.EndMeetingSchedule;
                         }
                         return s.Value.Schedule;
                     });
@@ -125,19 +125,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議終了前");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.EndMeetingMessage;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.EndMeetingMessage;
                         }
                         if (string.IsNullOrEmpty(s.Value.Message))
                         {
-                            return null;
+                            return d.EndMeetingMessage;
                         }
                         return s.Value.Message;
                     });
@@ -148,19 +148,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議終了前");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.EndMeetingUrl;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.EndMeetingUrl;
                         }
                         if (string.IsNullOrEmpty(s.Value.Url))
                         {
-                            return null;
+                            return d.EndMeetingUrl;
                         }
                         return s.Value.Url;
                     });
@@ -171,19 +171,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議中");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return -1;
+                            return d.InMeetingSchedule;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return -1;
+                            return d.InMeetingSchedule;
                         }
                         if (Array.TrueForAll(InMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
-                            return -1;
+                            return d.InMeetingSchedule;
                         }
                         return s.Value.Schedule;
                     });
@@ -194,19 +194,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議中");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.InMeetingMessage;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.InMeetingMessage;
                         }
                         if (string.IsNullOrEmpty(s.Value.Message))
                         {
-                            return null;
+                            return d.InMeetingMessage;
                         }
                         return s.Value.Message;
                     });
@@ -217,19 +217,19 @@ public class AutoMapperProfile : Profile
                 o =>
                 {
                     o.Condition(s => s.Type == "会議中");
-                    o.MapFrom((s, _) =>
+                    o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
                         {
-                            return null;
+                            return d.InMeetingUrl;
                         }
                         if (s.Value.Enabled is false)
                         {
-                            return null;
+                            return d.InMeetingUrl;
                         }
                         if (string.IsNullOrEmpty(s.Value.Url))
                         {
-                            return null;
+                            return d.InMeetingUrl;
                         }
                         return s.Value.Url;
                     });

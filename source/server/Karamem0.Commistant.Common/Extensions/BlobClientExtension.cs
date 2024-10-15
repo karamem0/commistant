@@ -37,9 +37,9 @@ public static class BlobClientExtension
 
     public static async Task SetObjectAsync<T>(this BlobClient target, BlobContent<T> value)
     {
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value.Data)));
+        var content = BinaryData.FromString(JsonSerializer.Serialize(value.Data));
         _ = await target.UploadAsync(
-            stream,
+            content,
             new BlobUploadOptions()
             {
                 Conditions = new BlobRequestConditions()

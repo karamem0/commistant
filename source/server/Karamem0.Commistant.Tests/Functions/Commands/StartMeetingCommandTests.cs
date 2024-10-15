@@ -36,7 +36,7 @@ public class StartMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -46,16 +46,16 @@ public class StartMeetingCommandTests
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
-            StartMeetingUrl = "https://www.example.com",
+            StartMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -75,10 +75,10 @@ public class StartMeetingCommandTests
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
         _ = connectorClientService
             .Received()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .Received()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -91,7 +91,7 @@ public class StartMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -101,16 +101,16 @@ public class StartMeetingCommandTests
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
-            StartMeetingUrl = "https://www.example.com",
+            StartMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 15, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -130,10 +130,10 @@ public class StartMeetingCommandTests
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
         _ = connectorClientService
             .Received()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .Received()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -146,7 +146,7 @@ public class StartMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -156,16 +156,16 @@ public class StartMeetingCommandTests
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
-            StartMeetingUrl = "https://www.example.com",
+            StartMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 5, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -185,10 +185,10 @@ public class StartMeetingCommandTests
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(false));
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -201,7 +201,7 @@ public class StartMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -211,16 +211,16 @@ public class StartMeetingCommandTests
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
-            StartMeetingUrl = "https://www.example.com",
+            StartMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -240,10 +240,10 @@ public class StartMeetingCommandTests
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(false));
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -256,7 +256,7 @@ public class StartMeetingCommandTests
             {
                 Id = "1234567890",
             },
-            ServiceUrl = "https://www.example.com",
+            ServiceUrl = "https://www.example.com/",
         };
         var conversationProperty = new ConversationProperty()
         {
@@ -266,16 +266,16 @@ public class StartMeetingCommandTests
             StartMeetingSended = true,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
-            StartMeetingUrl = "https://www.example.com",
+            StartMeetingUrl = "https://www.example.com/",
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
             .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>())
+        _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQrCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com")
+        _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
@@ -295,10 +295,10 @@ public class StartMeetingCommandTests
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync(new Uri("https://www.example.com"), Arg.Any<Activity>());
+            .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
-            .CreateAsync("https://www.example.com");
+            .CreateAsync("https://www.example.com/");
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 using AdaptiveCards;
+using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Validators;
@@ -106,20 +107,15 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         }
         if (value.Value<string>("Button") == "Yes")
         {
-            this.logger.SettingsReseted(stepContext.Context.Activity);
             var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
             await accessor.SetAsync(stepContext.Context, new(), cancellationToken);
-            _ = await stepContext.Context.SendActivityAsync(
-                "設定を初期化しました。",
-                cancellationToken: cancellationToken
-            );
+            this.logger.SettingsReseted(stepContext.Context.Activity);
+            _ = await stepContext.Context.SendSettingsResetedAsync(cancellationToken);
         }
         if (value.Value<string>("Button") == "No")
         {
             this.logger.SettingsCancelled(stepContext.Context.Activity);
-            _ = await stepContext.Context.SendActivityAsync(
-                "キャンセルしました。設定は変更されていません。",
-                cancellationToken: cancellationToken);
+            _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
@@ -134,14 +130,12 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
                             new()
                             {
                                 Title = "応答",
-                                Value = new Func<string>(() =>
-                                    value.Value<string>("Button") switch
-                                    {
-                                        "Yes" => "はい",
-                                        "No" => "いいえ",
-                                        _ => ""
-                                    }
-                                )()
+                                Value = value.Value<string>("Button") switch
+                                {
+                                    "Yes" => "はい",
+                                    "No" => "いいえ",
+                                    _ => ""
+                                }
                             }
                         ]
                     }
@@ -153,10 +147,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
                 Content = JsonConvert.DeserializeObject(card.ToJson())
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
-            _ = await stepContext.Context.UpdateActivityAsync(
-                activity,
-                cancellationToken: cancellationToken
-            );
+            _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
     }
