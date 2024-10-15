@@ -105,6 +105,7 @@ public class EndMeetingDialog(
                 new AdaptiveTextInput()
                 {
                     Id = "Message",
+                    IsMultiline = true,
                     Label = "メッセージ",
                     Placeholder = "会議後に表示されるメッセージ",
                     Style = AdaptiveTextInputStyle.Text,
@@ -172,18 +173,12 @@ public class EndMeetingDialog(
             property.EndMeetingMessage = value.Value<string>("Message", null);
             property.EndMeetingUrl = value.Value<string>("Url", null);
             this.logger.SettingsUpdated(stepContext.Context.Activity);
-            _ = await stepContext.Context.SendActivityAsync(
-                "設定を変更しました。",
-                cancellationToken: cancellationToken
-            );
+            _ = await stepContext.Context.SendSettingsUpdatedAsync(cancellationToken);
         }
         if (value.Value<string>("Button") == "Cancel")
         {
             this.logger.SettingsCancelled(stepContext.Context.Activity);
-            _ = await stepContext.Context.SendActivityAsync(
-                "キャンセルしました。設定は変更されていません。",
-                cancellationToken: cancellationToken
-            );
+            _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
@@ -191,45 +186,115 @@ public class EndMeetingDialog(
             {
                 Body =
                 [
-                    new AdaptiveFactSet()
+                    new AdaptiveColumnSet()
                     {
-                        Facts =
+                        Columns =
                         [
-                            new()
+                            new AdaptiveColumn()
                             {
-                                Title = "スケジュール",
-                                Value = new Func<string>(() =>
-                                    property.EndMeetingSchedule switch
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
                                     {
-                                        -1 => "なし",
-                                        0 => "予定時刻",
-                                        _ => $"{property.EndMeetingSchedule} 分後"
+                                        Text = "スケジュール",
+                                        Weight = AdaptiveTextWeight.Bolder
                                     }
-                                )()
+                                ],
+                                Width = "90px"
                             },
-                            new()
+                            new AdaptiveColumn()
                             {
-                                Title = "メッセージ",
-                                Value = $"{property.EndMeetingMessage}"
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = property.EndMeetingSchedule switch
+                                        {
+                                            -1 => "なし",
+                                            0 => "予定時刻",
+                                            _ => $"{property.EndMeetingSchedule} 分前"
+                                        }
+                                    }
+                                ],
+                                Width = "stretch"
+                            }
+                        ],
+                    },
+                    new AdaptiveColumnSet()
+                    {
+                        Columns =
+                        [
+                            new AdaptiveColumn()
+                            {
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = "メッセージ",
+                                        Weight = AdaptiveTextWeight.Bolder
+                                    }
+                                ],
+                                Width = "90px"
                             },
-                            new()
+                            new AdaptiveColumn()
                             {
-                                Title = "URL",
-                                Value = $"{property.EndMeetingUrl}"
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = $"{property.EndMeetingMessage}",
+                                        Wrap = true
+                                    }
+                                ],
+                                Width = "stretch"
+                            }
+                        ]
+                    },
+                    new AdaptiveColumnSet()
+                    {
+                        Columns =
+                        [
+                            new AdaptiveColumn()
+                            {
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = "URL",
+                                        Weight = AdaptiveTextWeight.Bolder
+                                    }
+                                ],
+                                Width = "90px"
+                            },
+                            new AdaptiveColumn()
+                            {
+                                Items =
+                                [
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = $"{property.EndMeetingUrl}"
+                                    }
+                                ],
+                                Width = "stretch"
                             }
                         ]
                     }
                 ]
             };
-            if (property.EndMeetingUrl is not null)
+            if (Uri.TryCreate(property.EndMeetingUrl, UriKind.Absolute, out var url))
             {
-                var bytes = await this.qrCodeService.CreateAsync(property.EndMeetingUrl, cancellationToken);
+                var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);
                 card.Body.Add(new AdaptiveImage()
                 {
-                    AltText = property.EndMeetingUrl,
-                    Size = AdaptiveImageSize.Stretch,
+                    AltText = url.ToString(),
+                    Size = AdaptiveImageSize.Large,
                     Url = new Uri($"data:image/png;base64,{base64}")
+                });
+                card.Actions.Add(new AdaptiveOpenUrlAction()
+                {
+                    Title = "URL を開く",
+                    Url = url,
                 });
             }
             var activity = MessageFactory.Attachment(new Attachment()
@@ -238,10 +303,7 @@ public class EndMeetingDialog(
                 Content = JsonConvert.DeserializeObject(card.ToJson())
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
-            _ = await stepContext.Context.UpdateActivityAsync(
-                activity,
-                cancellationToken: cancellationToken
-            );
+            _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
     }

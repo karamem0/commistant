@@ -12,7 +12,8 @@ import {
   Button,
   Field,
   Input,
-  Subtitle2
+  Subtitle2,
+  Textarea
 } from '@fluentui/react-components';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -110,7 +111,7 @@ function PropertyPage(props: Readonly<PropertyPageProps>) {
               name="startMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input
+                  <Textarea
                     {...field}
                     disabled={disabled} />
                 </Field>
@@ -158,7 +159,7 @@ function PropertyPage(props: Readonly<PropertyPageProps>) {
               name="endMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input
+                  <Textarea
                     {...field}
                     disabled={disabled} />
                 </Field>
@@ -207,7 +208,7 @@ function PropertyPage(props: Readonly<PropertyPageProps>) {
               name="inMeetingMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
-                  <Input
+                  <Textarea
                     {...field}
                     disabled={disabled} />
                 </Field>

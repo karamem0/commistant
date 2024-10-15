@@ -25,19 +25,13 @@ public static class JsonSerializer
 
     public static T? Deserialize<T>(string? value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
+        _ = value ?? throw new ArgumentNullException(nameof(value));
         return JsonConvert.DeserializeObject<T>(value, settings);
     }
 
     public static string Serialize<T>(T? value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
+        _ = value ?? throw new ArgumentNullException(nameof(value));
         return JsonConvert.SerializeObject(value, settings);
     }
 

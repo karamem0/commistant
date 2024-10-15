@@ -7,7 +7,9 @@
 //
 
 using Azure.AI.OpenAI;
+using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Resources;
+using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
 using System;
@@ -22,7 +24,7 @@ namespace Karamem0.Commistant.Services;
 public interface IOpenAIService
 {
 
-    Task<ChatCompletion> ChatCompletionAsync(string text, CancellationToken cancellationToken = default);
+    Task<ConversationPropertyArguments?> GetArgumentsAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
@@ -33,7 +35,7 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
 
     private readonly string openAIModelName = openAIModelName;
 
-    public async Task<ChatCompletion> ChatCompletionAsync(string text, CancellationToken cancellationToken = default)
+    public async Task<ConversationPropertyArguments?> GetArgumentsAsync(string text, CancellationToken cancellationToken = default)
     {
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
@@ -69,7 +71,16 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
             chatCompletionsOptions,
             cancellationToken
         );
-        return chatCompletion.Value;
+        if (chatCompletion.Value.FinishReason == ChatFinishReason.ToolCalls)
+        {
+            return JsonConvert.DeserializeObject<ConversationPropertyArguments>(
+                chatCompletion.Value.ToolCalls
+                .Select(item => item.FunctionArguments)
+                .First()
+                .ToString()
+            );
+        }
+        return null;
     }
 
 }

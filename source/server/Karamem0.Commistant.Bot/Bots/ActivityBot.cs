@@ -104,27 +104,15 @@ public class ActivityBot(
             {
                 if (dc.ActiveDialog is null)
                 {
-                    var result = await new Func<Task<DialogTurnResult?>>(async () =>
+                    var arguments = await this.openAIService.GetArgumentsAsync(command, cancellationToken: cancellationToken);
+                    var result = arguments?.Type switch
                     {
-                        var message = await this.openAIService.ChatCompletionAsync(command, cancellationToken: cancellationToken);
-                        if (message.FinishReason == ChatFinishReason.ToolCalls)
-                        {
-                            var arguments = message.ToolCalls.Select(item => item.FunctionArguments).First();
-                            var content = JsonSerializer.Deserialize<ConversationPropertyArguments>(arguments?.ToString());
-                            return content?.Type switch
-                            {
-                                "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), content, cancellationToken: cancellationToken),
-                                "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), content, cancellationToken: cancellationToken),
-                                "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), content, cancellationToken: cancellationToken),
-                                "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
-                                _ => null,
-                            };
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    })();
+                        "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), arguments, cancellationToken: cancellationToken),
+                        "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), arguments, cancellationToken: cancellationToken),
+                        "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), arguments, cancellationToken: cancellationToken),
+                        "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+                        _ => null,
+                    };
                     if (result is null)
                     {
                         _ = await turnContext.SendActivityAsync(
