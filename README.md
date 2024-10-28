@@ -2,7 +2,7 @@
 
 Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。
 
-[![.github/workflows/workflow.yml](https://github.com/karamem0/commistant/actions/workflows/workflow.yml/badge.svg)](https://github.com/karamem0/commistant/actions/workflows/workflow.yml)
+[![.github/workflows/develop.yml](https://github.com/karamem0/commistant/actions/workflows/develop.yml/badge.svg)](https://github.com/karamem0/commistant/actions/workflows/develop.yml)
 [![codecov](https://codecov.io/gh/karamem0/commistant/graph/badge.svg?token=Z783SI7V9N)](https://codecov.io/gh/karamem0/commistant)
 [![License](https://img.shields.io/github/license/karamem0/commistant.svg)](https://github.com/karamem0/commistant/blob/main/LICENSE)
 

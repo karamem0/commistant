@@ -1,0 +1,51 @@
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-bot:
+    name: Build bot
+    uses: ./.github/workflows/build-bot.yml
+    secrets: inherit
+    with:
+      environment: dev
+  deploy-bot:
+      name: Deploy bot
+      needs: build-bot
+      uses: ./.github/workflows/deploy-bot.yml
+      secrets: inherit
+      with:
+        environment: dev
+  build-web:
+    name: Build web
+    uses: ./.github/workflows/build-web.yml
+    secrets: inherit
+    with:
+      environment: dev
+  deploy-web:
+    name: Deploy web
+    needs: build-web
+    uses: ./.github/workflows/deploy-web.yml
+    secrets: inherit
+    with:
+      environment: dev
+  build-func:
+    name: Build func
+    uses: ./.github/workflows/build-func.yml
+    secrets: inherit
+    with:
+      environment: dev
+  deploy-func:
+    name: Deploy func
+    needs: build-func
+    uses: ./.github/workflows/deploy-func.yml
+    secrets: inherit
+    with:
+      environment: dev
+  build-manifest:
+    name: Build manifest
+    uses: ./.github/workflows/build-manifest.yml
+    secrets: inherit
+    with:
+      environment: dev

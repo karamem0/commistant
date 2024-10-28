@@ -6,12 +6,14 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-declare module 'ress';
+/// <reference types="vite/client" />
 
-interface ImportMetaEnv {
-  readonly VITE_TELEMETRY_CONNECTION_STRING: string
-}
+declare module 'ress';
 
 interface ImportMeta {
   readonly env: ImportMetaEnv
+}
+
+interface ImportMetaEnv {
+  readonly VITE_TELEMETRY_CONNECTION_STRING: string
 }

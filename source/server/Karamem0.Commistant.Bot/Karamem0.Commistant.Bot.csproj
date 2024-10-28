@@ -23,7 +23,7 @@
     <PackageReference Include="AdaptiveCards" Version="3.1.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0-beta.1" />
-    <PackageReference Include="Azure.Identity" Version="1.12.1" />
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.9" />
