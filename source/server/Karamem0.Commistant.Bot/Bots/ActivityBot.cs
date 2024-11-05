@@ -9,7 +9,6 @@
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
-using Karamem0.Commistant.Serialization;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -17,7 +16,6 @@ using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Logging;
-using OpenAI.Chat;
 using System;
 using System.Collections.Generic;
 using System.Linq;

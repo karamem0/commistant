@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
 
-
 public abstract class Command
 {
 

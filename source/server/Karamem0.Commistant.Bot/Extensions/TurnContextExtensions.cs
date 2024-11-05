@@ -6,11 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AdaptiveCards;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

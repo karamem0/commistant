@@ -6,8 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-#pragma warning disable CA1852
-
 using Karamem0.Commistant;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,5 +40,3 @@ _ = builder.ConfigureServices((context, services) =>
 var app = builder.Build();
 
 app.Run();
-
-#pragma warning restore CA1852

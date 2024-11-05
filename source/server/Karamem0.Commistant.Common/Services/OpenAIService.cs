@@ -6,7 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Azure.AI.OpenAI;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Resources;
 using Newtonsoft.Json;
