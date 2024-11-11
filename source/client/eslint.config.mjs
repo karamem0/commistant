@@ -21,31 +21,31 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...fixupConfigRules(compat.extends(
-    'plugin:@stylistic/recommended-extends',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:sonarjs/recommended-legacy'
-  )),
   {
-    'plugins': {
-      'hooks': pluginHooks
-    },
     'languageOptions': {
       'globals': {
         ...globals.browser,
         ...globals.jest
-      },
-      'parserOptions': {
-        'warnOnUnsupportedTypeScriptVersion': false
       }
+    },
+    'plugins': {
+      'hooks': pluginHooks
     },
     'settings': {
       'react': {
         'version': 'detect'
       }
-    },
+    }
+  },
+  ...fixupConfigRules(compat.extends(
+    'plugin:@stylistic/recommended-extends',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:sonarjs/recommended-legacy'
+  )),
+  {
     'rules': {
       'dot-notation': [
         'error',
@@ -115,7 +115,7 @@ export default [
       ],
       '@stylistic/indent-binary-ops': [
         'error',
-        2
+        4
       ],
       '@stylistic/jsx-closing-bracket-location': [
         'error',

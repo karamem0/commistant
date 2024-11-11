@@ -9,6 +9,7 @@
 import React from 'react';
 
 import Presenter from './Error500Page.presenter';
+import { useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
 
 interface Error500PageProps {
   error?: Error
@@ -17,6 +18,15 @@ interface Error500PageProps {
 function Error500Page(props: Readonly<Error500PageProps>) {
 
   const { error } = props;
+
+  const { trackException } = useAppInsightsContext();
+
+  React.useEffect(() => {
+    trackException({ exception: error });
+  }, [
+    error,
+    trackException
+  ]);
 
   return (
     <Presenter error={error?.message} />
