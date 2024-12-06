@@ -1,0 +1,24 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "FactSet",
+      "facts": [
+        {
+          "type": "Fact",
+          "title": "応答",
+          "value": "はい",
+          "$when": "${Value == 'Yes'}"
+        },
+        {
+          "type": "Fact",
+          "title": "応答",
+          "value": "いいえ",
+          "$when": "${Value == 'Np'}"
+        }
+      ]
+    }
+  ]
+}

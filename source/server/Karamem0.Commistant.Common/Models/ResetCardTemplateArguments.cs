@@ -14,11 +14,9 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationPropertyArguments
+public class ResetCardTemplateArguments
 {
 
-    public string? Type { get; set; }
-
-    public ConversationPropertyArgumentsValue? Value { get; set; }
+    public string Value { get; set; } = "";
 
 }

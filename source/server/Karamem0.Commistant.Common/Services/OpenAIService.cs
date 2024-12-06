@@ -39,7 +39,8 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
             Temperature = 0.3f,
-            Tools = {
+            Tools =
+            {
                 ChatTool.CreateFunctionTool(
                     "StartMeeting",
                     "Update the schedule, text, and URL of messages sent the start of the meeting.",

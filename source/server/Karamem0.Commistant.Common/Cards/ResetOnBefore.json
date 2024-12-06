@@ -1,0 +1,30 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "すべての設定を初期化します。よろしいですか？",
+      "wrap": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "id": "Yes",
+      "title": "はい",
+      "data": {
+        "Button": "Yes"
+      }
+    },
+    {
+      "type": "Action.Submit",
+      "id": "No",
+      "title": "いいえ",
+      "data": {
+        "Button": "No"
+      }
+    }
+  ]
+}

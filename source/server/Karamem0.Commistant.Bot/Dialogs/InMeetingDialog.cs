@@ -30,7 +30,7 @@ namespace Karamem0.Commistant.Dialogs;
 
 public class InMeetingDialog(
     ConversationState conversationState,
-    QrCodeService qrCodeService,
+    IQRCodeService qrCodeService,
     IMapper mapper,
     ILogger<InMeetingDialog> logger
 ) : ComponentDialog
@@ -38,7 +38,7 @@ public class InMeetingDialog(
 
     private readonly ConversationState conversationState = conversationState;
 
-    private readonly QrCodeService qrCodeService = qrCodeService;
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly IMapper mapper = mapper;
 
@@ -49,15 +49,15 @@ public class InMeetingDialog(
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
             [
-                this.BeforeConfirmAsync,
-                this.AfterConrifmAsync
+                this.OnBeforeAsync,
+                this.OnAfterAsync
             ]
         ));
-        _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
@@ -154,7 +154,7 @@ public class InMeetingDialog(
         });
         this.logger.SettingsUpdating(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
-            nameof(this.BeforeConfirmAsync),
+            nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
                 Prompt = (Activity)activity
@@ -163,7 +163,7 @@ public class InMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)

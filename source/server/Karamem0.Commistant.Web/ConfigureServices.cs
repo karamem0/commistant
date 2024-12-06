@@ -25,16 +25,19 @@ public static class ConfigureServices
 
     public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
     {
-        var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
+        var blobContainerUrl = configuration["AzureBotStatesStorageUrl"] ?? throw new InvalidOperationException();
         _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
         return services;
     }
 
     public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
     {
+        var microsoftAppId = configuration["MicrosoftAppId"] ?? throw new InvalidOperationException();
+        var microsoftAppPassword = configuration["MicrosoftAppPassword"] ?? throw new InvalidOperationException();
         _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
-            configuration.GetValue<string>("MicrosoftAppId"),
-            configuration.GetValue<string>("MicrosoftAppPassword")));
+            microsoftAppId,
+            microsoftAppPassword
+        ));
         return services;
     }
 

@@ -19,11 +19,11 @@ namespace Karamem0.Commistant.Mappings;
 public class AutoMapperProfile : Profile
 {
 
-    private static readonly int[] StartMeetingSchedules = [0, 5, 10, 15];
+    private static readonly int[] startMeetingSchedules = [0, 5, 10, 15];
 
-    private static readonly int[] EndMeetingSchedules = [0, 5, 10, 15];
+    private static readonly int[] endMeetingSchedules = [0, 5, 10, 15];
 
-    private static readonly int[] InMeetingSchedules = [5, 10, 15, 30, 60];
+    private static readonly int[] inMeetingSchedules = [5, 10, 15, 30, 60];
 
     public AutoMapperProfile()
     {
@@ -43,7 +43,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.StartMeetingSchedule;
                         }
-                        if (Array.TrueForAll(StartMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(startMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return d.StartMeetingSchedule;
                         }
@@ -112,7 +112,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.EndMeetingSchedule;
                         }
-                        if (Array.TrueForAll(EndMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(endMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return d.EndMeetingSchedule;
                         }
@@ -181,7 +181,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.InMeetingSchedule;
                         }
-                        if (Array.TrueForAll(InMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Array.TrueForAll(inMeetingSchedules, _ => _ != s.Value.Schedule))
                         {
                             return d.InMeetingSchedule;
                         }

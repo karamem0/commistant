@@ -6,7 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AdaptiveCards;
 using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
@@ -30,7 +29,8 @@ namespace Karamem0.Commistant.Dialogs;
 
 public class StartMeetingDialog(
     ConversationState conversationState,
-    QrCodeService qrCodeService,
+    IAdaptiveCardService adaptiveCardService,
+    IQRCodeService qrCodeService,
     IMapper mapper,
     ILogger<StartMeetingDialog> logger
 ) : ComponentDialog
@@ -38,7 +38,9 @@ public class StartMeetingDialog(
 
     private readonly ConversationState conversationState = conversationState;
 
-    private readonly QrCodeService qrCodeService = qrCodeService;
+    private readonly IAdaptiveCardService adaptiveCardService = adaptiveCardService;
+
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly IMapper mapper = mapper;
 
@@ -49,107 +51,39 @@ public class StartMeetingDialog(
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
             [
-                this.BeforeConfirmAsync,
-                this.AfterConrifmAsync
+                this.OnBeforeAsync,
+                this.OnAfterAsync
             ]
         ));
-        _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
         var options = (ConversationPropertyArguments?)stepContext.Options;
         var value = this.mapper.Map(options, property.Clone());
-        var card = new AdaptiveCard("1.3")
+        var arguments = new MeetingCardTemplateArguments()
         {
-            Body =
-            [
-                new AdaptiveChoiceSetInput()
-                {
-                    Id = "Schedule",
-                    Label = "スケジュール",
-                    Placeholder = "通知を表示する時間",
-                    Choices =
-                    [
-                        new()
-                        {
-                            Title = "なし",
-                            Value = "-1"
-                        },
-                        new()
-                        {
-                            Title = "予定時刻",
-                            Value = "0"
-                        },
-                        new()
-                        {
-                            Title = "5 分後",
-                            Value = "5"
-                        },
-                        new()
-                        {
-                            Title = "10 分後",
-                            Value = "10"
-                        },
-                        new()
-                        {
-                            Title = "15 分後",
-                            Value = "15"
-                        },
-                    ],
-                    Value = value.StartMeetingSchedule.ToString()
-                },
-                new AdaptiveTextInput()
-                {
-                    Id = "Message",
-                    IsMultiline = true,
-                    Label = "メッセージ",
-                    Placeholder = "開始後に表示されるメッセージ",
-                    Style = AdaptiveTextInputStyle.Text,
-                    Value = value.StartMeetingMessage
-                },
-                new AdaptiveTextInput()
-                {
-                    Id = "Url",
-                    Label = "URL",
-                    Placeholder = "開始後に表示されるリンクの URL",
-                    Style = AdaptiveTextInputStyle.Url,
-                    Value = value.StartMeetingUrl
-                }
-            ],
-            Actions =
-            [
-                new AdaptiveSubmitAction()
-                {
-                    Id = "Submit",
-                    Title = "保存",
-                    Data = new
-                    {
-                        Button = "Submit"
-                    }
-                },
-                new AdaptiveSubmitAction()
-                {
-                    Id = "Cancel",
-                    Title = "キャンセル",
-                    Data = new
-                    {
-                        Button = "Cancel"
-                    }
-                }
-            ]
+            Schedule = value.StartMeetingSchedule,
+            Message = value.StartMeetingMessage ?? "",
+            Url = value.StartMeetingUrl ?? "",
         };
+        var card = await this.adaptiveCardService.GetCardAsync(
+            AdaptiveCardTemplateTypes.StartMeetingOnBefore,
+            arguments,
+            cancellationToken
+        );
         var activity = MessageFactory.Attachment(new Attachment()
         {
-            ContentType = AdaptiveCard.ContentType,
-            Content = JsonConvert.DeserializeObject(card.ToJson())
+            ContentType = "application/vnd.microsoft.card.adaptive",
+            Content = JsonConvert.DeserializeObject(card)
         });
         this.logger.SettingsUpdating(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
-            nameof(this.BeforeConfirmAsync),
+            nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
                 Prompt = (Activity)activity
@@ -158,7 +92,7 @@ public class StartMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -182,125 +116,27 @@ public class StartMeetingDialog(
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
-            var card = new AdaptiveCard("1.3")
+            var arguments = new MeetingCardTemplateArguments()
             {
-                Body =
-                [
-                    new AdaptiveColumnSet()
-                    {
-                        Columns =
-                        [
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "スケジュール",
-                                        Weight = AdaptiveTextWeight.Bolder
-                                    }
-                                ],
-                                Width = "90px"
-                            },
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = property.StartMeetingSchedule switch
-                                        {
-                                            -1 => "なし",
-                                            0 => "予定時刻",
-                                            _ => $"{property.StartMeetingSchedule} 分後"
-                                        }
-                                    }
-                                ],
-                                Width = "stretch"
-                            }
-                        ],
-                    },
-                    new AdaptiveColumnSet()
-                    {
-                        Columns =
-                        [
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "メッセージ",
-                                        Weight = AdaptiveTextWeight.Bolder
-                                    }
-                                ],
-                                Width = "90px"
-                            },
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = $"{property.StartMeetingMessage}",
-                                        Wrap = true
-                                    }
-                                ],
-                                Width = "stretch"
-                            }
-                        ]
-                    },
-                    new AdaptiveColumnSet()
-                    {
-                        Columns =
-                        [
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "URL",
-                                        Weight = AdaptiveTextWeight.Bolder
-                                    }
-                                ],
-                                Width = "90px"
-                            },
-                            new AdaptiveColumn()
-                            {
-                                Items =
-                                [
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = $"{property.StartMeetingUrl}"
-                                    }
-                                ],
-                                Width = "stretch"
-                            }
-                        ]
-                    }
-                ]
+                Schedule = property.StartMeetingSchedule,
+                Message = property.StartMeetingMessage ?? ""
             };
             if (Uri.TryCreate(property.StartMeetingUrl, UriKind.Absolute, out var url))
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);
-                card.Body.Add(new AdaptiveImage()
-                {
-                    AltText = url.ToString(),
-                    Size = AdaptiveImageSize.Large,
-                    Url = new Uri($"data:image/png;base64,{base64}")
-                });
-                card.Actions.Add(new AdaptiveOpenUrlAction()
-                {
-                    Title = "URL を開く",
-                    Url = url,
-                });
+                arguments.Url = url.ToString();
+                arguments.QRCode = $"data:image/png;base64,{base64}";
             }
+            var card = await this.adaptiveCardService.GetCardAsync(
+                AdaptiveCardTemplateTypes.StartMeetingOnAfter,
+                arguments,
+                cancellationToken
+            );
             var activity = MessageFactory.Attachment(new Attachment()
             {
-                ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                ContentType = "application/vnd.microsoft.card.adaptive",
+                Content = JsonConvert.DeserializeObject(card)
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);

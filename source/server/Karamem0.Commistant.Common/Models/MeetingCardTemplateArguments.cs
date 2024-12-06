@@ -14,11 +14,15 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationPropertyArguments
+public class MeetingCardTemplateArguments
 {
 
-    public string? Type { get; set; }
+    public int Schedule { get; set; } = -1;
 
-    public ConversationPropertyArgumentsValue? Value { get; set; }
+    public string Message { get; set; } = "";
+
+    public string Url { get; set; } = "";
+
+    public string QRCode { get; set; } = "";
 
 }

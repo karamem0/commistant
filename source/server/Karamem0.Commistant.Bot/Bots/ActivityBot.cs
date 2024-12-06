@@ -28,7 +28,7 @@ namespace Karamem0.Commistant.Bots;
 public class ActivityBot(
     ConversationState conversationState,
     DialogSet dialogSet,
-    OpenAIService openAIService,
+    IOpenAIService openAIService,
     ILogger<ActivityBot> logger
 ) : TeamsActivityHandler
 {
@@ -37,7 +37,7 @@ public class ActivityBot(
 
     private readonly DialogSet dialogSet = dialogSet;
 
-    private readonly OpenAIService openAIService = openAIService;
+    private readonly IOpenAIService openAIService = openAIService;
 
     private readonly ILogger logger = logger;
 
@@ -108,7 +108,7 @@ public class ActivityBot(
                         "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), arguments, cancellationToken: cancellationToken),
                         "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), arguments, cancellationToken: cancellationToken),
                         "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), arguments, cancellationToken: cancellationToken),
-                        "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+                        "初期化" => await dc.BeginDialogAsync(nameof(ResetSettingsDialog), cancellationToken: cancellationToken),
                         _ => null,
                     };
                     if (result is null)

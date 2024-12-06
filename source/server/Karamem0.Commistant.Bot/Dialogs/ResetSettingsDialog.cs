@@ -10,6 +10,7 @@ using AdaptiveCards;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -26,10 +27,16 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs;
 
-public class ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger) : ComponentDialog
+public class ResetSettingsDialog(
+    ConversationState conversationState,
+    IAdaptiveCardService adaptiveCardService,
+    ILogger<ResetSettingsDialog> logger
+) : ComponentDialog
 {
 
     private readonly ConversationState conversationState = conversationState;
+
+    private readonly IAdaptiveCardService adaptiveCardService = adaptiveCardService;
 
     private readonly ILogger logger = logger;
 
@@ -38,58 +45,30 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
             [
-                this.BeforeConfirmAsync,
-                this.AfterConrifmAsync
+                this.OnBeforeAsync,
+                this.OnAfterAsync
             ]
         ));
-        _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         this.logger.SettingsResetting(stepContext.Context.Activity);
-        var card = new AdaptiveCard("1.3")
-        {
-            Body =
-            [
-                new AdaptiveTextBlock()
-                {
-                    Id = "Message",
-                    Text = "すべての設定を初期化します。よろしいですか？",
-                    Wrap = true
-                },
-            ],
-            Actions =
-            [
-                new AdaptiveSubmitAction()
-                {
-                    Id = "Yes",
-                    Title = "はい",
-                    Data = new
-                    {
-                        Button = "Yes"
-                    }
-                },
-                new AdaptiveSubmitAction()
-                {
-                    Id = "No",
-                    Title = "いいえ",
-                    Data = new
-                    {
-                        Button = "No"
-                    }
-                }
-            ]
-        };
+        var card = await this.adaptiveCardService.GetCardAsync(
+            AdaptiveCardTemplateTypes.ResetOnBefore,
+            null,
+            cancellationToken
+        );
         var activity = MessageFactory.Attachment(new Attachment()
         {
-            ContentType = AdaptiveCard.ContentType,
-            Content = JsonConvert.DeserializeObject(card.ToJson())
+            ContentType = "application/vnd.microsoft.card.adaptive",
+            Content = JsonConvert.DeserializeObject(card)
         });
         this.logger.SettingsResetting(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
-            nameof(this.BeforeConfirmAsync),
+            nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
                 Prompt = (Activity)activity
@@ -98,7 +77,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         );
     }
 
-    private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -119,32 +98,15 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
-            var card = new AdaptiveCard("1.3")
-            {
-                Body =
-                [
-                    new AdaptiveFactSet()
-                    {
-                        Facts =
-                        [
-                            new()
-                            {
-                                Title = "応答",
-                                Value = value.Value<string>("Button") switch
-                                {
-                                    "Yes" => "はい",
-                                    "No" => "いいえ",
-                                    _ => ""
-                                }
-                            }
-                        ]
-                    }
-                ]
-            };
+            var card = await this.adaptiveCardService.GetCardAsync(
+                AdaptiveCardTemplateTypes.ResetOnAfter,
+                null,
+                cancellationToken
+            );
             var activity = MessageFactory.Attachment(new Attachment()
             {
-                ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                ContentType = "application/vnd.microsoft.card.adaptive",
+                Content = JsonConvert.DeserializeObject(card)
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
