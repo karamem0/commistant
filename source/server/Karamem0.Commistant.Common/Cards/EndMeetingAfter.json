@@ -1,0 +1,112 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "スケジュール",
+              "weight": "bolder"
+            }
+          ],
+          "width": "90%"
+        },
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "なし",
+              "$when": "${Schedule < 0}"
+            },
+            {
+              "type": "TextBlock",
+              "text": "予定時刻",
+              "$when": "${Schedule == 0}"
+            },
+            {
+              "type": "TextBlock",
+              "text": "${Schedule} 分前",
+              "$when": "${Schedule > 0}"
+            }
+          ],
+          "width": "stretch"
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "メッセージ",
+              "weight": "bolder"
+            }
+          ],
+          "width": "90%"
+        },
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${Message}"
+            }
+          ],
+          "width": "stretch"
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "URL",
+              "weight": "bolder"
+            }
+          ],
+          "width": "90%"
+        },
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${Url}"
+            }
+          ],
+          "width": "stretch"
+        }
+      ]
+    },
+    {
+      "type": "Image",
+      "url": "${QRCode}",
+      "altText": "${Url}",
+      "size": "large",
+      "$when": "${not(empty(QRCode))}"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "id": "OpenUrl",
+      "title": "URL を開く",
+      "url": "${Url}",
+      "$when": "${not(empty(Url))}"
+    }
+  ]
+}

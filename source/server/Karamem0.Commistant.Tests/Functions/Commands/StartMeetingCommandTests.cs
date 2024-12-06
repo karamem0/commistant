@@ -54,7 +54,7 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
@@ -109,7 +109,7 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
@@ -164,7 +164,7 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
@@ -219,7 +219,7 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
@@ -274,7 +274,7 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();

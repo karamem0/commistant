@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationPropertyArguments
+public static class AdaptiveCardTemplateNames
 {
 
-    public string? Type { get; set; }
+    public static readonly string EndMeetingBefore = "EndMeetingBefore";
 
-    public ConversationPropertyArgumentsValue? Value { get; set; }
+    public static readonly string EndMeetingAfter = "EndMeetingAfter";
 
 }

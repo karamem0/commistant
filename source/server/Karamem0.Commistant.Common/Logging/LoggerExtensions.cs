@@ -23,7 +23,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, Exception?> unhandledError =
         LoggerMessage.Define<string?>(
-            LogLevel.Error,
+            LogLevel.Critical,
             new EventId(1),
             "[{MemberName}] 予期しない問題が発生しました。"
         );

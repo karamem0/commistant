@@ -17,10 +17,6 @@ namespace Karamem0.Commistant.Models;
 public class ConversationPropertyArgumentsValue
 {
 
-    public ConversationPropertyArgumentsValue()
-    {
-    }
-
     public bool Enabled { get; set; }
 
     public int Schedule { get; set; } = -1;

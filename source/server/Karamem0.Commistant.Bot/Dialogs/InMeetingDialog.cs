@@ -30,7 +30,7 @@ namespace Karamem0.Commistant.Dialogs;
 
 public class InMeetingDialog(
     ConversationState conversationState,
-    QrCodeService qrCodeService,
+    IQRCodeService qrCodeService,
     IMapper mapper,
     ILogger<InMeetingDialog> logger
 ) : ComponentDialog
@@ -38,7 +38,7 @@ public class InMeetingDialog(
 
     private readonly ConversationState conversationState = conversationState;
 
-    private readonly QrCodeService qrCodeService = qrCodeService;
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly IMapper mapper = mapper;
 

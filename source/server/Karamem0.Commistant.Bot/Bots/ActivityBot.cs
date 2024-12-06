@@ -28,7 +28,7 @@ namespace Karamem0.Commistant.Bots;
 public class ActivityBot(
     ConversationState conversationState,
     DialogSet dialogSet,
-    OpenAIService openAIService,
+    IOpenAIService openAIService,
     ILogger<ActivityBot> logger
 ) : TeamsActivityHandler
 {
@@ -37,7 +37,7 @@ public class ActivityBot(
 
     private readonly DialogSet dialogSet = dialogSet;
 
-    private readonly OpenAIService openAIService = openAIService;
+    private readonly IOpenAIService openAIService = openAIService;
 
     private readonly ILogger logger = logger;
 
