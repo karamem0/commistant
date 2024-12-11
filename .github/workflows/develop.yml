@@ -4,8 +4,13 @@ on:
       - develop
 
 jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
   build-bot:
     name: Build bot
+    needs: test
     uses: ./.github/workflows/build-bot.yml
     secrets: inherit
     with:
@@ -19,6 +24,7 @@ jobs:
         environment: dev
   build-web:
     name: Build web
+    needs: test
     uses: ./.github/workflows/build-web.yml
     secrets: inherit
     with:
@@ -32,6 +38,7 @@ jobs:
       environment: dev
   build-func:
     name: Build func
+    needs: test
     uses: ./.github/workflows/build-func.yml
     secrets: inherit
     with:

@@ -14,15 +14,11 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationPropertyArguments
+public record ConversationPropertyOptions
 {
-
-    public ConversationPropertyArguments()
-    {
-    }
 
     public string? Type { get; set; }
 
-    public ConversationPropertyArgumentsValue? Value { get; set; }
+    public ConversationPropertyOptionsValue? Value { get; set; }
 
 }

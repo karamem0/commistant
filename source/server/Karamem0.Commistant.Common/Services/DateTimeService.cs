@@ -24,10 +24,6 @@ public interface IDateTimeService
 public class DateTimeService : IDateTimeService
 {
 
-    public DateTimeService()
-    {
-    }
-
     public DateTime GetCurrentDateTime()
     {
         return DateTime.UtcNow;

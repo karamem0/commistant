@@ -28,7 +28,7 @@ namespace Karamem0.Commistant.Bots;
 public class ActivityBot(
     ConversationState conversationState,
     DialogSet dialogSet,
-    OpenAIService openAIService,
+    IOpenAIService openAIService,
     ILogger<ActivityBot> logger
 ) : TeamsActivityHandler
 {
@@ -37,16 +37,15 @@ public class ActivityBot(
 
     private readonly DialogSet dialogSet = dialogSet;
 
-    private readonly OpenAIService openAIService = openAIService;
+    private readonly IOpenAIService openAIService = openAIService;
 
     private readonly ILogger logger = logger;
 
-    public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
-    {
-        await base.OnTurnAsync(turnContext, cancellationToken);
-    }
-
-    protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
+    protected override async Task OnMembersAddedAsync(
+        IList<ChannelAccount> membersAdded,
+        ITurnContext<IConversationUpdateActivity> turnContext,
+        CancellationToken cancellationToken = default
+    )
     {
         foreach (var member in membersAdded)
         {
@@ -68,7 +67,11 @@ public class ActivityBot(
         await base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
     }
 
-    protected override async Task OnMembersRemovedAsync(IList<ChannelAccount> membersRemoved, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
+    protected override async Task OnMembersRemovedAsync(
+        IList<ChannelAccount> membersRemoved,
+        ITurnContext<IConversationUpdateActivity> turnContext,
+        CancellationToken cancellationToken = default
+    )
     {
         foreach (var member in membersRemoved)
         {
@@ -80,7 +83,10 @@ public class ActivityBot(
         await base.OnMembersRemovedAsync(membersRemoved, turnContext, cancellationToken);
     }
 
-    protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+    protected override async Task OnMessageActivityAsync(
+        ITurnContext<IMessageActivity> turnContext,
+        CancellationToken cancellationToken = default
+    )
     {
         var participant = await TeamsInfo.GetMeetingParticipantAsync(
             turnContext,
@@ -102,13 +108,28 @@ public class ActivityBot(
             {
                 if (dc.ActiveDialog is null)
                 {
-                    var arguments = await this.openAIService.GetArgumentsAsync(command, cancellationToken: cancellationToken);
+                    var arguments = await this.openAIService.GetConversationPropertyOptionsAsync(command, cancellationToken);
                     var result = arguments?.Type switch
                     {
-                        "会議開始後" => await dc.BeginDialogAsync(nameof(StartMeetingDialog), arguments, cancellationToken: cancellationToken),
-                        "会議終了前" => await dc.BeginDialogAsync(nameof(EndMeetingDialog), arguments, cancellationToken: cancellationToken),
-                        "会議中" => await dc.BeginDialogAsync(nameof(InMeetingDialog), arguments, cancellationToken: cancellationToken),
-                        "初期化" => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+                        Constants.StartMeetingCommand => await dc.BeginDialogAsync(
+                            nameof(StartMeetingDialog),
+                            arguments,
+                            cancellationToken: cancellationToken
+                        ),
+                        Constants.EndMeetingCommand => await dc.BeginDialogAsync(
+                            nameof(EndMeetingDialog),
+                            arguments,
+                            cancellationToken: cancellationToken
+                        ),
+                        Constants.InMeetingCommand => await dc.BeginDialogAsync(
+                            nameof(InMeetingDialog),
+                            arguments,
+                            cancellationToken: cancellationToken
+                        ),
+                        Constants.ResetCommand => await dc.BeginDialogAsync(
+                            nameof(ResetDialog),
+                            cancellationToken: cancellationToken
+                        ),
                         _ => null,
                     };
                     if (result is null)

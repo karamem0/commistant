@@ -15,7 +15,6 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -38,15 +37,15 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
             [
-                this.BeforeConfirmAsync,
-                this.AfterConrifmAsync
+                this.OnBeforeAsync,
+                this.OnAfterAsync
             ]
         ));
-        _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         this.logger.SettingsResetting(stepContext.Context.Activity);
         var card = new AdaptiveCard("1.3")
@@ -85,11 +84,11 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         var activity = MessageFactory.Attachment(new Attachment()
         {
             ContentType = AdaptiveCard.ContentType,
-            Content = JsonConvert.DeserializeObject(card.ToJson())
+            Content = card
         });
         this.logger.SettingsResetting(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
-            nameof(this.BeforeConfirmAsync),
+            nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
                 Prompt = (Activity)activity
@@ -98,7 +97,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         );
     }
 
-    private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -144,7 +143,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
             var activity = MessageFactory.Attachment(new Attachment()
             {
                 ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                Content = card
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);

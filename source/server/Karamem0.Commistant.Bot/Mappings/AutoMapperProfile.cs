@@ -19,20 +19,14 @@ namespace Karamem0.Commistant.Mappings;
 public class AutoMapperProfile : Profile
 {
 
-    private static readonly int[] StartMeetingSchedules = [0, 5, 10, 15];
-
-    private static readonly int[] EndMeetingSchedules = [0, 5, 10, 15];
-
-    private static readonly int[] InMeetingSchedules = [5, 10, 15, 30, 60];
-
     public AutoMapperProfile()
     {
-        _ = this.CreateMap<ConversationPropertyArguments, ConversationProperty>()
+        _ = this.CreateMap<ConversationPropertyOptions, ConversationProperty>()
             .ForMember(
                 d => d.StartMeetingSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議開始後");
+                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -43,7 +37,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.StartMeetingSchedule;
                         }
-                        if (Array.TrueForAll(StartMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Constants.StartMeetingSchedules.Any(_ => _ == s.Value.Schedule))
                         {
                             return d.StartMeetingSchedule;
                         }
@@ -55,7 +49,7 @@ public class AutoMapperProfile : Profile
                 d => d.StartMeetingMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議開始後");
+                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -78,7 +72,7 @@ public class AutoMapperProfile : Profile
                 d => d.StartMeetingUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議開始後");
+                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -101,7 +95,7 @@ public class AutoMapperProfile : Profile
                 d => d.EndMeetingSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議終了前");
+                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -112,7 +106,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.EndMeetingSchedule;
                         }
-                        if (Array.TrueForAll(EndMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Constants.EndMeetingSchedules.Any(_ => _ == s.Value.Schedule))
                         {
                             return d.EndMeetingSchedule;
                         }
@@ -124,7 +118,7 @@ public class AutoMapperProfile : Profile
                 d => d.EndMeetingMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議終了前");
+                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -147,7 +141,7 @@ public class AutoMapperProfile : Profile
                 d => d.EndMeetingUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議終了前");
+                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -170,7 +164,7 @@ public class AutoMapperProfile : Profile
                 d => d.InMeetingSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議中");
+                    o.Condition(s => s.Type == Constants.InMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -181,7 +175,7 @@ public class AutoMapperProfile : Profile
                         {
                             return d.InMeetingSchedule;
                         }
-                        if (Array.TrueForAll(InMeetingSchedules, _ => _ != s.Value.Schedule))
+                        if (Constants.InMeetingSchedules.Any(_ => _ == s.Value.Schedule))
                         {
                             return d.InMeetingSchedule;
                         }
@@ -193,7 +187,7 @@ public class AutoMapperProfile : Profile
                 d => d.InMeetingMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議中");
+                    o.Condition(s => s.Type == Constants.InMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)
@@ -216,7 +210,7 @@ public class AutoMapperProfile : Profile
                 d => d.InMeetingUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == "会議中");
+                    o.Condition(s => s.Type == Constants.InMeetingCommand);
                     o.MapFrom((s, d) =>
                     {
                         if (s.Value is null)

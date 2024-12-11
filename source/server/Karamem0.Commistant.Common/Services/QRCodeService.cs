@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Services;
 
-public interface IQrCodeService
+public interface IQRCodeService
 {
 
     Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
-public class QrCodeService(QRCodeGenerator qrCodeGenerator) : IQrCodeService
+public class QRCodeService(QRCodeGenerator qrCodeGenerator) : IQRCodeService
 {
 
     private readonly QRCodeGenerator qrCodeGenerator = qrCodeGenerator;

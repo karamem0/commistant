@@ -14,12 +14,8 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationPropertyArgumentsValue
+public record ConversationPropertyOptionsValue
 {
-
-    public ConversationPropertyArgumentsValue()
-    {
-    }
 
     public bool Enabled { get; set; }
 

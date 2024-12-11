@@ -6,7 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Karamem0.Commistant.Commands;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
@@ -20,14 +19,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Karamem0.Commistant.Functions.Commands.Tests;
+namespace Karamem0.Commistant.Commands.Tests;
 
-[Category("Karamem0.Commistant.Functions")]
+[Category("Karamem0.Commistant.Commands")]
 public class StartMeetingCommandTests
 {
 
     [Test()]
-    public async Task StartMeetingCommand_ExecuteAsync_Succeeded_OnSchedule()
+    public async Task ExecuteAsync_OnSchedule_Succeeded()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -54,19 +53,19 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
+        // Execute
         var command = new StartMeetingCommand(
             dateTimeService,
             connectorClientService,
             qrCodeService,
             logger
         );
-        // Execute
         await command.ExecuteAsync(
             conversationProperty,
             conversationReference
@@ -82,7 +81,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task StartMeetingCommand_ExecuteAsync_Succeeded_AfterSchedule()
+    public async Task ExecuteAsync_AfterSchedule_Succeeded()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -109,19 +108,19 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
+        // Execute
         var command = new StartMeetingCommand(
             dateTimeService,
             connectorClientService,
             qrCodeService,
             logger
         );
-        // Execute
         await command.ExecuteAsync(
             conversationProperty,
             conversationReference
@@ -137,7 +136,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task StartMeetingCommand_ExecuteAsync_Skipped_BeforeSchedule()
+    public async Task ExecuteAsync_BeforeSchedule_Skipped()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -164,19 +163,19 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
+        // Execute
         var command = new StartMeetingCommand(
             dateTimeService,
             connectorClientService,
             qrCodeService,
             logger
         );
-        // Execute
         await command.ExecuteAsync(
             conversationProperty,
             conversationReference
@@ -192,7 +191,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task StartMeetingCommand_ExecuteAsync_Skipped_NotInMeeting()
+    public async Task ExecuteAsync_NotInMeeting_Skipped()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -219,19 +218,19 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
+        // Execute
         var command = new StartMeetingCommand(
             dateTimeService,
             connectorClientService,
             qrCodeService,
             logger
         );
-        // Execute
         await command.ExecuteAsync(
             conversationProperty,
             conversationReference
@@ -247,7 +246,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task StartMeetingCommand_ExecuteAsync_Skipped_AfterSended()
+    public async Task ExecuteAsync_AfterSended_Skipped()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -274,19 +273,19 @@ public class StartMeetingCommandTests
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
-        var qrCodeService = Substitute.For<IQrCodeService>();
+        var qrCodeService = Substitute.For<IQRCodeService>();
         _ = qrCodeService.CreateAsync("https://www.example.com/")
             .Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
+        // Execute
         var command = new StartMeetingCommand(
             dateTimeService,
             connectorClientService,
             qrCodeService,
             logger
         );
-        // Execute
         await command.ExecuteAsync(
             conversationProperty,
             conversationReference
