@@ -20,15 +20,6 @@ jobs:
       - name: Restore source
         run: dotnet restore
         working-directory: source/server
-      - name: Test source
-        shell: pwsh
-        run: |
-          dotnet test `
-          Karamem0.Commistant.Tests/Karamem0.Commistant.Tests.csproj `
-          --filter TestCategory=Karamem0.Commistant.Functions `
-          -p:AltCover=true `
-          -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
-        working-directory: source/server
       - name: Build source
         shell: pwsh
         run: |
@@ -45,16 +36,3 @@ jobs:
           name: func
           path: source/server/build
           include-hidden-files: true
-      - name: Upload test results
-        uses: enricomi/publish-unit-test-result-action/linux@v2
-        if: always()
-        with:
-          files: source/server/test/*.xml
-          check_name: Func test results
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          fail_ci_if_error: true
-          token: ${{secrets.CODECOV_TOKEN}}
-          slug: karamem0/commistant

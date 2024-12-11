@@ -17,7 +17,6 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace Karamem0.Commistant.Dialogs;
 
 public class EndMeetingDialog(
     ConversationState conversationState,
-    QrCodeService qrCodeService,
+    IQRCodeService qrCodeService,
     IMapper mapper,
     ILogger<EndMeetingDialog> logger
 ) : ComponentDialog
@@ -38,7 +37,7 @@ public class EndMeetingDialog(
 
     private readonly ConversationState conversationState = conversationState;
 
-    private readonly QrCodeService qrCodeService = qrCodeService;
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly IMapper mapper = mapper;
 
@@ -49,20 +48,20 @@ public class EndMeetingDialog(
         _ = this.AddDialog(new WaterfallDialog(
             nameof(WaterfallDialog),
             [
-                this.BeforeConfirmAsync,
-                this.AfterConrifmAsync
+                this.OnBeforeAsync,
+                this.OnAfterAsync
             ]
         ));
-        _ = this.AddDialog(new TextPrompt(nameof(this.BeforeConfirmAsync), AdaptiveCardvalidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> BeforeConfirmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
-        var options = (ConversationPropertyArguments?)stepContext.Options;
-        var value = this.mapper.Map(options, property.Clone());
+        var options = (ConversationPropertyOptions?)stepContext.Options;
+        var value = this.mapper.Map(options, property with {});
         var card = new AdaptiveCard("1.3")
         {
             Body =
@@ -107,7 +106,7 @@ public class EndMeetingDialog(
                     Id = "Message",
                     IsMultiline = true,
                     Label = "メッセージ",
-                    Placeholder = "会議後に表示されるメッセージ",
+                    Placeholder = "会議終了前に表示されるメッセージ",
                     Style = AdaptiveTextInputStyle.Text,
                     Value = value.EndMeetingMessage
                 },
@@ -115,7 +114,7 @@ public class EndMeetingDialog(
                 {
                     Id = "Url",
                     Label = "URL",
-                    Placeholder = "会議後に表示されるリンクの URL",
+                    Placeholder = "会議終了前に表示されるリンクの URL",
                     Style = AdaptiveTextInputStyle.Url,
                     Value = value.EndMeetingUrl
                 }
@@ -145,11 +144,11 @@ public class EndMeetingDialog(
         var activity = MessageFactory.Attachment(new Attachment()
         {
             ContentType = AdaptiveCard.ContentType,
-            Content = JsonConvert.DeserializeObject(card.ToJson())
+            Content = card
         });
         this.logger.SettingsUpdating(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
-            nameof(this.BeforeConfirmAsync),
+            nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
                 Prompt = (Activity)activity
@@ -158,7 +157,7 @@ public class EndMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> AfterConrifmAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -300,7 +299,7 @@ public class EndMeetingDialog(
             var activity = MessageFactory.Attachment(new Attachment()
             {
                 ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                Content = card
             });
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);

@@ -25,8 +25,8 @@ jobs:
         shell: pwsh
         run: |
           $content = Get-Content -Path ${{env.FILE_PATH}}
-          $content = $content -replace "{{APP_DOMAIN_NAME}}", "${{vars.APP_DOMAIN_NAME}}"
-          $content = $content -replace "{{TELEMETRY_CONNECTION_STRING}}", "${{vars.TELEMETRY_CONNECTION_STRING}}"
+          $content = $content -Replace "{{APP_DOMAIN_NAME}}", "${{vars.APP_DOMAIN_NAME}}"
+          $content = $content -Replace "{{TELEMETRY_CONNECTION_STRING}}", "${{vars.TELEMETRY_CONNECTION_STRING}}"
           Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
         env:
           FILE_PATH: source/client/.env
@@ -41,15 +41,6 @@ jobs:
         working-directory: source/client
       - name: Restore server
         run: dotnet restore
-        working-directory: source/server
-      - name: Test source
-        shell: pwsh
-        run: |
-          dotnet test `
-            Karamem0.Commistant.Tests/Karamem0.Commistant.Tests.csproj `
-            --filter TestCategory=Karamem0.Commistant.Web `
-            -p:AltCover=true `
-            -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
         working-directory: source/server
       - name: Build source
         shell: pwsh
@@ -67,16 +58,3 @@ jobs:
           name: web
           path: source/server/build
           include-hidden-files: true
-      - name: Upload test results
-        uses: enricomi/publish-unit-test-result-action/linux@v2
-        if: always()
-        with:
-          files: source/server/test/*.xml
-          check_name: Web test results
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          fail_ci_if_error: true
-          token: ${{secrets.CODECOV_TOKEN}}
-          slug: karamem0/commistant

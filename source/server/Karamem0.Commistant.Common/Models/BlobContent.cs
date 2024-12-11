@@ -18,10 +18,6 @@ namespace Karamem0.Commistant.Models;
 public class BlobContent<T>
 {
 
-    public BlobContent()
-    {
-    }
-
     public T? Data { get; set; }
 
     public ETag? ETag { get; set; }

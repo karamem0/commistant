@@ -41,10 +41,7 @@ public class ConnectorClientService(ServiceClientCredentials credentials) : ICon
     )
     {
         var client = new ConnectorClient(url, this.credentials);
-        return await client.Conversations.SendToConversationAsync(
-            activity,
-            cancellationToken: cancellationToken
-        );
+        return await client.Conversations.SendToConversationAsync(activity, cancellationToken);
     }
 
 }

@@ -27,7 +27,7 @@ namespace Karamem0.Commistant.Commands;
 public class InMeetingCommand(
     IDateTimeService dateTimeService,
     IConnectorClientService connectorClientService,
-    IQrCodeService qrCodeService,
+    IQRCodeService qrCodeService,
     ILogger<InMeetingCommand> logger
 ) : Command()
 {
@@ -36,7 +36,7 @@ public class InMeetingCommand(
 
     private readonly IConnectorClientService connectorClientService = connectorClientService;
 
-    private readonly IQrCodeService qrCodeService = qrCodeService;
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly ILogger logger = logger;
 
@@ -100,7 +100,7 @@ public class InMeetingCommand(
             var activity = MessageFactory.Attachment(new Attachment()
             {
                 ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                Content = card
             });
             activity.From = reference.Bot;
             activity.Recipient = reference.User;

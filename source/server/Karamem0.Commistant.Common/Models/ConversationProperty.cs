@@ -14,12 +14,8 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class ConversationProperty : ICloneable
+public record ConversationProperty
 {
-
-    public ConversationProperty()
-    {
-    }
 
     public bool StartMeetingSended { get; set; }
 
@@ -48,15 +44,5 @@ public class ConversationProperty : ICloneable
     public DateTime? ScheduledEndTime { get; set; }
 
     public DateTime? ScheduledStartTime { get; set; }
-
-    object ICloneable.Clone()
-    {
-        return this.MemberwiseClone();
-    }
-
-    public ConversationProperty Clone()
-    {
-        return (ConversationProperty)this.MemberwiseClone();
-    }
 
 }

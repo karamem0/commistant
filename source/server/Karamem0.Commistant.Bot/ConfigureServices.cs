@@ -24,6 +24,7 @@ using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Karamem0.Commistant;
@@ -33,7 +34,7 @@ public static class ConfigureServices
 
     public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
     {
-        var blobContainerUrl = configuration.GetValue<string>("AzureBotStatesStorageUrl") ?? throw new InvalidOperationException();
+        var blobContainerUrl = configuration["AzureBotStatesStorageUrl"] ?? throw new InvalidOperationException();
         _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
         _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
         _ = services.AddSingleton<IStorage>(new BlobsStorage(
@@ -58,24 +59,25 @@ public static class ConfigureServices
             .Add(provider.GetService<StartMeetingDialog>())
             .Add(provider.GetService<EndMeetingDialog>())
             .Add(provider.GetService<InMeetingDialog>())
-            .Add(provider.GetService<ResetDialog>()));
+            .Add(provider.GetService<ResetDialog>())
+        );
         return services;
     }
 
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var openAIEndpointUrl = configuration.GetValue<string>("AzureOpenAIEndpointUrl") ?? throw new InvalidOperationException();
-        var openAIModelName = configuration.GetValue<string>("AzureOpenAIModelName") ?? throw new InvalidOperationException();
+        var openAIEndpointUrl = configuration["AzureOpenAIEndpointUrl"] ?? throw new InvalidOperationException();
+        var openAIModelName = configuration["AzureOpenAIModelName"] ?? throw new InvalidOperationException();
         _ = services.AddScoped(provider => new AzureOpenAIClient(
             new Uri(openAIEndpointUrl),
             new DefaultAzureCredential()
         ));
-        _ = services.AddScoped(provider => new OpenAIService(
-            provider.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException(),
+        _ = services.AddScoped<IOpenAIService>(provider => new OpenAIService(
+            provider.GetRequiredService<AzureOpenAIClient>(),
             openAIModelName
         ));
         _ = services.AddScoped<QRCodeGenerator>();
-        _ = services.AddScoped<QrCodeService>();
+        _ = services.AddScoped<IQRCodeService, QRCodeService>();
         return services;
     }
 

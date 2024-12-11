@@ -16,12 +16,19 @@ export default defineConfig({
     'outDir': 'dist',
     'sourcemap': true
   },
+  'optimizeDeps': {
+    'esbuildOptions': {
+      'define': {
+        'global': 'globalThis'
+      }
+    }
+  },
   'plugins': [
     react({
       'jsxImportSource': '@emotion/react',
       'babel': {
         'plugins': [
-          '@emotion/babel-plugin',
+          '@emotion',
           [
             'formatjs',
             {

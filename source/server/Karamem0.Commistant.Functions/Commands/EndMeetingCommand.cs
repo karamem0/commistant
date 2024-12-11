@@ -27,7 +27,7 @@ namespace Karamem0.Commistant.Commands;
 public class EndMeetingCommand(
     IDateTimeService dateTimeService,
     IConnectorClientService connectorClientService,
-    IQrCodeService qrCodeService,
+    IQRCodeService qrCodeService,
     ILogger<EndMeetingCommand> logger
 ) : Command()
 {
@@ -36,7 +36,7 @@ public class EndMeetingCommand(
 
     private readonly IConnectorClientService connectorClientService = connectorClientService;
 
-    private readonly IQrCodeService qrCodeService = qrCodeService;
+    private readonly IQRCodeService qrCodeService = qrCodeService;
 
     private readonly ILogger logger = logger;
 
@@ -104,7 +104,7 @@ public class EndMeetingCommand(
             var activity = MessageFactory.Attachment(new Attachment()
             {
                 ContentType = AdaptiveCard.ContentType,
-                Content = JsonConvert.DeserializeObject(card.ToJson())
+                Content = card
             });
             activity.From = reference.Bot;
             activity.Recipient = reference.User;
