@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2024 karamem0
+// Copyright (c) 2022-2025 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -14,8 +14,8 @@ import {
   Link,
   Text
 } from '@fluentui/react-components';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { EventHandler } from '../../../types/Event';
-import { FormattedMessage } from 'react-intl';
 import { SiGithub } from 'react-icons/si';
 import { css } from '@emotion/react';
 import messages from '../messages';
@@ -35,6 +35,7 @@ function HomePage(props: Readonly<HomePageProps>) {
     onLinkToTermsOfUse
   } = props;
 
+  const intl = useIntl();
   const { theme } = useTheme();
 
   return (
@@ -46,12 +47,13 @@ function HomePage(props: Readonly<HomePageProps>) {
       `}>
       <header
         css={css`
-          display: flex;
-          flex-flow: row;
+          display: grid;
+          grid-template-rows: auto;
+          grid-template-columns: auto;
           align-items: center;
           justify-content: end;
           width: 100%;
-          height: 2.5rem;
+          height: 2rem;
           padding: 0 1rem;
         `}>
         <Button
@@ -77,7 +79,7 @@ function HomePage(props: Readonly<HomePageProps>) {
           justify-content: center;
           width: 100%;
           padding: 2rem;
-          background-color: #ea5549;
+          background-color: ${theme.colorBrandBackground};
           @media (width >= 960px) {
             padding: 4rem 2rem;
           }
@@ -87,7 +89,6 @@ function HomePage(props: Readonly<HomePageProps>) {
             display: grid;
             grid-template-rows: auto;
             grid-template-columns: auto;
-            gap: 1rem;
             align-items: center;
             justify-content: center;
             @media (width >= 960px) {
@@ -114,13 +115,14 @@ function HomePage(props: Readonly<HomePageProps>) {
             </Text>
             <Text
               css={css`
-                color: #fff;
+                color: ${theme.colorNeutralForegroundInverted};
                 text-align: center;
               `}>
               <FormattedMessage {...messages.AppDescription} />
             </Text>
           </div>
           <Image
+            alt={intl.formatMessage(messages.AppTitle)}
             fit="contain"
             src="/assets/screenshots/001.png"
             css={css`

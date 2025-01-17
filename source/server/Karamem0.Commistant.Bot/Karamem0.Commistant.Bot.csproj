@@ -8,7 +8,7 @@
     <Authors>karamem0</Authors>
     <Company>karamem0</Company>
     <Product>Commistant</Product>
-    <Copyright>Copyright (c) 2022-2024 karamem0</Copyright>
+    <Copyright>Copyright (c) 2022-2025 karamem0</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -23,13 +23,13 @@
     <PackageReference Include="AdaptiveCards" Version="3.1.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
-    <PackageReference Include="Azure.Identity" Version="1.13.1" />
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.12" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.22.9" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.22.9" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.22.9" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="9.0.1" />
     <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 

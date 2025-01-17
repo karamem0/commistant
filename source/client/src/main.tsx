@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2024 karamem0
+// Copyright (c) 2022-2025 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -35,7 +35,7 @@ const element = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(element);
 
 root.render(
-  <React.Fragment>
+  <React.StrictMode>
     <Global styles={ress} />
     <TelemetryProvider>
       <BrowserRouter>
@@ -86,5 +86,5 @@ root.render(
         </TeamsInitializer>
       </BrowserRouter>
     </TelemetryProvider>
-  </React.Fragment>
+  </React.StrictMode>
 );

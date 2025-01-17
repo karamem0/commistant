@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2024 karamem0
+// Copyright (c) 2022-2025 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -40,6 +40,12 @@ public class ActivityBot(
     private readonly IOpenAIService openAIService = openAIService;
 
     private readonly ILogger logger = logger;
+
+    public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
+    {
+        await base.OnTurnAsync(turnContext, cancellationToken);
+        await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
+    }
 
     protected override async Task OnMembersAddedAsync(
         IList<ChannelAccount> membersAdded,
@@ -156,7 +162,6 @@ public class ActivityBot(
                 cancellationToken: cancellationToken
             );
         }
-        await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
     }
 
     protected override async Task OnTeamsMeetingStartAsync(
@@ -175,7 +180,6 @@ public class ActivityBot(
         property.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
         property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
         await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
-        await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
     }
 
     protected override async Task OnTeamsMeetingEndAsync(
@@ -193,7 +197,6 @@ public class ActivityBot(
         property.ScheduledStartTime = null;
         property.ScheduledEndTime = null;
         await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
-        await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
     }
 
 }

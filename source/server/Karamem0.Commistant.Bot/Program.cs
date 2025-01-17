@@ -1,12 +1,10 @@
 //
-// Copyright (c) 2022-2024 karamem0
+// Copyright (c) 2022-2025 karamem0
 //
 // This software is released under the MIT License.
 //
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
-
-#pragma warning disable CA1852
 
 using Karamem0.Commistant;
 using Karamem0.Commistant.Mappings;
@@ -47,5 +45,3 @@ _ = app.UseAuthorization();
 _ = app.MapControllers();
 
 await app.RunAsync();
-
-#pragma warning restore CA1852

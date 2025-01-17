@@ -8,7 +8,7 @@
     <Authors>karamem0</Authors>
     <Company>karamem0</Company>
     <Product>Commistant</Product>
-    <Copyright>Copyright (c) 2022-2024 karamem0</Copyright>
+    <Copyright>Copyright (c) 2022-2025 karamem0</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -25,9 +25,9 @@
     <PackageReference Include="Microsoft.Bot.Schema" Version="4.22.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
-    <PackageReference Include="NUnit" Version="4.3.1" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.5.0">
+    <PackageReference Include="NUnit.Analyzers" Version="4.6.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
