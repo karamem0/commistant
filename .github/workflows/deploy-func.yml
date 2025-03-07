@@ -1,9 +1,13 @@
+name: Deploy func to Azure
+
 on:
   workflow_call:
     inputs:
       environment:
         required: true
         type: string
+
+permissions: {}
 
 jobs:
   run:

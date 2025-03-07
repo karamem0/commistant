@@ -34,30 +34,39 @@ public class ResetDialogTests
         var conversationState = new ConversationState(new MemoryStorage());
         var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var logger = Substitute.For<ILogger<ResetDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "Yes"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "Yes"
+            }
+        );
         // Execute
         var dialog = new ResetDialog(conversationState, logger);
         var client = new DialogTestClient(Channels.Msteams, dialog, conversationState: conversationState);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        await accessor.SetAsync(client.DialogContext.Context, new ConversationProperty()
-        {
-            StartMeetingSchedule = 5,
-            EndMeetingSchedule = 5,
-            InMeetingSchedule = 5
-        });
+        await accessor.SetAsync(
+            client.DialogContext.Context,
+            new ConversationProperty()
+            {
+                StartMeetingSchedule = 5,
+                EndMeetingSchedule = 5,
+                InMeetingSchedule = 5
+            }
+        );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
-            Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
-            Assert.That(property.InMeetingSchedule, Is.EqualTo(-1));
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(property.InMeetingSchedule, Is.EqualTo(-1));
+            }
+        );
     }
 
     [Test()]
@@ -67,30 +76,39 @@ public class ResetDialogTests
         var conversationState = new ConversationState(new MemoryStorage());
         var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var logger = Substitute.For<ILogger<ResetDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "No"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "No"
+            }
+        );
         // Execute
         var dialog = new ResetDialog(conversationState, logger);
         var client = new DialogTestClient(Channels.Msteams, dialog, conversationState: conversationState);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        await accessor.SetAsync(client.DialogContext.Context, new ConversationProperty()
-        {
-            StartMeetingSchedule = 5,
-            EndMeetingSchedule = 5,
-            InMeetingSchedule = 5
-        });
+        await accessor.SetAsync(
+            client.DialogContext.Context,
+            new ConversationProperty()
+            {
+                StartMeetingSchedule = 5,
+                EndMeetingSchedule = 5,
+                InMeetingSchedule = 5
+            }
+        );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
-            Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
-            Assert.That(property.InMeetingSchedule, Is.EqualTo(5));
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
+                Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
+                Assert.That(property.InMeetingSchedule, Is.EqualTo(5));
+            }
+        );
     }
 
 }

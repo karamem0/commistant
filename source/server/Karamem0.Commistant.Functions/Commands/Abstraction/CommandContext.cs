@@ -17,11 +17,7 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
 
-public class CommandContext(
-    CommandSet commandSet,
-    ConversationProperty property,
-    ConversationReference reference
-)
+public class CommandContext(CommandSet commandSet, ConversationProperty property, ConversationReference reference)
 {
 
     private readonly CommandSet commandSet = commandSet;

@@ -40,13 +40,15 @@ public class StartMeetingDialogTests
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<StartMeetingDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "Submit",
-            ["Schedule"] = "5",
-            ["Message"] = "Hello world!",
-            ["Url"] = "https://www.example.com"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "Submit",
+                ["Schedule"] = "5",
+                ["Message"] = "Hello world!",
+                ["Url"] = "https://www.example.com"
+            }
+        );
         // Execute
         var dialog = new StartMeetingDialog(
             conversationState,
@@ -56,15 +58,19 @@ public class StartMeetingDialogTests
         );
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
-            Assert.That(property.StartMeetingMessage, Is.EqualTo("Hello world!"));
-            Assert.That(property.StartMeetingUrl, Is.EqualTo("https://www.example.com"));
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
+                Assert.That(property.StartMeetingMessage, Is.EqualTo("Hello world!"));
+                Assert.That(property.StartMeetingUrl, Is.EqualTo("https://www.example.com"));
+            }
+        );
     }
 
     [Test()]
@@ -77,13 +83,15 @@ public class StartMeetingDialogTests
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<StartMeetingDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "Cancel",
-            ["Schedule"] = "5",
-            ["Message"] = "Hello world!",
-            ["Url"] = "https://www.example.com"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "Cancel",
+                ["Schedule"] = "5",
+                ["Message"] = "Hello world!",
+                ["Url"] = "https://www.example.com"
+            }
+        );
         // Execute
         var dialog = new StartMeetingDialog(
             conversationState,
@@ -93,15 +101,19 @@ public class StartMeetingDialogTests
         );
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
-            Assert.That(property.StartMeetingMessage, Is.Null);
-            Assert.That(property.StartMeetingUrl, Is.Null);
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(property.StartMeetingMessage, Is.Null);
+                Assert.That(property.StartMeetingUrl, Is.Null);
+            }
+        );
     }
 
 }

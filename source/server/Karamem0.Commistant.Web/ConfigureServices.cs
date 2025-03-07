@@ -23,19 +23,26 @@ namespace Karamem0.Commistant;
 public static class ConfigureServices
 {
 
-    public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddBlobContainerClient(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var blobContainerUrl = configuration["AzureBotStatesStorageUrl"] ?? throw new InvalidOperationException();
-        _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
+        _ = services.AddSingleton(
+            provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential())
+        );
         return services;
     }
 
-    public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddServiceClientCredentials(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(
-            configuration["MicrosoftAppId"],
-            configuration["MicrosoftAppPassword"]
-        ));
+        _ = services.AddSingleton<ServiceClientCredentials>(
+            new MicrosoftAppCredentials(configuration["MicrosoftAppId"], configuration["MicrosoftAppPassword"])
+        );
         return services;
     }
 

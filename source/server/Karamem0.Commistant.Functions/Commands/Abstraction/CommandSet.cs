@@ -27,10 +27,7 @@ public class CommandSet
         this.commands = [];
     }
 
-    public Task<CommandContext> CreateContextAsync(
-        ConversationProperty property,
-        ConversationReference reference
-    )
+    public Task<CommandContext> CreateContextAsync(ConversationProperty property, ConversationReference reference)
     {
         return Task.Run(() => new CommandContext(this, property, reference));
     }

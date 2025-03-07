@@ -54,12 +54,14 @@ public class ExecuteCommandFunction(
                     {
                         continue;
                     }
-                    var property = blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
+                    var property =
+                        blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
                     if (property is null)
                     {
                         continue;
                     }
-                    var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
+                    var reference =
+                        blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
                     if (reference is null)
                     {
                         continue;

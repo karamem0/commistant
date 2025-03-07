@@ -41,13 +41,15 @@ public class EndMeetingDialogTests
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<EndMeetingDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "Submit",
-            ["Schedule"]  = "5",
-            ["Message"] = "Hello world!",
-            ["Url"] = "https://www.example.com"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "Submit",
+                ["Schedule"] = "5",
+                ["Message"] = "Hello world!",
+                ["Url"] = "https://www.example.com"
+            }
+        );
         // Execute
         var dialog = new EndMeetingDialog(
             conversationState,
@@ -57,15 +59,19 @@ public class EndMeetingDialogTests
         );
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
-            Assert.That(property.EndMeetingMessage, Is.EqualTo("Hello world!"));
-            Assert.That(property.EndMeetingUrl, Is.EqualTo("https://www.example.com"));
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
+                Assert.That(property.EndMeetingMessage, Is.EqualTo("Hello world!"));
+                Assert.That(property.EndMeetingUrl, Is.EqualTo("https://www.example.com"));
+            }
+        );
     }
 
     [Test()]
@@ -78,13 +84,15 @@ public class EndMeetingDialogTests
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<EndMeetingDialog>>();
-        var value = JObject.FromObject(new Dictionary<string, object>()
-        {
-            ["Button"] = "Cancel",
-            ["Schedule"]  = "5",
-            ["Message"] = "Hello world!",
-            ["Url"] = "https://www.example.com"
-        });
+        var value = JObject.FromObject(
+            new Dictionary<string, object>()
+            {
+                ["Button"] = "Cancel",
+                ["Schedule"] = "5",
+                ["Message"] = "Hello world!",
+                ["Url"] = "https://www.example.com"
+            }
+        );
         // Execute
         var dialog = new EndMeetingDialog(
             conversationState,
@@ -94,15 +102,19 @@ public class EndMeetingDialogTests
         );
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        var actual = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id));
+        var actual = await client.SendActivityAsync<IMessageActivity>(
+            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+        );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-        {
-            Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
-            Assert.That(property.EndMeetingMessage, Is.Null);
-            Assert.That(property.EndMeetingUrl, Is.Null);
-        });
+        Assert.Multiple(
+            () =>
+            {
+                Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(property.EndMeetingMessage, Is.Null);
+                Assert.That(property.EndMeetingUrl, Is.Null);
+            }
+        );
     }
 
 }

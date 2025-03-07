@@ -1,4 +1,10 @@
-on: workflow_call
+name: Test source
+
+on:
+  workflow_call: {}
+
+permissions:
+  checks: write
 
 jobs:
   run:

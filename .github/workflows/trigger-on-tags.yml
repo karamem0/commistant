@@ -1,7 +1,12 @@
+name: Trigger on tags
+
 on:
   push:
     tags:
       - v*.*.*
+
+permissions:
+  contents: write
 
 jobs:
   build-manifest:
@@ -13,5 +18,5 @@ jobs:
   release:
     name: Release
     needs: build-manifest
-    uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/deploy-to-github-release.yml
     secrets: inherit

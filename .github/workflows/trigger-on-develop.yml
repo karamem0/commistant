@@ -1,12 +1,17 @@
+name: Trigger on develop
+
 on:
   push:
     branches:
       - develop
 
+permissions:
+  checks: write
+
 jobs:
   test:
     name: Test
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/test-source.yml
     secrets: inherit
   build-bot:
     name: Build bot
@@ -16,7 +21,7 @@ jobs:
     with:
       environment: dev
   deploy-bot:
-      name: Deploy bot
+      name: Deploy bot to Azure
       needs: build-bot
       uses: ./.github/workflows/deploy-bot.yml
       secrets: inherit
@@ -30,7 +35,7 @@ jobs:
     with:
       environment: dev
   deploy-web:
-    name: Deploy web
+    name: Deploy web to Azure
     needs: build-web
     uses: ./.github/workflows/deploy-web.yml
     secrets: inherit
@@ -44,7 +49,7 @@ jobs:
     with:
       environment: dev
   deploy-func:
-    name: Deploy func
+    name: Deploy func to Azure
     needs: build-func
     uses: ./.github/workflows/deploy-func.yml
     secrets: inherit

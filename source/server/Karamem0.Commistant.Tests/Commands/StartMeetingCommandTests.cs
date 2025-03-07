@@ -40,8 +40,24 @@ public class StartMeetingCommandTests
         var conversationProperty = new ConversationProperty()
         {
             InMeeting = true,
-            ScheduledStartTime = new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-            ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
+            ScheduledStartTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                0,
+                0,
+                DateTimeKind.Utc
+            ),
+            ScheduledEndTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                30,
+                0,
+                DateTimeKind.Utc
+            ),
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
@@ -49,13 +65,22 @@ public class StartMeetingCommandTests
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
-            .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
+        .Returns(
+            new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                10,
+                0,
+                DateTimeKind.Utc
+            )
+        );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com/")
-            .Returns([]);
+        _ = qrCodeService.CreateAsync("https://www.example.com/").Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
@@ -66,18 +91,12 @@ public class StartMeetingCommandTests
             qrCodeService,
             logger
         );
-        await command.ExecuteAsync(
-            conversationProperty,
-            conversationReference
-        );
+        await command.ExecuteAsync(conversationProperty, conversationReference);
         // Assert
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
-        _ = connectorClientService
-            .Received()
+        _ = connectorClientService.Received()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
-        _ = qrCodeService
-            .Received()
-            .CreateAsync("https://www.example.com/");
+        _ = qrCodeService.Received().CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -95,8 +114,24 @@ public class StartMeetingCommandTests
         var conversationProperty = new ConversationProperty()
         {
             InMeeting = true,
-            ScheduledStartTime = new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-            ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
+            ScheduledStartTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                0,
+                0,
+                DateTimeKind.Utc
+            ),
+            ScheduledEndTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                30,
+                0,
+                DateTimeKind.Utc
+            ),
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
@@ -104,13 +139,22 @@ public class StartMeetingCommandTests
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
-            .Returns(new DateTime(2000, 1, 1, 9, 15, 0, DateTimeKind.Utc));
+        .Returns(
+            new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                15,
+                0,
+                DateTimeKind.Utc
+            )
+        );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com/")
-            .Returns([]);
+        _ = qrCodeService.CreateAsync("https://www.example.com/").Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
@@ -121,18 +165,12 @@ public class StartMeetingCommandTests
             qrCodeService,
             logger
         );
-        await command.ExecuteAsync(
-            conversationProperty,
-            conversationReference
-        );
+        await command.ExecuteAsync(conversationProperty, conversationReference);
         // Assert
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
-        _ = connectorClientService
-            .Received()
+        _ = connectorClientService.Received()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
-        _ = qrCodeService
-            .Received()
-            .CreateAsync("https://www.example.com/");
+        _ = qrCodeService.Received().CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -150,8 +188,24 @@ public class StartMeetingCommandTests
         var conversationProperty = new ConversationProperty()
         {
             InMeeting = true,
-            ScheduledStartTime = new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-            ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
+            ScheduledStartTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                0,
+                0,
+                DateTimeKind.Utc
+            ),
+            ScheduledEndTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                30,
+                0,
+                DateTimeKind.Utc
+            ),
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
@@ -159,13 +213,22 @@ public class StartMeetingCommandTests
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
-            .Returns(new DateTime(2000, 1, 1, 9, 5, 0, DateTimeKind.Utc));
+        .Returns(
+            new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                5,
+                0,
+                DateTimeKind.Utc
+            )
+        );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com/")
-            .Returns([]);
+        _ = qrCodeService.CreateAsync("https://www.example.com/").Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
@@ -176,18 +239,12 @@ public class StartMeetingCommandTests
             qrCodeService,
             logger
         );
-        await command.ExecuteAsync(
-            conversationProperty,
-            conversationReference
-        );
+        await command.ExecuteAsync(conversationProperty, conversationReference);
         // Assert
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(false));
-        _ = connectorClientService
-            .DidNotReceive()
+        _ = connectorClientService.DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
-        _ = qrCodeService
-            .DidNotReceive()
-            .CreateAsync("https://www.example.com/");
+        _ = qrCodeService.DidNotReceive().CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -205,8 +262,24 @@ public class StartMeetingCommandTests
         var conversationProperty = new ConversationProperty()
         {
             InMeeting = false,
-            ScheduledStartTime = new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-            ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
+            ScheduledStartTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                0,
+                0,
+                DateTimeKind.Utc
+            ),
+            ScheduledEndTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                30,
+                0,
+                DateTimeKind.Utc
+            ),
             StartMeetingSended = false,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
@@ -214,13 +287,22 @@ public class StartMeetingCommandTests
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
-            .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
+        .Returns(
+            new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                10,
+                0,
+                DateTimeKind.Utc
+            )
+        );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com/")
-            .Returns([]);
+        _ = qrCodeService.CreateAsync("https://www.example.com/").Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
@@ -231,18 +313,12 @@ public class StartMeetingCommandTests
             qrCodeService,
             logger
         );
-        await command.ExecuteAsync(
-            conversationProperty,
-            conversationReference
-        );
+        await command.ExecuteAsync(conversationProperty, conversationReference);
         // Assert
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(false));
-        _ = connectorClientService
-            .DidNotReceive()
+        _ = connectorClientService.DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
-        _ = qrCodeService
-            .DidNotReceive()
-            .CreateAsync("https://www.example.com/");
+        _ = qrCodeService.DidNotReceive().CreateAsync("https://www.example.com/");
     }
 
     [Test()]
@@ -260,8 +336,24 @@ public class StartMeetingCommandTests
         var conversationProperty = new ConversationProperty()
         {
             InMeeting = true,
-            ScheduledStartTime = new DateTime(2000, 1, 1, 9, 0, 0, DateTimeKind.Utc),
-            ScheduledEndTime = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc),
+            ScheduledStartTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                0,
+                0,
+                DateTimeKind.Utc
+            ),
+            ScheduledEndTime = new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                30,
+                0,
+                DateTimeKind.Utc
+            ),
             StartMeetingSended = true,
             StartMeetingSchedule = 10,
             StartMeetingMessage = "",
@@ -269,13 +361,22 @@ public class StartMeetingCommandTests
         };
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService.GetCurrentDateTime()
-            .Returns(new DateTime(2000, 1, 1, 9, 10, 0, DateTimeKind.Utc));
+        .Returns(
+            new DateTime(
+                2000,
+                1,
+                1,
+                9,
+                10,
+                0,
+                DateTimeKind.Utc
+            )
+        );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService.SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>())
             .Returns(new ResourceResponse());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        _ = qrCodeService.CreateAsync("https://www.example.com/")
-            .Returns([]);
+        _ = qrCodeService.CreateAsync("https://www.example.com/").Returns([]);
         var logger = Substitute.For<ILogger<StartMeetingCommand>>();
         logger.StartMeetingMessageNotifying(conversationReference, conversationProperty);
         logger.StartMeetingMessageNotified(conversationReference, conversationProperty);
@@ -286,18 +387,12 @@ public class StartMeetingCommandTests
             qrCodeService,
             logger
         );
-        await command.ExecuteAsync(
-            conversationProperty,
-            conversationReference
-        );
+        await command.ExecuteAsync(conversationProperty, conversationReference);
         // Assert
         Assert.That(conversationProperty.StartMeetingSended, Is.EqualTo(true));
-        _ = connectorClientService
-            .DidNotReceive()
+        _ = connectorClientService.DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
-        _ = qrCodeService
-            .DidNotReceive()
-            .CreateAsync("https://www.example.com/");
+        _ = qrCodeService.DidNotReceive().CreateAsync("https://www.example.com/");
     }
 
 }

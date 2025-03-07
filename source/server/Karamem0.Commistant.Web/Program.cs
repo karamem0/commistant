@@ -29,11 +29,9 @@ _ = services.AddServiceClientCredentials(configuration);
 _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftEntra");
 _ = services.AddControllers();
 _ = services.AddHttpClient();
-_ = services.AddCors(options =>
-    options.AddDefaultPolicy(builder => builder
-        .AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod()));
+_ = services.AddCors(
+    options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
+);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

@@ -34,18 +34,23 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
 
     protected override async Task OnInitializeAsync(DialogContext dc)
     {
-        _ = this.AddDialog(new WaterfallDialog(
-            nameof(WaterfallDialog),
-            [
-                this.OnBeforeAsync,
-                this.OnAfterAsync
-            ]
-        ));
+        _ = this.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    this.OnBeforeAsync,
+                    this.OnAfterAsync
+                ]
+            )
+        );
         _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
+    private async Task<DialogTurnResult> OnBeforeAsync(
+        WaterfallStepContext stepContext,
+        CancellationToken cancellationToken = default
+    )
     {
         this.logger.SettingsResetting(stepContext.Context.Activity);
         var card = new AdaptiveCard("1.3")
@@ -81,11 +86,13 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
                 }
             ]
         };
-        var activity = MessageFactory.Attachment(new Attachment()
-        {
-            ContentType = AdaptiveCard.ContentType,
-            Content = card
-        });
+        var activity = MessageFactory.Attachment(
+            new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = card
+            }
+        );
         this.logger.SettingsResetting(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
             nameof(this.OnBeforeAsync),
@@ -97,7 +104,10 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         );
     }
 
-    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
+    private async Task<DialogTurnResult> OnAfterAsync(
+        WaterfallStepContext stepContext,
+        CancellationToken cancellationToken = default
+    )
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -140,11 +150,13 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
                     }
                 ]
             };
-            var activity = MessageFactory.Attachment(new Attachment()
-            {
-                ContentType = AdaptiveCard.ContentType,
-                Content = card
-            });
+            var activity = MessageFactory.Attachment(
+                new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                }
+            );
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }

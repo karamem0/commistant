@@ -44,7 +44,8 @@ public class OpenAIServiceTests
         };
         var chatCompletion = OpenAIChatModelFactory.ChatCompletion(
             finishReason: ChatFinishReason.ToolCalls,
-            toolCalls: [
+            toolCalls:
+            [
                 ChatToolCall.CreateFunctionToolCall(
                     "ab3d750e-8b79-4987-b40c-422a0ec98d02",
                     "StartMeeting",
@@ -62,9 +63,7 @@ public class OpenAIServiceTests
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
         var openAIClient = Substitute.For<OpenAIClient>(apiKey);
-        _ = openAIClient
-            .GetChatClient(modelName)
-            .Returns(chatClient);
+        _ = openAIClient.GetChatClient(modelName).Returns(chatClient);
         // Execute
         var target = new OpenAIService(openAIClient, modelName);
         var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");
@@ -89,9 +88,7 @@ public class OpenAIServiceTests
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
         var openAIClient = Substitute.For<OpenAIClient>(apiKey);
-        _ = openAIClient
-            .GetChatClient(modelName)
-            .Returns(chatClient);
+        _ = openAIClient.GetChatClient(modelName).Returns(chatClient);
         // Execute
         var target = new OpenAIService(openAIClient, modelName);
         var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");

@@ -37,11 +37,9 @@ public static class ConfigureServices
         var blobContainerUrl = configuration["AzureBotStatesStorageUrl"] ?? throw new InvalidOperationException();
         _ = services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFrameworkAuthentication>();
         _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
-        _ = services.AddSingleton<IStorage>(new BlobsStorage(
-            new Uri(blobContainerUrl),
-            new DefaultAzureCredential(),
-            new StorageTransferOptions()
-        ));
+        _ = services.AddSingleton<IStorage>(
+            new BlobsStorage(new Uri(blobContainerUrl), new DefaultAzureCredential(), new StorageTransferOptions())
+        );
         _ = services.AddSingleton<ConversationState>();
         _ = services.AddScoped<IBot, ActivityBot>();
         return services;
@@ -53,13 +51,14 @@ public static class ConfigureServices
         _ = services.AddScoped<EndMeetingDialog>();
         _ = services.AddScoped<InMeetingDialog>();
         _ = services.AddScoped<ResetDialog>();
-        _ = services.AddScoped(provider => new DialogSet(provider
-            .GetService<ConversationState>()?
-            .CreateProperty<DialogState>(nameof(DialogState)))
-            .Add(provider.GetService<StartMeetingDialog>())
-            .Add(provider.GetService<EndMeetingDialog>())
-            .Add(provider.GetService<InMeetingDialog>())
-            .Add(provider.GetService<ResetDialog>())
+        _ = services.AddScoped(
+            provider =>
+                new DialogSet(
+                        provider.GetService<ConversationState>()?.CreateProperty<DialogState>(nameof(DialogState))
+                    ).Add(provider.GetService<StartMeetingDialog>())
+                    .Add(provider.GetService<EndMeetingDialog>())
+                    .Add(provider.GetService<InMeetingDialog>())
+                    .Add(provider.GetService<ResetDialog>())
         );
         return services;
     }
@@ -68,14 +67,12 @@ public static class ConfigureServices
     {
         var openAIEndpointUrl = configuration["AzureOpenAIEndpointUrl"] ?? throw new InvalidOperationException();
         var openAIModelName = configuration["AzureOpenAIModelName"] ?? throw new InvalidOperationException();
-        _ = services.AddScoped(provider => new AzureOpenAIClient(
-            new Uri(openAIEndpointUrl),
-            new DefaultAzureCredential()
-        ));
-        _ = services.AddScoped<IOpenAIService>(provider => new OpenAIService(
-            provider.GetRequiredService<AzureOpenAIClient>(),
-            openAIModelName
-        ));
+        _ = services.AddScoped(
+            provider => new AzureOpenAIClient(new Uri(openAIEndpointUrl), new DefaultAzureCredential())
+        );
+        _ = services.AddScoped<IOpenAIService>(
+            provider => new OpenAIService(provider.GetRequiredService<AzureOpenAIClient>(), openAIModelName)
+        );
         _ = services.AddScoped<QRCodeGenerator>();
         _ = services.AddScoped<IQRCodeService, QRCodeService>();
         return services;

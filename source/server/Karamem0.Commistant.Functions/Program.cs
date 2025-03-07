@@ -19,23 +19,31 @@ using System.Threading.Tasks;
 
 var builder = new HostBuilder();
 _ = builder.ConfigureFunctionsWorkerDefaults();
-_ = builder.ConfigureAppConfiguration((context, builder) =>
-{
-    _ = builder.AddJsonFile("appsettings.json", true, true);
-    _ = builder.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT")}.json", true, true);
-    _ = builder.AddUserSecrets(typeof(Program).Assembly, true);
-    _ = builder.AddEnvironmentVariables();
-});
-_ = builder.ConfigureServices((context, services) =>
-{
-    _ = services.AddApplicationInsightsTelemetryWorkerService();
-    _ = services.AddLogging(builder => builder.AddApplicationInsights());
-    _ = services.AddHttpClient();
-    _ = services.AddBlobContainerClient(context.Configuration);
-    _ = services.AddServiceClientCredentials(context.Configuration);
-    _ = services.AddServices();
-    _ = services.AddCommands();
-});
+_ = builder.ConfigureAppConfiguration(
+    (context, builder) =>
+    {
+        _ = builder.AddJsonFile("appsettings.json", true, true);
+        _ = builder.AddJsonFile(
+            $"appsettings.{Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT")}.json",
+            true,
+            true
+        );
+        _ = builder.AddUserSecrets(typeof(Program).Assembly, true);
+        _ = builder.AddEnvironmentVariables();
+    }
+);
+_ = builder.ConfigureServices(
+    (context, services) =>
+    {
+        _ = services.AddApplicationInsightsTelemetryWorkerService();
+        _ = services.AddLogging(builder => builder.AddApplicationInsights());
+        _ = services.AddHttpClient();
+        _ = services.AddBlobContainerClient(context.Configuration);
+        _ = services.AddServiceClientCredentials(context.Configuration);
+        _ = services.AddServices();
+        _ = services.AddCommands();
+    }
+);
 
 var app = builder.Build();
 

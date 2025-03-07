@@ -69,7 +69,12 @@ public class ActivityBotTests
         };
         var turnContext = new TurnContext(adapter, activity);
         // Execute
-        var target = new ActivityBot(conversationState, dislogSet, openAIService, logger);
+        var target = new ActivityBot(
+            conversationState,
+            dislogSet,
+            openAIService,
+            logger
+        );
         await target.OnTurnAsync(turnContext);
         // Validate
         Assert.That(adapter.ActiveQueue, Has.Count.EqualTo(1));
@@ -116,7 +121,12 @@ public class ActivityBotTests
         };
         var turnContext = new TurnContext(adapter, activity);
         // Execute
-        var target = new ActivityBot(conversationState, dislogSet, openAIService, logger);
+        var target = new ActivityBot(
+            conversationState,
+            dislogSet,
+            openAIService,
+            logger
+        );
         await target.OnTurnAsync(turnContext);
         // Validate
         _ = conversationState.Received().DeleteAsync(Arg.Any<ITurnContext>(), Arg.Any<CancellationToken>());

@@ -45,23 +45,33 @@ public class EndMeetingDialog(
 
     protected override async Task OnInitializeAsync(DialogContext dc)
     {
-        _ = this.AddDialog(new WaterfallDialog(
-            nameof(WaterfallDialog),
-            [
-                this.OnBeforeAsync,
-                this.OnAfterAsync
-            ]
-        ));
+        _ = this.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    this.OnBeforeAsync,
+                    this.OnAfterAsync
+                ]
+            )
+        );
         _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardvalidator.Validate));
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
+    private async Task<DialogTurnResult> OnBeforeAsync(
+        WaterfallStepContext stepContext,
+        CancellationToken cancellationToken = default
+    )
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
         var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
         var options = (ConversationPropertyOptions?)stepContext.Options;
-        var value = this.mapper.Map(options, property with {});
+        var value = this.mapper.Map(
+            options,
+            property with
+            {
+            }
+        );
         var card = new AdaptiveCard("1.3")
         {
             Body =
@@ -141,11 +151,13 @@ public class EndMeetingDialog(
                 }
             ]
         };
-        var activity = MessageFactory.Attachment(new Attachment()
-        {
-            ContentType = AdaptiveCard.ContentType,
-            Content = card
-        });
+        var activity = MessageFactory.Attachment(
+            new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = card
+            }
+        );
         this.logger.SettingsUpdating(stepContext.Context.Activity);
         return await stepContext.PromptAsync(
             nameof(this.OnBeforeAsync),
@@ -157,7 +169,10 @@ public class EndMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
+    private async Task<DialogTurnResult> OnAfterAsync(
+        WaterfallStepContext stepContext,
+        CancellationToken cancellationToken = default
+    )
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -284,23 +299,29 @@ public class EndMeetingDialog(
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);
-                card.Body.Add(new AdaptiveImage()
-                {
-                    AltText = url.ToString(),
-                    Size = AdaptiveImageSize.Large,
-                    Url = new Uri($"data:image/png;base64,{base64}")
-                });
-                card.Actions.Add(new AdaptiveOpenUrlAction()
-                {
-                    Title = "URL を開く",
-                    Url = url,
-                });
+                card.Body.Add(
+                    new AdaptiveImage()
+                    {
+                        AltText = url.ToString(),
+                        Size = AdaptiveImageSize.Large,
+                        Url = new Uri($"data:image/png;base64,{base64}")
+                    }
+                );
+                card.Actions.Add(
+                    new AdaptiveOpenUrlAction()
+                    {
+                        Title = "URL を開く",
+                        Url = url,
+                    }
+                );
             }
-            var activity = MessageFactory.Attachment(new Attachment()
-            {
-                ContentType = AdaptiveCard.ContentType,
-                Content = card
-            });
+            var activity = MessageFactory.Attachment(
+                new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                }
+            );
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }

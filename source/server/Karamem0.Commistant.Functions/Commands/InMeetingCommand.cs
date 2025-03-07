@@ -75,33 +75,41 @@ public class InMeetingCommand(
             var card = new AdaptiveCard("1.3");
             if (string.IsNullOrEmpty(property.InMeetingMessage) is false)
             {
-                card.Body.Add(new AdaptiveTextBlock()
-                {
-                    Text = property.InMeetingMessage,
-                    Wrap = true
-                });
+                card.Body.Add(
+                    new AdaptiveTextBlock()
+                    {
+                        Text = property.InMeetingMessage,
+                        Wrap = true
+                    }
+                );
             }
             if (Uri.TryCreate(property.InMeetingUrl, UriKind.Absolute, out var url))
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);
-                card.Body.Add(new AdaptiveImage()
-                {
-                    AltText = url.ToString(),
-                    Size = AdaptiveImageSize.Stretch,
-                    Url = new Uri($"data:image/png;base64,{base64}")
-                });
-                card.Actions.Add(new AdaptiveOpenUrlAction()
-                {
-                    Title = "URL を開く",
-                    Url = url,
-                });
+                card.Body.Add(
+                    new AdaptiveImage()
+                    {
+                        AltText = url.ToString(),
+                        Size = AdaptiveImageSize.Stretch,
+                        Url = new Uri($"data:image/png;base64,{base64}")
+                    }
+                );
+                card.Actions.Add(
+                    new AdaptiveOpenUrlAction()
+                    {
+                        Title = "URL を開く",
+                        Url = url,
+                    }
+                );
             }
-            var activity = MessageFactory.Attachment(new Attachment()
-            {
-                ContentType = AdaptiveCard.ContentType,
-                Content = card
-            });
+            var activity = MessageFactory.Attachment(
+                new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                }
+            );
             activity.From = reference.Bot;
             activity.Recipient = reference.User;
             activity.Conversation = reference.Conversation;
