@@ -47,10 +47,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> OnBeforeAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         this.logger.SettingsResetting(stepContext.Context.Activity);
         var card = new AdaptiveCard("1.3")
@@ -104,10 +101,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         );
     }
 
-    private async Task<DialogTurnResult> OnAfterAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -117,7 +111,11 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         if (value.Value<string>("Button") == "Yes")
         {
             var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-            await accessor.SetAsync(stepContext.Context, new(), cancellationToken);
+            await accessor.SetAsync(
+                stepContext.Context,
+                new(),
+                cancellationToken
+            );
             this.logger.SettingsReseted(stepContext.Context.Activity);
             _ = await stepContext.Context.SendSettingsResetedAsync(cancellationToken);
         }

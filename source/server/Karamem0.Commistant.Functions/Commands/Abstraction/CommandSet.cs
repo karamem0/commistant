@@ -17,29 +17,45 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
 
-public class CommandSet
+public interface ICommandSet
 {
 
-    private readonly Dictionary<string, Command> commands;
+    ICommandContext CreateContext(ConversationProperty property, ConversationReference reference);
+
+    ICommandSet Add(ICommand? command);
+
+    ICommand? Find(string? commandId);
+
+}
+
+public class CommandSet : ICommandSet
+{
+
+    private readonly Dictionary<string, ICommand> commands;
 
     public CommandSet()
     {
         this.commands = [];
     }
 
-    public Task<CommandContext> CreateContextAsync(ConversationProperty property, ConversationReference reference)
+    public ICommandContext CreateContext(ConversationProperty property, ConversationReference reference)
     {
-        return Task.Run(() => new CommandContext(this, property, reference));
+        return new CommandContext(
+            this,
+            property,
+            reference
+        );
     }
 
-    public CommandSet Add(Command? command)
+    public ICommandSet Add(ICommand? command)
     {
         _ = command ?? throw new ArgumentNullException(nameof(command));
-        this.commands.Add(command.GetType().Name, command);
+        var commandType = command.GetType();
+        this.commands.Add(commandType.Name, command);
         return this;
     }
 
-    public Command? Find(string? commandId)
+    public ICommand? Find(string? commandId)
     {
         _ = commandId ?? throw new ArgumentNullException(nameof(commandId));
         if (this.commands.TryGetValue(commandId, out var command))

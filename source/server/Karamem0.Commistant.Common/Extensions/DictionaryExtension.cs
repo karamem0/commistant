@@ -17,11 +17,11 @@ namespace Karamem0.Commistant.Extensions;
 public static class DictionaryExtension
 {
 
-    public static T? GetValueOrDefault<T>(this IDictionary<string, object> target, string key)
+    public static T? GetValueOrDefault<T>(this IDictionary<string, object?> target, string key)
     {
         if (target.TryGetValue(key, out var value))
         {
-            return (T)value;
+            return (T?)value;
         }
         else
         {

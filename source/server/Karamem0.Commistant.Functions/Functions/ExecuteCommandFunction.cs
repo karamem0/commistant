@@ -26,7 +26,7 @@ namespace Karamem0.Commistant.Functions;
 public class ExecuteCommandFunction(
     ILoggerFactory loggerFactory,
     BlobContainerClient botStateClient,
-    CommandSet commandSet
+    ICommandSet commandSet
 )
 {
 
@@ -34,44 +34,39 @@ public class ExecuteCommandFunction(
 
     private readonly BlobContainerClient botStateClient = botStateClient;
 
-    private readonly CommandSet commandSet = commandSet;
+    private readonly ICommandSet commandSet = commandSet;
 
 #pragma warning disable IDE0060
 
     [Function("ExecuteCommand")]
-    public async Task Run([TimerTrigger("0 */1 * * * *")] object timerInfo)
+    public async Task RunAsync([TimerTrigger("0 */1 * * * *")] object timerInfo)
     {
         try
         {
             this.logger.TimerStarted();
-            await foreach (var blobPage in this.botStateClient.GetBlobsAsync().AsPages())
+            await foreach (var blobItem in this.botStateClient.GetBlobsAsync())
             {
-                foreach (var blobItem in blobPage.Values)
+                var blobClient = this.botStateClient.GetBlobClient(blobItem.Name);
+                var blobContent = await blobClient.GetObjectAsync<Dictionary<string, object?>>();
+                if (blobContent.Data is null)
                 {
-                    var blobClient = this.botStateClient.GetBlobClient(blobItem.Name);
-                    var blobContent = await blobClient.GetObjectAsync<Dictionary<string, object>>();
-                    if (blobContent.Data is null)
-                    {
-                        continue;
-                    }
-                    var property =
-                        blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
-                    if (property is null)
-                    {
-                        continue;
-                    }
-                    var reference =
-                        blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
-                    if (reference is null)
-                    {
-                        continue;
-                    }
-                    var cd = await this.commandSet.CreateContextAsync(property, reference);
-                    await cd.ExecuteCommandAsync(nameof(StartMeetingCommand));
-                    await cd.ExecuteCommandAsync(nameof(EndMeetingCommand));
-                    await cd.ExecuteCommandAsync(nameof(InMeetingCommand));
-                    await blobClient.SetObjectAsync(blobContent);
+                    continue;
                 }
+                var property = blobContent.Data.GetValueOrDefault<ConversationProperty>(nameof(ConversationProperty));
+                if (property is null)
+                {
+                    continue;
+                }
+                var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
+                if (reference is null)
+                {
+                    continue;
+                }
+                var cd = this.commandSet.CreateContext(property, reference);
+                await cd.ExecuteCommandAsync(nameof(StartMeetingCommand));
+                await cd.ExecuteCommandAsync(nameof(EndMeetingCommand));
+                await cd.ExecuteCommandAsync(nameof(InMeetingCommand));
+                await blobClient.SetObjectAsync(blobContent);
             }
             this.logger.TimerEnded();
         }

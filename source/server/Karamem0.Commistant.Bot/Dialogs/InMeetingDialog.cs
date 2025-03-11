@@ -58,13 +58,14 @@ public class InMeetingDialog(
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> OnBeforeAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
+        var property = await accessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
         var options = (ConversationPropertyOptions?)stepContext.Options;
         var value = this.mapper.Map(
             options,
@@ -174,10 +175,7 @@ public class InMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> OnAfterAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -185,7 +183,11 @@ public class InMeetingDialog(
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
+        var property = await accessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
         if (value.Value<string>("Button") == "Submit")
         {
             property.InMeetingSchedule = value.Value("Schedule", 0);
@@ -300,7 +302,11 @@ public class InMeetingDialog(
                     }
                 ]
             };
-            if (Uri.TryCreate(property.InMeetingUrl, UriKind.Absolute, out var url))
+            if (Uri.TryCreate(
+                    property.InMeetingUrl,
+                    UriKind.Absolute,
+                    out var url
+                ))
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);

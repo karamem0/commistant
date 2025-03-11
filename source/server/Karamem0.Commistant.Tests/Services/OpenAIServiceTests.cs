@@ -27,7 +27,7 @@ public class OpenAIServiceTests
 {
 
     [Test()]
-    public async Task GetConversationPropertyOptionsAsync_Succeeded_ReturnsValue()
+    public async Task GetConversationPropertyOptionsAsync_WhenSucceeded_ShouldReturnValue()
     {
         // Setup
         var modelName = "gpt-4o-mini";
@@ -63,7 +63,9 @@ public class OpenAIServiceTests
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
         var openAIClient = Substitute.For<OpenAIClient>(apiKey);
-        _ = openAIClient.GetChatClient(modelName).Returns(chatClient);
+        _ = openAIClient
+            .GetChatClient(modelName)
+            .Returns(chatClient);
         // Execute
         var target = new OpenAIService(openAIClient, modelName);
         var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");
@@ -72,7 +74,7 @@ public class OpenAIServiceTests
     }
 
     [Test()]
-    public async Task GetConversationPropertyOptionsAsync_Failed_ReturnsNull()
+    public async Task GetConversationPropertyOptionsAsync_WhenFailed_ShouldReturnNull()
     {
         // Setup
         var modelName = "gpt-4o-mini";
@@ -88,7 +90,9 @@ public class OpenAIServiceTests
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
         var openAIClient = Substitute.For<OpenAIClient>(apiKey);
-        _ = openAIClient.GetChatClient(modelName).Returns(chatClient);
+        _ = openAIClient
+            .GetChatClient(modelName)
+            .Returns(chatClient);
         // Execute
         var target = new OpenAIService(openAIClient, modelName);
         var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");

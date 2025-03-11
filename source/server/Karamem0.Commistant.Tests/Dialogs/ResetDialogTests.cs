@@ -28,7 +28,7 @@ public class ResetDialogTests
 {
 
     [Test()]
-    public async Task ResetDialog_Yes_Succeeded()
+    public async Task ResetDialog_WhenYes_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -42,7 +42,11 @@ public class ResetDialogTests
         );
         // Execute
         var dialog = new ResetDialog(conversationState, logger);
-        var client = new DialogTestClient(Channels.Msteams, dialog, conversationState: conversationState);
+        var client = new DialogTestClient(
+            Channels.Msteams,
+            dialog,
+            conversationState: conversationState
+        );
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         await accessor.SetAsync(
             client.DialogContext.Context,
@@ -55,7 +59,11 @@ public class ResetDialogTests
         );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
@@ -70,7 +78,7 @@ public class ResetDialogTests
     }
 
     [Test()]
-    public async Task ResetDialog_No_Succeeded()
+    public async Task ResetDialog_WhenNo_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -84,7 +92,11 @@ public class ResetDialogTests
         );
         // Execute
         var dialog = new ResetDialog(conversationState, logger);
-        var client = new DialogTestClient(Channels.Msteams, dialog, conversationState: conversationState);
+        var client = new DialogTestClient(
+            Channels.Msteams,
+            dialog,
+            conversationState: conversationState
+        );
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         await accessor.SetAsync(
             client.DialogContext.Context,
@@ -97,7 +109,11 @@ public class ResetDialogTests
         );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());

@@ -21,8 +21,11 @@ namespace Karamem0.Commistant.Logging;
 public static class LoggerExtensions
 {
 
-    private static readonly Action<ILogger, string?, Exception?> unhandledError =
-        LoggerMessage.Define<string?>(LogLevel.Error, new EventId(1), "[{MemberName}] 予期しない問題が発生しました。");
+    private static readonly Action<ILogger, string?, Exception?> unhandledError = LoggerMessage.Define<string?>(
+        LogLevel.Error,
+        new EventId(1),
+        "[{MemberName}] 予期しない問題が発生しました。"
+    );
 
     public static void UnhandledError(
         this ILogger logger,
@@ -30,15 +33,18 @@ public static class LoggerExtensions
         [CallerMemberName()] string? memberName = null
     )
     {
-        unhandledError.Invoke(logger, memberName, exception);
+        unhandledError.Invoke(
+            logger,
+            memberName,
+            exception
+        );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, Exception?> meetingStarted =
-        LoggerMessage.Define<string?, string, string?>(
-            LogLevel.Information,
-            new EventId(1001),
-            "[{MemberName}] 会議を開始しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, Exception?> meetingStarted = LoggerMessage.Define<string?, string, string?>(
+        LogLevel.Information,
+        new EventId(1001),
+        "[{MemberName}] 会議を開始しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
+    );
 
     public static void MeetingStarted(
         this ILogger logger,
@@ -56,12 +62,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, Exception?> meetingEnded =
-        LoggerMessage.Define<string?, string, string?>(
-            LogLevel.Information,
-            new EventId(1002),
-            "[{MemberName}] 会議を終了しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, Exception?> meetingEnded = LoggerMessage.Define<string?, string, string?>(
+        LogLevel.Information,
+        new EventId(1002),
+        "[{MemberName}] 会議を終了しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
+    );
 
     public static void MeetingEnded(
         this ILogger logger,
@@ -87,7 +92,11 @@ public static class LoggerExtensions
 
     public static void TimerStarted(this ILogger logger, [CallerMemberName()] string? memberName = null)
     {
-        timerStarted.Invoke(logger, memberName, null);
+        timerStarted.Invoke(
+            logger,
+            memberName,
+            null
+        );
     }
 
     private static readonly Action<ILogger, string?, Exception?> timerEnded = LoggerMessage.Define<string?>(
@@ -98,15 +107,18 @@ public static class LoggerExtensions
 
     public static void TimerEnded(this ILogger logger, [CallerMemberName()] string? memberName = null)
     {
-        timerEnded.Invoke(logger, memberName, null);
+        timerEnded.Invoke(
+            logger,
+            memberName,
+            null
+        );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, Exception?> timerExecuting =
-        LoggerMessage.Define<string?, string, string?>(
-            LogLevel.Information,
-            new EventId(1005),
-            "[{MemberName}] タイマーを実行しています。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, Exception?> timerExecuting = LoggerMessage.Define<string?, string, string?>(
+        LogLevel.Information,
+        new EventId(1005),
+        "[{MemberName}] タイマーを実行しています。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
+    );
 
     public static void TimerExecuting(
         this ILogger logger,
@@ -124,12 +136,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, Exception?> timerExecuted =
-        LoggerMessage.Define<string?, string, string?>(
-            LogLevel.Information,
-            new EventId(1006),
-            "[{MemberName}] タイマーを実行しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, Exception?> timerExecuted = LoggerMessage.Define<string?, string, string?>(
+        LogLevel.Information,
+        new EventId(1006),
+        "[{MemberName}] タイマーを実行しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
+    );
 
     public static void TimerExecuted(
         this ILogger logger,
@@ -147,12 +158,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?>
-        startMeetingMessageNotifying = LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1007),
-            "[{MemberName}] 会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> startMeetingMessageNotifying = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1007),
+        "[{MemberName}] 会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void StartMeetingMessageNotifying(
         this ILogger logger,
@@ -171,12 +181,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> startMeetingMessageNotified =
-        LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1008),
-            "[{MemberName}] 会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> startMeetingMessageNotified = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1008),
+        "[{MemberName}] 会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void StartMeetingMessageNotified(
         this ILogger logger,
@@ -195,12 +204,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> endMeetingMessageNotifying =
-        LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1009),
-            "[{MemberName}] 会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> endMeetingMessageNotifying = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1009),
+        "[{MemberName}] 会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void EndMeetingMessageNotifying(
         this ILogger logger,
@@ -219,12 +227,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> endMeetingMessageNotified =
-        LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1010),
-            "[{MemberName}] 会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> endMeetingMessageNotified = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1010),
+        "[{MemberName}] 会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void EndMeetingMessageNotified(
         this ILogger logger,
@@ -243,12 +250,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> inMeetingMessageNotifying =
-        LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1011),
-            "[{MemberName}] 会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> inMeetingMessageNotifying = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1011),
+        "[{MemberName}] 会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void InMeetingMessageNotifying(
         this ILogger logger,
@@ -267,12 +273,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> inMeetingMessageNotified =
-        LoggerMessage.Define<string?, string, string?, string?>(
-            LogLevel.Information,
-            new EventId(1012),
-            "[{MemberName}] 会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-        );
+    private static readonly Action<ILogger, string?, string, string?, string?, Exception?> inMeetingMessageNotified = LoggerMessage.Define<string?, string, string?, string?>(
+        LogLevel.Information,
+        new EventId(1012),
+        "[{MemberName}] 会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+    );
 
     public static void InMeetingMessageNotified(
         this ILogger logger,
@@ -291,12 +296,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, Exception?> settingsUpdating =
-        LoggerMessage.Define<string?, string>(
-            LogLevel.Information,
-            new EventId(1013),
-            "[{MemberName}] 設定を変更します。ConversationId: {ConversationId}"
-        );
+    private static readonly Action<ILogger, string?, string, Exception?> settingsUpdating = LoggerMessage.Define<string?, string>(
+        LogLevel.Information,
+        new EventId(1013),
+        "[{MemberName}] 設定を変更します。ConversationId: {ConversationId}"
+    );
 
     public static void SettingsUpdating(
         this ILogger logger,
@@ -312,12 +316,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, Exception?> settingsUpdated =
-        LoggerMessage.Define<string?, string>(
-            LogLevel.Information,
-            new EventId(1014),
-            "[{MemberName}] 設定を変更しました。ConversationId: {ConversationId}"
-        );
+    private static readonly Action<ILogger, string?, string, Exception?> settingsUpdated = LoggerMessage.Define<string?, string>(
+        LogLevel.Information,
+        new EventId(1014),
+        "[{MemberName}] 設定を変更しました。ConversationId: {ConversationId}"
+    );
 
     public static void SettingsUpdated(
         this ILogger logger,
@@ -333,12 +336,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, Exception?> settingsResetting =
-        LoggerMessage.Define<string?, string>(
-            LogLevel.Information,
-            new EventId(1015),
-            "[{MemberName}] 設定を初期化します。ConversationId: {ConversationId}"
-        );
+    private static readonly Action<ILogger, string?, string, Exception?> settingsResetting = LoggerMessage.Define<string?, string>(
+        LogLevel.Information,
+        new EventId(1015),
+        "[{MemberName}] 設定を初期化します。ConversationId: {ConversationId}"
+    );
 
     public static void SettingsResetting(
         this ILogger logger,
@@ -354,12 +356,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, Exception?> settingsReseted =
-        LoggerMessage.Define<string?, string>(
-            LogLevel.Information,
-            new EventId(1016),
-            "[{MemberName}] 設定を初期化しました。ConversationId: {ConversationId}"
-        );
+    private static readonly Action<ILogger, string?, string, Exception?> settingsReseted = LoggerMessage.Define<string?, string>(
+        LogLevel.Information,
+        new EventId(1016),
+        "[{MemberName}] 設定を初期化しました。ConversationId: {ConversationId}"
+    );
 
     public static void SettingsReseted(
         this ILogger logger,
@@ -375,12 +376,11 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string, Exception?> settingsCancelled =
-        LoggerMessage.Define<string?, string>(
-            LogLevel.Information,
-            new EventId(1017),
-            "[{MemberName}] キャンセルしました。設定は変更されていません。ConversationId: {ConversationId}"
-        );
+    private static readonly Action<ILogger, string?, string, Exception?> settingsCancelled = LoggerMessage.Define<string?, string>(
+        LogLevel.Information,
+        new EventId(1017),
+        "[{MemberName}] キャンセルしました。設定は変更されていません。ConversationId: {ConversationId}"
+    );
 
     public static void SettingsCancelled(
         this ILogger logger,

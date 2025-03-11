@@ -22,7 +22,11 @@ _ = builder.ConfigureFunctionsWorkerDefaults();
 _ = builder.ConfigureAppConfiguration(
     (context, builder) =>
     {
-        _ = builder.AddJsonFile("appsettings.json", true, true);
+        _ = builder.AddJsonFile(
+            "appsettings.json",
+            true,
+            true
+        );
         _ = builder.AddJsonFile(
             $"appsettings.{Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT")}.json",
             true,

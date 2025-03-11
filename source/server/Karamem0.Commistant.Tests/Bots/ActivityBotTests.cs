@@ -29,7 +29,7 @@ public class ActivityBotTests
 {
 
     [Test()]
-    public async Task OnMembersAddedAsync_Succeeded()
+    public async Task OnMembersAddedAsync_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -81,7 +81,7 @@ public class ActivityBotTests
     }
 
     [Test()]
-    public async Task OnMembersRemovedAsync_Succeeded()
+    public async Task OnMembersRemovedAsync_ShouldSucceed()
     {
         // Setup
         var conversationState = Substitute.For<ConversationState>(new MemoryStorage());
@@ -129,7 +129,9 @@ public class ActivityBotTests
         );
         await target.OnTurnAsync(turnContext);
         // Validate
-        _ = conversationState.Received().DeleteAsync(Arg.Any<ITurnContext>(), Arg.Any<CancellationToken>());
+        _ = conversationState
+            .Received()
+            .DeleteAsync(Arg.Any<ITurnContext>(), Arg.Any<CancellationToken>());
     }
 
 }

@@ -18,7 +18,11 @@ namespace Karamem0.Commistant.Extensions;
 public static class JObjectExtensions
 {
 
-    public static T? Value<T>(this JObject target, string propertyName, T? defaultValue)
+    public static T? Value<T>(
+        this JObject target,
+        string propertyName,
+        T? defaultValue
+    )
     {
         if (target.ContainsKey(propertyName))
         {

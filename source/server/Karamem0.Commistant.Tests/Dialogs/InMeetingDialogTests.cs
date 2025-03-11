@@ -32,7 +32,7 @@ public class InMeetingDialogTests
 {
 
     [Test()]
-    public async Task InMeetingDialog_Submit_Succeeded()
+    public async Task InMeetingDialog_WhenSubmit_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -60,7 +60,11 @@ public class InMeetingDialogTests
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
@@ -75,7 +79,7 @@ public class InMeetingDialogTests
     }
 
     [Test()]
-    public async Task InMeetingDialog_Cancel_Succeeded()
+    public async Task InMeetingDialog_WhenCancel_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -103,7 +107,11 @@ public class InMeetingDialogTests
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());

@@ -29,7 +29,11 @@ public class BotController(IBotFrameworkHttpAdapter adapter, IBot bot) : Control
     [HttpPost()]
     public async Task PostAsync()
     {
-        await this.adapter.ProcessAsync(this.Request, this.Response, this.bot);
+        await this.adapter.ProcessAsync(
+            this.Request,
+            this.Response,
+            this.bot
+        );
     }
 
 }

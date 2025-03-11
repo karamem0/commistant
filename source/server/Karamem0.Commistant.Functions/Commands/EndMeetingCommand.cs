@@ -87,7 +87,11 @@ public class EndMeetingCommand(
                     }
                 );
             }
-            if (Uri.TryCreate(property.EndMeetingUrl, UriKind.Absolute, out var url))
+            if (Uri.TryCreate(
+                    property.EndMeetingUrl,
+                    UriKind.Absolute,
+                    out var url
+                ))
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);

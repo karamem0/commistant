@@ -21,7 +21,11 @@ namespace Karamem0.Commistant.Services;
 public interface IConnectorClientService
 {
 
-    Task<ResourceResponse> SendActivityAsync(Uri url, Activity activity, CancellationToken cancellationToken = default);
+    Task<ResourceResponse> SendActivityAsync(
+        Uri url,
+        Activity activity,
+        CancellationToken cancellationToken = default
+    );
 
 }
 

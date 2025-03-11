@@ -7,7 +7,6 @@
 //
 
 using AutoMapper;
-using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
@@ -32,7 +31,7 @@ public class EndMeetingDialogTests
 {
 
     [Test()]
-    public async Task EndMeetingDialog_Submit_Succeeded()
+    public async Task EndMeetingDialog_WhenSubmit_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -60,7 +59,11 @@ public class EndMeetingDialogTests
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
@@ -75,7 +78,7 @@ public class EndMeetingDialogTests
     }
 
     [Test()]
-    public async Task EndMeetingDialog_Cancel_Succeeded()
+    public async Task EndMeetingDialog_WhenCancel_ShouldSucceed()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -103,7 +106,11 @@ public class EndMeetingDialogTests
         var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
-            new Activity(ActivityTypes.Message, value: value, replyToId: activity.Id)
+            new Activity(
+                ActivityTypes.Message,
+                value: value,
+                replyToId: activity.Id
+            )
         );
         // Assert
         var property = await accessor.GetAsync(client.DialogContext.Context, () => new());

@@ -30,7 +30,12 @@ _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftE
 _ = services.AddControllers();
 _ = services.AddHttpClient();
 _ = services.AddCors(
-    options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
+    options => options.AddDefaultPolicy(
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+    )
 );
 
 var app = builder.Build();

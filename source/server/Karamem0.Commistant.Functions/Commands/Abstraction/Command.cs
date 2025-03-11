@@ -17,7 +17,18 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
 
-public abstract class Command
+public interface ICommand
+{
+
+    Task ExecuteAsync(
+        ConversationProperty property,
+        ConversationReference reference,
+        CancellationToken cancellationToken = default
+    );
+
+}
+
+public abstract class Command : ICommand
 {
 
     protected Command()

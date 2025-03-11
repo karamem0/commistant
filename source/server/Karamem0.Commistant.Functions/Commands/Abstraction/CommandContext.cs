@@ -17,10 +17,21 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
 
-public class CommandContext(CommandSet commandSet, ConversationProperty property, ConversationReference reference)
+public interface ICommandContext
 {
 
-    private readonly CommandSet commandSet = commandSet;
+    Task ExecuteCommandAsync(string commandId, CancellationToken cancellationToken = default);
+
+}
+
+public class CommandContext(
+    ICommandSet commandSet,
+    ConversationProperty property,
+    ConversationReference reference
+) : ICommandContext
+{
+
+    private readonly ICommandSet commandSet = commandSet;
 
     private readonly ConversationProperty property = property;
 
@@ -31,7 +42,11 @@ public class CommandContext(CommandSet commandSet, ConversationProperty property
         var command = this.commandSet.Find(commandId);
         if (command is not null)
         {
-            await command.ExecuteAsync(this.property, this.reference, cancellationToken);
+            await command.ExecuteAsync(
+                this.property,
+                this.reference,
+                cancellationToken
+            );
         }
     }
 

@@ -57,22 +57,22 @@ public class ActivityBot(
         {
             if (member.Id == turnContext.Activity.Recipient.Id)
             {
-                var referenceAccessor =
-                    this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
+                var referenceAccessor = this.conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
                 var reference = turnContext.Activity.GetConversationReference();
-                await referenceAccessor.SetAsync(turnContext, reference, cancellationToken);
-                await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
-                _ = await turnContext.SendActivityAsync(
-                    "<b>Commistant にようこそ！</b>" +
-                    "<br/>" +
-                    "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。" +
-                    "会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。" +
-                    "通知にはテキストおよび QR コードつきの URL を添付することができます。",
-                    cancellationToken: cancellationToken
+                await referenceAccessor.SetAsync(
+                    turnContext,
+                    reference,
+                    cancellationToken
                 );
+                await this.conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
+                _ = await turnContext.SendActivityAsync("<b>Commistant にようこそ！</b>" + "<br/>" + "Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。" + "会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。" + "通知にはテキストおよび QR コードつきの URL を添付することができます。", cancellationToken: cancellationToken);
             }
         }
-        await base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
+        await base.OnMembersAddedAsync(
+            membersAdded,
+            turnContext,
+            cancellationToken
+        );
     }
 
     protected override async Task OnMembersRemovedAsync(
@@ -88,13 +88,14 @@ public class ActivityBot(
                 await this.conversationState.DeleteAsync(turnContext, cancellationToken);
             }
         }
-        await base.OnMembersRemovedAsync(membersRemoved, turnContext, cancellationToken);
+        await base.OnMembersRemovedAsync(
+            membersRemoved,
+            turnContext,
+            cancellationToken
+        );
     }
 
-    protected override async Task OnMessageActivityAsync(
-        ITurnContext<IMessageActivity> turnContext,
-        CancellationToken cancellationToken = default
-    )
+    protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken = default)
     {
         var participant = await TeamsInfo.GetMeetingParticipantAsync(
             turnContext,
@@ -116,8 +117,7 @@ public class ActivityBot(
             {
                 if (dc.ActiveDialog is null)
                 {
-                    var arguments =
-                        await this.openAIService.GetConversationPropertyOptionsAsync(command, cancellationToken);
+                    var arguments = await this.openAIService.GetConversationPropertyOptionsAsync(command, cancellationToken);
                     var result = arguments?.Type switch
                     {
                         Constants.StartMeetingCommand => await dc.BeginDialogAsync(
@@ -135,10 +135,7 @@ public class ActivityBot(
                             arguments,
                             cancellationToken: cancellationToken
                         ),
-                        Constants.ResetCommand => await dc.BeginDialogAsync(
-                            nameof(ResetDialog),
-                            cancellationToken: cancellationToken
-                        ),
+                        Constants.ResetCommand => await dc.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
                         _ => null,
                     };
                     if (result is null)
@@ -148,10 +145,7 @@ public class ActivityBot(
                 }
                 else
                 {
-                    _ = await turnContext.SendActivityAsync(
-                        "新しいコマンドを開始する前に中断されたコマンドを完了させてください。",
-                        cancellationToken: cancellationToken
-                    );
+                    _ = await turnContext.SendActivityAsync("新しいコマンドを開始する前に中断されたコマンドを完了させてください。", cancellationToken: cancellationToken);
                 }
             }
         }
@@ -168,16 +162,23 @@ public class ActivityBot(
     )
     {
         this.logger.MeetingStarted(turnContext.Activity, meeting.Id);
-        var propertyAccessor =
-            this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await propertyAccessor.GetAsync(turnContext, () => new(), cancellationToken);
+        var propertyAccessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var property = await propertyAccessor.GetAsync(
+            turnContext,
+            () => new(),
+            cancellationToken
+        );
         var meetingInfo = await TeamsInfo.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
         property.InMeeting = true;
         property.StartMeetingSended = false;
         property.EndMeetingSended = false;
         property.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
         property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
-        await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
+        await propertyAccessor.SetAsync(
+            turnContext,
+            property,
+            cancellationToken: cancellationToken
+        );
     }
 
     protected override async Task OnTeamsMeetingEndAsync(
@@ -187,15 +188,22 @@ public class ActivityBot(
     )
     {
         this.logger.MeetingEnded(turnContext.Activity, meeting.Id);
-        var propertyAccessor =
-            this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await propertyAccessor.GetAsync(turnContext, () => new(), cancellationToken);
+        var propertyAccessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var property = await propertyAccessor.GetAsync(
+            turnContext,
+            () => new(),
+            cancellationToken
+        );
         property.InMeeting = false;
         property.StartMeetingSended = false;
         property.EndMeetingSended = false;
         property.ScheduledStartTime = null;
         property.ScheduledEndTime = null;
-        await propertyAccessor.SetAsync(turnContext, property, cancellationToken: cancellationToken);
+        await propertyAccessor.SetAsync(
+            turnContext,
+            property,
+            cancellationToken: cancellationToken
+        );
     }
 
 }

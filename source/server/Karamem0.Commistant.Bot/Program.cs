@@ -23,7 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var services = builder.Services;
 _ = services.AddHttpClient();
-_ = services.AddControllers().AddNewtonsoftJson();
+_ = services
+    .AddControllers()
+    .AddNewtonsoftJson();
 _ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
 _ = services.AddApplicationInsightsTelemetry();
 _ = services.AddBots(configuration);

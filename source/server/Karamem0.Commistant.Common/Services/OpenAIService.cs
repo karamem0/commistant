@@ -23,10 +23,7 @@ namespace Karamem0.Commistant.Services;
 public interface IOpenAIService
 {
 
-    Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(
-        string text,
-        CancellationToken cancellationToken = default
-    );
+    Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
@@ -37,10 +34,7 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
 
     private readonly string openAIModelName = openAIModelName;
 
-    public async Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(
-        string text,
-        CancellationToken cancellationToken = default
-    )
+    public async Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default)
     {
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
@@ -80,7 +74,10 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
         if (chatCompletion.Value.FinishReason == ChatFinishReason.ToolCalls)
         {
             return JsonConvert.DeserializeObject<ConversationPropertyOptions>(
-                chatCompletion.Value.ToolCalls.Select(item => item.FunctionArguments).First().ToString()
+                chatCompletion
+                    .Value.ToolCalls.Select(item => item.FunctionArguments)
+                    .First()
+                    .ToString()
             );
         }
         return null;

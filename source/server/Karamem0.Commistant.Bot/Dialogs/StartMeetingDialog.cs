@@ -58,13 +58,14 @@ public class StartMeetingDialog(
         await base.OnInitializeAsync(dc);
     }
 
-    private async Task<DialogTurnResult> OnBeforeAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
+        var property = await accessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
         var options = (ConversationPropertyOptions?)stepContext.Options;
         var value = this.mapper.Map(
             options,
@@ -169,10 +170,7 @@ public class StartMeetingDialog(
         );
     }
 
-    private async Task<DialogTurnResult> OnAfterAsync(
-        WaterfallStepContext stepContext,
-        CancellationToken cancellationToken = default
-    )
+    private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
         if (value is null)
@@ -180,7 +178,11 @@ public class StartMeetingDialog(
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
         var accessor = this.conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
-        var property = await accessor.GetAsync(stepContext.Context, () => new(), cancellationToken);
+        var property = await accessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
         if (value.Value<string>("Button") == "Submit")
         {
             property.StartMeetingSchedule = value.Value("Schedule", -1);
@@ -295,7 +297,11 @@ public class StartMeetingDialog(
                     }
                 ]
             };
-            if (Uri.TryCreate(property.StartMeetingUrl, UriKind.Absolute, out var url))
+            if (Uri.TryCreate(
+                    property.StartMeetingUrl,
+                    UriKind.Absolute,
+                    out var url
+                ))
             {
                 var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
                 var base64 = Convert.ToBase64String(bytes);

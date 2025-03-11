@@ -16,11 +16,11 @@
   "dependencies": {
     "@automapper/pojos": "^8.8.1",
     "@emotion/react": "^11.14.0",
-    "@fluentui/react-components": "^9.60.0",
-    "@microsoft/applicationinsights-react-js": "^17.3.5",
+    "@fluentui/react-components": "^9.60.1",
+    "@microsoft/applicationinsights-react-js": "^17.3.6",
     "@microsoft/applicationinsights-web": "^3.3.6",
     "@microsoft/teams-js": "2.34.0",
-    "axios": "^1.8.1",
+    "axios": "^1.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^5.0.0",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@emotion/babel-plugin": "^11.13.5",
     "@eslint/eslintrc": "^3.3.0",
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "@formatjs/cli": "^6.6.1",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/react": "^18.3.18",
@@ -42,7 +42,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-formatjs": "^10.5.35",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "eslint-plugin-hooks": "^0.4.3",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.4",
@@ -55,7 +55,7 @@
     "stylelint-config-recess-order": "^6.0.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.0",
+    "typescript-eslint": "^8.26.1",
     "vite": "^6.2.1"
   },
   "volta": {

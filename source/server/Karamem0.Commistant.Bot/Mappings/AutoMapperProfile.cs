@@ -21,7 +21,8 @@ public class AutoMapperProfile : Profile
 
     public AutoMapperProfile()
     {
-        _ = this.CreateMap<ConversationPropertyOptions, ConversationProperty>()
+        _ = this
+            .CreateMap<ConversationPropertyOptions, ConversationProperty>()
             .ForMember(
                 d => d.StartMeetingSchedule,
                 o =>
