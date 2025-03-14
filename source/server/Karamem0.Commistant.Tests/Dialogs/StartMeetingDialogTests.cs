@@ -35,7 +35,7 @@ public class StartMeetingDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
@@ -66,13 +66,13 @@ public class StartMeetingDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
-                Assert.That(property.StartMeetingMessage, Is.EqualTo("Hello world!"));
-                Assert.That(property.StartMeetingUrl, Is.EqualTo("https://www.example.com"));
+                Assert.That(conversationProperties.StartMeetingSchedule, Is.EqualTo(5));
+                Assert.That(conversationProperties.StartMeetingMessage, Is.EqualTo("Hello world!"));
+                Assert.That(conversationProperties.StartMeetingUrl, Is.EqualTo("https://www.example.com"));
             }
         );
     }
@@ -82,7 +82,7 @@ public class StartMeetingDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
@@ -113,13 +113,13 @@ public class StartMeetingDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(property.StartMeetingMessage, Is.Null);
-                Assert.That(property.StartMeetingUrl, Is.Null);
+                Assert.That(conversationProperties.StartMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(conversationProperties.StartMeetingMessage, Is.Null);
+                Assert.That(conversationProperties.StartMeetingUrl, Is.Null);
             }
         );
     }

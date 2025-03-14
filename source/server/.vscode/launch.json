@@ -2,22 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Bot",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/Karamem0.Commistant.Bot/Karamem0.Commistant.Bot.csproj"
-    },
-    {
-      "name": "Launch Functions",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:azureFunctions.pickProcess}"
-    },
-    {
       "name": "Launch Web",
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj"
+    },
+    {
+      "name": "Launch ExecuteCommand WebJobs",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Karamem0.Commistant.WebJobs.ExecuteCommand/Karamem0.Commistant.WebJobs.ExecuteCommand.csproj"
     }
   ]
 }

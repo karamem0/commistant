@@ -35,7 +35,7 @@ public class EndMeetingDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
@@ -66,13 +66,13 @@ public class EndMeetingDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
-                Assert.That(property.EndMeetingMessage, Is.EqualTo("Hello world!"));
-                Assert.That(property.EndMeetingUrl, Is.EqualTo("https://www.example.com"));
+                Assert.That(conversationProperties.EndMeetingSchedule, Is.EqualTo(5));
+                Assert.That(conversationProperties.EndMeetingMessage, Is.EqualTo("Hello world!"));
+                Assert.That(conversationProperties.EndMeetingUrl, Is.EqualTo("https://www.example.com"));
             }
         );
     }
@@ -82,7 +82,7 @@ public class EndMeetingDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapperConfig = new MapperConfiguration(config => config.AddProfile<AutoMapperProfile>());
         var mapper = mapperConfig.CreateMapper();
@@ -113,13 +113,13 @@ public class EndMeetingDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(property.EndMeetingMessage, Is.Null);
-                Assert.That(property.EndMeetingUrl, Is.Null);
+                Assert.That(conversationProperties.EndMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(conversationProperties.EndMeetingMessage, Is.Null);
+                Assert.That(conversationProperties.EndMeetingUrl, Is.Null);
             }
         );
     }

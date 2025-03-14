@@ -32,7 +32,7 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
@@ -50,7 +50,7 @@ public class ResetDialogTests
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         await accessor.SetAsync(
             client.DialogContext.Context,
-            new ConversationProperty()
+            new ConversationProperties()
             {
                 StartMeetingSchedule = 5,
                 EndMeetingSchedule = 5,
@@ -66,13 +66,13 @@ public class ResetDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.StartMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(property.EndMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(property.InMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(conversationProperties.StartMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(conversationProperties.EndMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(conversationProperties.InMeetingSchedule, Is.EqualTo(-1));
             }
         );
     }
@@ -82,7 +82,7 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var accessor = conversationState.CreateProperty<ConversationProperty>(nameof(ConversationProperty));
+        var accessor = conversationState.CreateProperty<ConversationProperties>(nameof(ConversationProperties));
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
@@ -100,7 +100,7 @@ public class ResetDialogTests
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         await accessor.SetAsync(
             client.DialogContext.Context,
-            new ConversationProperty()
+            new ConversationProperties()
             {
                 StartMeetingSchedule = 5,
                 EndMeetingSchedule = 5,
@@ -116,13 +116,13 @@ public class ResetDialogTests
             )
         );
         // Assert
-        var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+        var conversationProperties = await accessor.GetAsync(client.DialogContext.Context, () => new());
         Assert.Multiple(
             () =>
             {
-                Assert.That(property.StartMeetingSchedule, Is.EqualTo(5));
-                Assert.That(property.EndMeetingSchedule, Is.EqualTo(5));
-                Assert.That(property.InMeetingSchedule, Is.EqualTo(5));
+                Assert.That(conversationProperties.StartMeetingSchedule, Is.EqualTo(5));
+                Assert.That(conversationProperties.EndMeetingSchedule, Is.EqualTo(5));
+                Assert.That(conversationProperties.InMeetingSchedule, Is.EqualTo(5));
             }
         );
     }

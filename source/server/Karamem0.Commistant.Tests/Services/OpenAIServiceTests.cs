@@ -7,6 +7,8 @@
 //
 
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Options;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
 using OpenAI;
@@ -27,15 +29,20 @@ public class OpenAIServiceTests
 {
 
     [Test()]
-    public async Task GetConversationPropertyOptionsAsync_WhenSucceeded_ShouldReturnValue()
+    public async Task GetConversationPropertiesOptionsAsync_WhenSucceeded_ShouldReturnValue()
     {
         // Setup
-        var modelName = "gpt-4o-mini";
-        var apiKey = "api-key";
-        var options = new ConversationPropertyOptions()
+        var openAIOptions = Substitute.For<IOptions<AzureOpenAIOptions>>();
+        _ = openAIOptions.Value.Returns(
+            new AzureOpenAIOptions()
+            {
+                AzureOpenAIModelName = "gpt-4o-mini"
+            }
+        );
+        var conversationPropertiesOptions = new ConversationPropertiesOptions()
         {
             Type = "会議開始後",
-            Value = new ConversationPropertyOptionsValue()
+            Value = new ConversationPropertiesOptionsValue()
             {
                 Schedule = 5,
                 Message = "Hello World!",
@@ -49,12 +56,12 @@ public class OpenAIServiceTests
                 ChatToolCall.CreateFunctionToolCall(
                     "ab3d750e-8b79-4987-b40c-422a0ec98d02",
                     "StartMeeting",
-                    BinaryData.FromObjectAsJson(options)
+                    BinaryData.FromObjectAsJson(conversationPropertiesOptions)
                 )
             ]
         );
         var pipelineResponse = Substitute.For<PipelineResponse>();
-        var chatClient = Substitute.For<ChatClient>(modelName, apiKey);
+        var chatClient = Substitute.For<ChatClient>();
         _ = chatClient
             .CompleteChatAsync(
                 Arg.Any<IEnumerable<ChatMessage>>(),
@@ -62,26 +69,31 @@ public class OpenAIServiceTests
                 Arg.Any<CancellationToken>()
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
-        var openAIClient = Substitute.For<OpenAIClient>(apiKey);
+        var openAIClient = Substitute.For<OpenAIClient>();
         _ = openAIClient
-            .GetChatClient(modelName)
+            .GetChatClient(Arg.Any<string>())
             .Returns(chatClient);
         // Execute
-        var target = new OpenAIService(openAIClient, modelName);
-        var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");
+        var target = new OpenAIService(openAIClient, openAIOptions);
+        var actual = await target.GetConversationPropertiesOptionsAsync("会議開始後");
         // Validate
-        Assert.That(actual, Is.EqualTo(options));
+        Assert.That(actual, Is.EqualTo(conversationPropertiesOptions));
     }
 
     [Test()]
-    public async Task GetConversationPropertyOptionsAsync_WhenFailed_ShouldReturnNull()
+    public async Task GetConversationPropertiesOptionsAsync_WhenFailed_ShouldReturnNull()
     {
         // Setup
-        var modelName = "gpt-4o-mini";
-        var apiKey = "api-key";
+        var openAIOptions = Substitute.For<IOptions<AzureOpenAIOptions>>();
+        _ = openAIOptions.Value.Returns(
+            new AzureOpenAIOptions()
+            {
+                AzureOpenAIModelName = "gpt-4o-mini"
+            }
+        );
         var chatCompletion = OpenAIChatModelFactory.ChatCompletion(finishReason: ChatFinishReason.Stop);
         var pipelineResponse = Substitute.For<PipelineResponse>();
-        var chatClient = Substitute.For<ChatClient>(modelName, apiKey);
+        var chatClient = Substitute.For<ChatClient>();
         _ = chatClient
             .CompleteChatAsync(
                 Arg.Any<IEnumerable<ChatMessage>>(),
@@ -89,13 +101,13 @@ public class OpenAIServiceTests
                 Arg.Any<CancellationToken>()
             )
             .Returns(ClientResult.FromValue(chatCompletion, pipelineResponse));
-        var openAIClient = Substitute.For<OpenAIClient>(apiKey);
+        var openAIClient = Substitute.For<OpenAIClient>();
         _ = openAIClient
-            .GetChatClient(modelName)
+            .GetChatClient(Arg.Any<string>())
             .Returns(chatClient);
         // Execute
-        var target = new OpenAIService(openAIClient, modelName);
-        var actual = await target.GetConversationPropertyOptionsAsync("会議開始後");
+        var target = new OpenAIService(openAIClient, openAIOptions);
+        var actual = await target.GetConversationPropertiesOptionsAsync("会議開始後");
         // Validate
         Assert.That(actual, Is.Null);
     }

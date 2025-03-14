@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Karamem0.Commistant.WebJobs.ExecuteCommand": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

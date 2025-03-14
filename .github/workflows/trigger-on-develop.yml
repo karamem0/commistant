@@ -13,48 +13,20 @@ jobs:
     name: Test
     uses: ./.github/workflows/test-source.yml
     secrets: inherit
-  build-bot:
-    name: Build bot
+  build-source:
+    name: Build source
     needs: test
-    uses: ./.github/workflows/build-bot.yml
+    uses: ./.github/workflows/build-source.yml
     secrets: inherit
     with:
       environment: dev
-  deploy-bot:
-      name: Deploy bot to Azure
-      needs: build-bot
-      uses: ./.github/workflows/deploy-bot.yml
+  deploy-source:
+      name: Deploy source to Azure
+      needs: build-source
+      uses: ./.github/workflows/deploy-source.yml
       secrets: inherit
       with:
         environment: dev
-  build-web:
-    name: Build web
-    needs: test
-    uses: ./.github/workflows/build-web.yml
-    secrets: inherit
-    with:
-      environment: dev
-  deploy-web:
-    name: Deploy web to Azure
-    needs: build-web
-    uses: ./.github/workflows/deploy-web.yml
-    secrets: inherit
-    with:
-      environment: dev
-  build-func:
-    name: Build func
-    needs: test
-    uses: ./.github/workflows/build-func.yml
-    secrets: inherit
-    with:
-      environment: dev
-  deploy-func:
-    name: Deploy func to Azure
-    needs: build-func
-    uses: ./.github/workflows/deploy-func.yml
-    secrets: inherit
-    with:
-      environment: dev
   build-manifest:
     name: Build manifest
     uses: ./.github/workflows/build-manifest.yml

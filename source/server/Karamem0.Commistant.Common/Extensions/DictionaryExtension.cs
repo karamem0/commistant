@@ -21,7 +21,7 @@ public static class DictionaryExtension
     {
         if (target.TryGetValue(key, out var value))
         {
-            return (T?)value;
+            return value is T? ? (T)value : default;
         }
         else
         {

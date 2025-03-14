@@ -32,12 +32,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NunitXml.TestLogger" Version="6.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Karamem0.Commistant.Bot\Karamem0.Commistant.Bot.csproj" />
     <ProjectReference Include="..\Karamem0.Commistant.Common\Karamem0.Commistant.Common.csproj" />
-    <ProjectReference Include="..\Karamem0.Commistant.Functions\Karamem0.Commistant.Functions.csproj" />
+    <ProjectReference Include="..\Karamem0.Commistant.Web\Karamem0.Commistant.Web.csproj" />
+    <ProjectReference Include="..\Karamem0.Commistant.WebJobs.ExecuteCommand\Karamem0.Commistant.WebJobs.ExecuteCommand.csproj" />
   </ItemGroup>
 
 </Project>

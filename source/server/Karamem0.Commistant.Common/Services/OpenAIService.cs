@@ -7,7 +7,9 @@
 //
 
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Options;
 using Karamem0.Commistant.Resources;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
@@ -23,18 +25,18 @@ namespace Karamem0.Commistant.Services;
 public interface IOpenAIService
 {
 
-    Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default);
+    Task<ConversationPropertiesOptions?> GetConversationPropertiesOptionsAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
-public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : IOpenAIService
+public class OpenAIService(OpenAIClient openAIClient, IOptions<AzureOpenAIOptions> openAIOptions) : IOpenAIService
 {
 
     private readonly OpenAIClient openAIClient = openAIClient;
 
-    private readonly string openAIModelName = openAIModelName;
+    private readonly string openAIModelName = openAIOptions.Value.AzureOpenAIModelName ?? throw new InvalidOperationException();
 
-    public async Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default)
+    public async Task<ConversationPropertiesOptions?> GetConversationPropertiesOptionsAsync(string text, CancellationToken cancellationToken = default)
     {
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
@@ -73,7 +75,7 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
         );
         if (chatCompletion.Value.FinishReason == ChatFinishReason.ToolCalls)
         {
-            return JsonConvert.DeserializeObject<ConversationPropertyOptions>(
+            return JsonConvert.DeserializeObject<ConversationPropertiesOptions>(
                 chatCompletion
                     .Value.ToolCalls.Select(item => item.FunctionArguments)
                     .First()
