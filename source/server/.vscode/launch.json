@@ -8,16 +8,10 @@
       "projectPath": "${workspaceFolder}/Karamem0.Commistant.Bot/Karamem0.Commistant.Bot.csproj"
     },
     {
-      "name": "Launch Functions",
+      "name": "Launch Function",
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:azureFunctions.pickProcess}"
-    },
-    {
-      "name": "Launch Web",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj"
     }
   ]
 }

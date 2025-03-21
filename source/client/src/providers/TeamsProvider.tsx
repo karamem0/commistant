@@ -45,6 +45,7 @@ function TeamsProvider(props: Readonly<TeamsProviderProps>) {
         setValue({ context: await app.getContext() });
         axios.interceptors.request.use(async (request) => {
           const authToken = await authentication.getAuthToken();
+          request.baseURL = import.meta.env.VITE_FUNCTION_URL;
           request.headers.Authorization = `Bearer ${authToken}`;
           return request;
         });

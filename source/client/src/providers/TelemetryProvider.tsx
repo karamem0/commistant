@@ -8,12 +8,15 @@
 
 import React from 'react';
 
-import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
+import {
+  AppInsightsContext,
+  ReactPlugin,
+  withAITracking
+} from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
-import env from '../env';
 
 const reactPlugin = new ReactPlugin();
-const connectionString = env.VITE_TELEMETRY_CONNECTION_STRING;
+const connectionString = import.meta.env.VITE_TELEMETRY_CONNECTION_STRING;
 if (connectionString != null && connectionString.length > 0) {
   const appInsights = new ApplicationInsights({
     config: {
@@ -30,7 +33,11 @@ function TelemetryProvider(props: React.PropsWithChildren<unknown>) {
 
   const { children } = props;
 
-  return children;
+  return (
+    <AppInsightsContext.Provider value={reactPlugin}>
+      {children}
+    </AppInsightsContext.Provider>
+  );
 
 }
 

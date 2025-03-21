@@ -15,8 +15,8 @@ jobs:
     secrets: inherit
     with:
       environment: prd
-  release:
-    name: Release
+  deploy-to-github-release:
+    name: Deploy to GitHub Release
     needs: build-manifest
     uses: ./.github/workflows/deploy-to-github-release.yml
     secrets: inherit

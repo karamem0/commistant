@@ -8,42 +8,16 @@ on:
 permissions: {}
 
 jobs:
-  build-bot:
-    name: Build bot
-    uses: ./.github/workflows/build-bot.yml
+  build-source:
+    name: Build source
+    uses: ./.github/workflows/build-source.yml
     secrets: inherit
     with:
       environment: prd
-  deploy-bot:
-    name: Deploy bot to Azure
-    needs: build-bot
-    uses: ./.github/workflows/deploy-bot.yml
-    secrets: inherit
-    with:
-      environment: prd
-  build-web:
-    name: Build web
-    uses: ./.github/workflows/build-web.yml
-    secrets: inherit
-    with:
-      environment: prd
-  deploy-web:
-    name: Deploy web to Azure
-    needs: build-web
-    uses: ./.github/workflows/deploy-web.yml
-    secrets: inherit
-    with:
-      environment: prd
-  build-func:
-    name: Build func
-    uses: ./.github/workflows/build-func.yml
-    secrets: inherit
-    with:
-      environment: prd
-  deploy-func:
-    name: Deploy func to Azure
-    needs: build-func
-    uses: ./.github/workflows/deploy-func.yml
+  deploy-source:
+    name: Deploy to Azure
+    needs: build-source
+    uses: ./.github/workflows/deploy-to-azure.yml
     secrets: inherit
     with:
       environment: prd

@@ -21,7 +21,7 @@ function ConfigurePage() {
     try {
       await pages.config.setConfig({
         websiteUrl: window.origin,
-        contentUrl: `${window.origin}/tab/property`,
+        contentUrl: `${window.origin}/tab/content`,
         entityId: '55da67fc-cfa4-481c-a77f-de2c0b6deaed',
         suggestedDisplayName: intl.formatMessage(messages.AppName)
       });

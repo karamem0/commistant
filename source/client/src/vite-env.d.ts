@@ -15,5 +15,7 @@ interface ImportMeta {
 }
 
 interface ImportMetaEnv {
+  readonly VITE_PUBLIC_URL: string,
+  readonly VITE_FUNCTION_URL: string,
   readonly VITE_TELEMETRY_CONNECTION_STRING: string
 }

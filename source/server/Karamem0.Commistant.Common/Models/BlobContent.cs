@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public class BlobContent<T>
+public record BlobContent<T>
 {
 
     public T? Data { get; set; }

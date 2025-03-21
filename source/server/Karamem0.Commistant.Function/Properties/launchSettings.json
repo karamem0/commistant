@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Karamem0.Commistant.Function": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7160",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "AZURE_FUNCTIONS_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

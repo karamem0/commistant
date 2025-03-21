@@ -7,11 +7,18 @@
 //
 
 using Azure.Identity;
-using Azure.Storage.Blobs;
+using Azure.Storage;
+using Karamem0.Commistant.Adapters;
+using Karamem0.Commistant.Bots;
+using Karamem0.Commistant.Dialogs;
+using Karamem0.Commistant.Options;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Azure.Blobs;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +30,46 @@ namespace Karamem0.Commistant;
 public static class ConfigureServices
 {
 
-    public static IServiceCollection AddBlobContainerClient(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
     {
-        var blobContainerUrl = configuration["AzureBotStatesStorageUrl"] ?? throw new InvalidOperationException();
-        _ = services.AddSingleton(provider => new BlobContainerClient(new Uri(blobContainerUrl), new DefaultAzureCredential()));
+        _ = services.AddSingleton<BotFrameworkAuthentication>(provider => new ConfigurationBotFrameworkAuthentication(configuration.GetSection("BotFramework")));
+        _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+        _ = services.AddSingleton<IStorage>(
+            provider =>
+            {
+                var options = configuration
+                                  .GetSection("AzureBlobsStorage")
+                                  .Get<AzureBlobsStorageOptions>() ??
+                              throw new InvalidOperationException();
+                return new BlobsStorage(
+                    new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),
+                    new DefaultAzureCredential(),
+                    new StorageTransferOptions()
+                );
+            }
+        );
+        _ = services.AddSingleton<ConversationState>();
+        _ = services.AddScoped<IBot, TeamsBot>();
         return services;
     }
 
-    public static IServiceCollection AddServiceClientCredentials(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDialogs(this IServiceCollection services)
     {
-        _ = services.AddSingleton<ServiceClientCredentials>(new MicrosoftAppCredentials(configuration["MicrosoftAppId"], configuration["MicrosoftAppPassword"]));
+        _ = services.AddScoped<StartMeetingDialog>();
+        _ = services.AddScoped<EndMeetingDialog>();
+        _ = services.AddScoped<InMeetingDialog>();
+        _ = services.AddScoped<ResetDialog>();
+        _ = services.AddScoped(
+            provider => new DialogSet(
+                    provider
+                        .GetService<ConversationState>()
+                        ?.CreateProperty<DialogState>(nameof(DialogState))
+                )
+                .Add(provider.GetService<StartMeetingDialog>())
+                .Add(provider.GetService<EndMeetingDialog>())
+                .Add(provider.GetService<InMeetingDialog>())
+                .Add(provider.GetService<ResetDialog>())
+        );
         return services;
     }
 

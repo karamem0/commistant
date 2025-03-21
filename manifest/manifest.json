@@ -24,7 +24,7 @@
   "accentColor": "#ea5549",
   "configurableTabs": [
     {
-      "configurationUrl": "https://{{APP_DOMAIN_NAME}}/tab/configure",
+      "configurationUrl": "https://{{WEB_HOST_NAME}}/tab/configure",
       "canUpdateConfiguration": false,
       "scopes": [
         "groupChat"
@@ -73,12 +73,12 @@
     }
   ],
   "validDomains": [
-    "{{APP_DOMAIN_NAME}}",
+    "{{WEB_HOST_NAME}}",
     "token.botframework.com"
   ],
   "webApplicationInfo": {
     "id": "{{APP_CLIENT_ID}}",
-    "resource": "api://{{APP_DOMAIN_NAME}}/{{APP_CLIENT_ID}}"
+    "resource": "api://{{WEB_HOST_NAME}}/{{APP_CLIENT_ID}}"
   },
   "authorization": {
     "permissions": {

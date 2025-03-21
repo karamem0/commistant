@@ -9,7 +9,6 @@
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Resources;
 using Newtonsoft.Json;
-using OpenAI;
 using OpenAI.Chat;
 using System;
 using System.Collections.Generic;
@@ -23,18 +22,16 @@ namespace Karamem0.Commistant.Services;
 public interface IOpenAIService
 {
 
-    Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default);
+    Task<CommandOptions?> GetCommandOptionsAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
-public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : IOpenAIService
+public class OpenAIService(ChatClient chatClient) : IOpenAIService
 {
 
-    private readonly OpenAIClient openAIClient = openAIClient;
+    private readonly ChatClient chatClient = chatClient;
 
-    private readonly string openAIModelName = openAIModelName;
-
-    public async Task<ConversationPropertyOptions?> GetConversationPropertyOptionsAsync(string text, CancellationToken cancellationToken = default)
+    public async Task<CommandOptions?> GetCommandOptionsAsync(string text, CancellationToken cancellationToken = default)
     {
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
@@ -63,9 +60,17 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
                 ),
             }
         };
-        var chatClient = this.openAIClient.GetChatClient(this.openAIModelName);
-        var chatCompletion = await chatClient.CompleteChatAsync(
+        var chatCompletion = await this.chatClient.CompleteChatAsync(
             [
+                new SystemChatMessage(
+                    string.Join(
+                        " ",
+                        [
+                            "You are an AI assistant generating JSON.",
+                            "You can only use user input and cannot use your own knowledge."
+                        ]
+                    )
+                ),
                 new UserChatMessage(text)
             ],
             chatCompletionsOptions,
@@ -73,7 +78,7 @@ public class OpenAIService(OpenAIClient openAIClient, string openAIModelName) : 
         );
         if (chatCompletion.Value.FinishReason == ChatFinishReason.ToolCalls)
         {
-            return JsonConvert.DeserializeObject<ConversationPropertyOptions>(
+            return JsonConvert.DeserializeObject<CommandOptions>(
                 chatCompletion
                     .Value.ToolCalls.Select(item => item.FunctionArguments)
                     .First()

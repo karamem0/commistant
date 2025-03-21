@@ -6,7 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-export interface ConversationProperty {
+export interface CommandSettings {
   isOrganizer: boolean,
   startMeetingSchedule: number,
   startMeetingMessage?: string,

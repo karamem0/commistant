@@ -6,7 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-export interface ConversationPropertyFormState {
+export interface CommandSettingsFormState {
   startMeetingSchedule: string,
   startMeetingMessage: string,
   startMeetingUrl: string,

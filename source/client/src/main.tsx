@@ -18,13 +18,13 @@ import {
   Routes
 } from 'react-router-dom';
 import ConfigurePage from './features/tab/pages/ConfigurePage';
+import ContentPage from './features/tab/pages/ContentPage';
 import Error404Page from './features/error/pages/Error404Page';
 import Error500Page from './features/error/pages/Error500Page';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Global } from '@emotion/react';
 import HomePage from './features/home/pages/HomePage';
 import IntlProvider from './providers/IntlProvider';
-import PropertyPage from './features/tab/pages/PropertyPage';
 import SnackbarProvider from './common/providers/SnackbarProvider';
 import TeamsInitializer from './common/components/TeamsInitializer';
 import TeamsProvider from './providers/TeamsProvider';
@@ -62,9 +62,9 @@ root.render(
                                 <ConfigurePage />
                               )} />
                             <Route
-                              path="/tab/property"
+                              path="/tab/content"
                               element={(
-                                <PropertyPage />
+                                <ContentPage />
                               )} />
                           </Route>
                         ) : null

@@ -13,14 +13,14 @@ import {
   forMember,
   mapFrom
 } from '@automapper/core';
-import { ConversationProperty } from '../types/Model';
-import { ConversationPropertyFormState } from '../types/Form';
+import { CommandSettings } from '../types/Model';
+import { CommandSettingsFormState } from '../types/Form';
 
 export const mapper = createMapper({
   strategyInitializer: pojos()
 });
 
-PojosMetadataMap.create<ConversationProperty>('ConversationProperty', {
+PojosMetadataMap.create<CommandSettings>('CommandSettings', {
   startMeetingSchedule: Number,
   startMeetingMessage: String,
   startMeetingUrl: String,
@@ -32,7 +32,7 @@ PojosMetadataMap.create<ConversationProperty>('ConversationProperty', {
   inMeetingUrl: String
 });
 
-PojosMetadataMap.create<ConversationPropertyFormState>('ConversationPropertyFormState', {
+PojosMetadataMap.create<CommandSettingsFormState>('CommandSettingsFormState', {
   startMeetingSchedule: String,
   startMeetingMessage: String,
   startMeetingUrl: String,
@@ -44,10 +44,10 @@ PojosMetadataMap.create<ConversationPropertyFormState>('ConversationPropertyForm
   inMeetingUrl: String
 });
 
-createMap<ConversationProperty, ConversationPropertyFormState>(
+createMap<CommandSettings, CommandSettingsFormState>(
   mapper,
-  'ConversationProperty',
-  'ConversationPropertyFormState',
+  'CommandSettings',
+  'CommandSettingsFormState',
   forMember(
     (target) => target.startMeetingSchedule,
     mapFrom((source) => String(source.startMeetingSchedule))),
@@ -59,10 +59,10 @@ createMap<ConversationProperty, ConversationPropertyFormState>(
     mapFrom((source) => String(source.inMeetingSchedule)))
 );
 
-createMap<ConversationPropertyFormState, ConversationProperty>(
+createMap<CommandSettingsFormState, CommandSettings>(
   mapper,
-  'ConversationPropertyFormState',
-  'ConversationProperty',
+  'CommandSettingsFormState',
+  'CommandSettings',
   forMember(
     (target) => target.startMeetingSchedule,
     mapFrom((source) => Number(source.startMeetingSchedule))),

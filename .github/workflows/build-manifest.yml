@@ -22,7 +22,7 @@ jobs:
         run: |
           $content = Get-Content -Path ${{env.FILE_PATH}}
           $content = $content -Replace '{{APP_CLIENT_ID}}', '${{vars.APP_CLIENT_ID}}'
-          $content = $content -Replace '{{APP_DOMAIN_NAME}}', '${{vars.APP_DOMAIN_NAME}}'
+          $content = $content -Replace '{{WEB_HOST_NAME}}', '${{vars.WEB_HOST_NAME}}'
           $content = $content -Replace "{{APP_VERSION}}", "${{vars.BUILD_VERSION}}"
           Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
         env:

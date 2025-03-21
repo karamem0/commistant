@@ -34,11 +34,22 @@
       "type": "func",
       "command": "host start",
       "options": {
-        "cwd": "${workspaceFolder}/Karamem0.Commistant.Functions/bin/Debug/net8.0"
+        "cwd": "${workspaceFolder}/Karamem0.Commistant.Function/bin/Debug/net8.0"
       },
       "isBackground": true,
       "dependsOn": "build",
       "problemMatcher": "$func-dotnet-watch"
+    },
+    {
+      "label": "format",
+      "type": "shell",
+      "command": "jb",
+      "args": [
+        "cleanupcode",
+        "--profile=\"Built-in: Reformat Code\"",
+        "${workspaceFolder}/Karamem0.Commistant.sln"
+      ],
+      "problemMatcher": []
     }
   ]
 }
