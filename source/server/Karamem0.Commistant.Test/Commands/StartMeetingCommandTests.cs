@@ -25,7 +25,7 @@ public class StartMeetingCommandTests
 {
 
     [Test()]
-    public async Task ExecuteAsync_WhenOnSchedule_ShouldSucceed()
+    public async Task ExecuteAsync_Success_WhenOnSchedule()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -104,7 +104,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenAfterSchedule_ShouldSucceed()
+    public async Task ExecuteAsync_Success_WhenAfterSchedule()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -183,7 +183,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenBeforeSchedule_ShouldSkip()
+    public async Task ExecuteAsync_Failure_WhenBeforeSchedule()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -262,7 +262,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenNotInMeeting_ShouldSkip()
+    public async Task ExecuteAsync_Failure_WhenNotInMeeting()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -341,7 +341,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenAfterSended_ShouldSkip()
+    public async Task ExecuteAsync_Failure_WhenAfterSended()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -420,7 +420,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenInvalidSchedule_ShouldSkip()
+    public async Task ExecuteAsync_Failure_WhenInvalidSchedule()
     {
         // Setup
         var conversationReference = new ConversationReference()
@@ -499,7 +499,7 @@ public class StartMeetingCommandTests
     }
 
     [Test()]
-    public async Task ExecuteAsync_WhenNotScheduled_ShouldSkip()
+    public async Task ExecuteAsync_Failure_WhenNotScheduled()
     {
         // Setup
         var conversationReference = new ConversationReference()

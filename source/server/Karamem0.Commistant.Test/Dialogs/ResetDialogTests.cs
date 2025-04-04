@@ -28,7 +28,7 @@ public class ResetDialogTests
 {
 
     [Test()]
-    public async Task ResetDialog_WhenYes_ShouldSucceed()
+    public async Task ResetDialog_Success_WhenYes()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -78,7 +78,7 @@ public class ResetDialogTests
     }
 
     [Test()]
-    public async Task ResetDialog_WhenNo_ShouldSucceed()
+    public async Task ResetDialog_Success_WhenNo()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
