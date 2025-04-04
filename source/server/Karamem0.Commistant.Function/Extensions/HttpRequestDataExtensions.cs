@@ -18,23 +18,13 @@ namespace Karamem0.Commistant.Extensions;
 public static partial class HttpRequestDataExtensions
 {
 
-    public static string? GetBearerToken(this HttpRequestData target)
+    public static string? GetUserId(this HttpRequestData target)
     {
-        if (target.Headers.TryGetValues("Authorization", out var headerValues) is false)
+        if (target.Headers.TryGetValues("X-MS-CLIENT-PRINCIPAL-ID", out var headerValues) is false)
         {
             return null;
         }
-        var headerValue = headerValues.SingleOrDefault();
-        if (headerValue is null)
-        {
-            return null;
-        }
-        var headerPairs = headerValue.Split(' ');
-        if (headerPairs.Length != 2 || headerPairs[0] != "Bearer")
-        {
-            return null;
-        }
-        return headerPairs[1];
+        return headerValues.Single();
     }
 
 }

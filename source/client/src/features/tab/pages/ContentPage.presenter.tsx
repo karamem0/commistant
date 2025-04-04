@@ -26,6 +26,7 @@ import { useTheme } from '../../../providers/ThemeProvider';
 
 interface ContentPageProps {
   disabled?: boolean,
+  loading?: boolean,
   value?: CommandSettingsFormState,
   onSubmit?: EventHandler<CommandSettingsFormState>
 }
@@ -34,6 +35,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
 
   const {
     disabled,
+    loading,
     value,
     onSubmit
   } = props;
@@ -236,7 +238,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
           <Button
             appearance="primary"
             aria-label={intl.formatMessage(messages.Save)}
-            disabled={disabled || !form.formState.isDirty}
+            disabled={disabled || loading || !form.formState.isDirty}
             title={intl.formatMessage(messages.Save)}
             type="submit">
             <FormattedMessage {...messages.Save} />

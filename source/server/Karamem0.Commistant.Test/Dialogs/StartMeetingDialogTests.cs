@@ -30,7 +30,7 @@ public class StartMeetingDialogTests
 {
 
     [Test()]
-    public async Task StartMeetingDialog_WhenSubmit_ShouldSucceed()
+    public async Task StartMeetingDialog_Success_WhenSubmit()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -86,7 +86,7 @@ public class StartMeetingDialogTests
     }
 
     [Test()]
-    public async Task StartMeetingDialog_WhenCancel_ShouldSucceed()
+    public async Task StartMeetingDialog_Success_WhenCancel()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());

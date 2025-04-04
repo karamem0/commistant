@@ -28,7 +28,7 @@ public class TeamsBotTests
 {
 
     [Test()]
-    public async Task OnTurnAsync_WhenMembersAdded_ShouldSucceed()
+    public async Task OnTurnAsync_Success_WhenMembersAdded()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -88,7 +88,7 @@ public class TeamsBotTests
     }
 
     [Test()]
-    public async Task OnTurnAsync_WhenMembersRemoved_ShouldSucceed()
+    public async Task OnTurnAsync_Success_WhenMembersRemoved()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());

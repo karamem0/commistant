@@ -9,7 +9,6 @@
 using Karamem0.Commistant.Models;
 using NSubstitute;
 using NUnit.Framework;
-using OpenAI;
 using OpenAI.Chat;
 using System;
 using System.ClientModel;
@@ -27,7 +26,7 @@ public class OpenAIServiceTests
 {
 
     [Test()]
-    public async Task GetCommandOptionsAsync_WhenSucceeded_ShouldReturnValue()
+    public async Task GetCommandOptionsAsync_Success()
     {
         // Setup
         var options = new CommandOptions()
@@ -68,7 +67,7 @@ public class OpenAIServiceTests
     }
 
     [Test()]
-    public async Task GetCommandOptionsAsync_WhenFailed_ShouldReturnNull()
+    public async Task GetCommandOptionsAsync_Failure_WhenStopped()
     {
         // Setup
         var chatCompletion = OpenAIChatModelFactory.ChatCompletion(finishReason: ChatFinishReason.Stop);

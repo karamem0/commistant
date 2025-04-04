@@ -34,7 +34,7 @@ public class GetSettingsFunctionTests
 {
 
     [Test()]
-    public async Task RunAsync_ShouldReturnsHttpStatus200()
+    public async Task RunAsync_Success()
     {
         // Setup
         var blobService = Substitute.For<IBlobService>();

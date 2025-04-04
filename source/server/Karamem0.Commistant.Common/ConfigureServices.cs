@@ -29,7 +29,7 @@ public static class ConfigureServices
 
     public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.Configure<AzureBlobsStorageOptions>(configuration.GetSection("AzureBlobsStorage"));
+        _ = services.Configure<AzureStorageBlobsOptions>(configuration.GetSection("AzureStorageBlobs"));
         _ = services.Configure<AzureOpenAIOptions>(configuration.GetSection("AzureOpenAI"));
         _ = services.Configure<BotFrameworkOptions>(configuration.GetSection("BotFramework"));
         return services;
@@ -41,8 +41,8 @@ public static class ConfigureServices
             provider =>
             {
                 var options = configuration
-                                  .GetSection("AzureBlobsStorage")
-                                  .Get<AzureBlobsStorageOptions>() ??
+                                  .GetSection("AzureStorageBlobs")
+                                  .Get<AzureStorageBlobsOptions>() ??
                               throw new InvalidOperationException();
                 return new BlobContainerClient(new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName), new DefaultAzureCredential());
             }

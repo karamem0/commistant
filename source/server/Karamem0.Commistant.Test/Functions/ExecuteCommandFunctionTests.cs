@@ -28,7 +28,7 @@ public class ExecuteCommandFunctionTests
 {
 
     [Test()]
-    public async Task RunAsync_ShouldSucceed()
+    public async Task RunAsync_Success()
     {
         // Setup
         var blobService = Substitute.For<IBlobService>();
@@ -72,7 +72,7 @@ public class ExecuteCommandFunctionTests
     }
 
     [Test()]
-    public async Task RunAsync_WhenDataIsNull_ShouldSkip()
+    public async Task RunAsync_Failure_WhenDataIsNull()
     {
         // Setup
         var blobService = Substitute.For<IBlobService>();
@@ -112,7 +112,7 @@ public class ExecuteCommandFunctionTests
     }
 
     [Test()]
-    public async Task RunAsync_WhenCommandSettingsIsNull_ShouldSkip()
+    public async Task RunAsync_Failure_WhenCommandSettingsIsNull()
     {
         // Setup
         var blobService = Substitute.For<IBlobService>();
@@ -156,7 +156,7 @@ public class ExecuteCommandFunctionTests
     }
 
     [Test()]
-    public async Task RunAsync_WhenConversationReferenceIsNull_ShouldSkip()
+    public async Task RunAsync_Failure_WhenConversationReferenceIsNull()
     {
         // Setup
         var blobService = Substitute.For<IBlobService>();

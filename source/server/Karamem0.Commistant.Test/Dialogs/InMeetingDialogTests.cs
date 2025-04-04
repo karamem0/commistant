@@ -30,7 +30,7 @@ public class InMeetingDialogTests
 {
 
     [Test()]
-    public async Task InMeetingDialog_WhenSubmit_ShouldSucceed()
+    public async Task InMeetingDialog_Success_WhenSubmit()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -86,7 +86,7 @@ public class InMeetingDialogTests
     }
 
     [Test()]
-    public async Task InMeetingDialog_WhenCancel_ShouldSucceed()
+    public async Task InMeetingDialog_Success_WhenCancel()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());

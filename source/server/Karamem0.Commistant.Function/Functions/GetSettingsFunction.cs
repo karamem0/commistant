@@ -65,9 +65,7 @@ public class GetSettingsFunction(
                 requestBody.MeetingId,
                 cancellationToken
             );
-            var userId = requestData
-                .Headers.GetValues("X-MS-CLIENT-PRINCIPAL-ID")
-                .SingleOrDefault();
+            var userId = requestData.GetUserId();
             if (meetingInfo.Organizer?.AadObjectId == userId)
             {
                 responseBody.IsOrganizer = true;

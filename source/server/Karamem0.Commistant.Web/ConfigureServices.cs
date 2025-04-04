@@ -38,8 +38,8 @@ public static class ConfigureServices
             provider =>
             {
                 var options = configuration
-                                  .GetSection("AzureBlobsStorage")
-                                  .Get<AzureBlobsStorageOptions>() ??
+                                  .GetSection("AzureStorageBlobs")
+                                  .Get<AzureStorageBlobsOptions>() ??
                               throw new InvalidOperationException();
                 return new BlobsStorage(
                     new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),

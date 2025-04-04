@@ -27,6 +27,7 @@ function ContentPage() {
   const getValue = useGetValue();
   const setValue = useSetValue();
 
+  const [ loading, setLoading ] = React.useState<boolean>(false);
   const [ disabled, setDisabled ] = React.useState<boolean>(true);
   const [ state, setState ] = React.useState<CommandSettingsFormState>();
 
@@ -36,6 +37,7 @@ function ContentPage() {
         throw new Error();
       }
       try {
+        setLoading(true);
         const conversationId = context?.chat?.id;
         if (!conversationId) {
           throw new Error();
@@ -61,6 +63,8 @@ function ContentPage() {
           intent: 'error',
           text: intl.formatMessage(messages.SaveFailed)
         });
+      } finally {
+        setLoading(false);
       }
     })();
   }, [
@@ -92,6 +96,7 @@ function ContentPage() {
   return (
     <Presenter
       disabled={disabled}
+      loading={loading}
       value={state}
       onSubmit={handleSubmit} />
   );

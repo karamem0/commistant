@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Options;
 
-public record AzureBlobsStorageOptions
+public record AzureStorageBlobsOptions
 {
 
     public Uri? Endpoint { get; set; }
