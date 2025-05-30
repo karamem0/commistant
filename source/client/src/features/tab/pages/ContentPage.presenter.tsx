@@ -15,7 +15,7 @@ import {
   Subtitle2,
   Textarea
 } from '@fluentui/react-components';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { CommandSettingsFormState } from '../../../types/Form';
 import { EventHandler } from '../../../types/Event';
@@ -52,6 +52,10 @@ function ContentPage(props: Readonly<ContentPageProps>) {
     form,
     value
   ]);
+
+  const watch = useWatch({
+    control: form.control
+  });
 
   return value ? (
     <div
@@ -115,7 +119,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.startMeetingSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
@@ -126,7 +130,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.startMeetingSchedule === '-1'} />
                 </Field>
               )} />
           </div>
@@ -163,7 +167,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.endMeetingSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
@@ -174,7 +178,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.endMeetingSchedule === '-1'} />
                 </Field>
               )} />
           </div>
@@ -212,7 +216,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.inMeetingSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
@@ -223,7 +227,7 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled} />
+                    disabled={disabled || watch.inMeetingSchedule === '-1'} />
                 </Field>
               )} />
           </div>

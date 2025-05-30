@@ -21,7 +21,7 @@ jobs:
     with:
       environment: dev
   deploy-to-azure:
-      name: Deploy bot to Azure
+      name: Deploy to Azure
       needs: build-source
       uses: ./.github/workflows/deploy-to-azure.yml
       secrets: inherit
