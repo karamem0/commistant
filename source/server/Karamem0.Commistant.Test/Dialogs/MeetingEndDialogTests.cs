@@ -26,15 +26,14 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Dialogs.Tests;
 
 [Category("Karamem0.Commistant.Dialogs")]
-public class StartMeetingDialogTests
+public class MeetingEndDialogTests
 {
 
     [Test()]
-    public async Task StartMeetingDialog_Success_WhenSubmit()
+    public async Task MeetingEndDialog_Success_WhenSubmit()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapper = Substitute.For<IMapper>();
         _ = mapper
@@ -42,12 +41,12 @@ public class StartMeetingDialogTests
             .Returns(
                 new CommandSettings()
                 {
-                    StartMeetingSchedule = 5,
-                    StartMeetingMessage = "Hello world!",
-                    StartMeetingUrl = "https://www.example.com"
+                    MeetingEndSchedule = 5,
+                    MeetingEndMessage = "Hello world!",
+                    MeetingEndUrl = "https://www.example.com"
                 }
             );
-        var logger = Substitute.For<ILogger<StartMeetingDialog>>();
+        var logger = Substitute.For<ILogger<MeetingEndDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -58,7 +57,7 @@ public class StartMeetingDialogTests
             }
         );
         // Execute
-        var target = new StartMeetingDialog(
+        var target = new MeetingEndDialog(
             conversationState,
             qrCodeService,
             mapper,
@@ -74,23 +73,22 @@ public class StartMeetingDialogTests
             )
         );
         // Assert
+        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.StartMeetingSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.StartMeetingMessage, Is.EqualTo("Hello world!"));
-                Assert.That(commandSettings.StartMeetingUrl, Is.EqualTo("https://www.example.com"));
+                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(5));
+                Assert.That(commandSettings.MeetingEndMessage, Is.EqualTo("Hello world!"));
+                Assert.That(commandSettings.MeetingEndUrl, Is.EqualTo("https://www.example.com"));
             }
         );
     }
 
     [Test()]
-    public async Task StartMeetingDialog_Success_WhenCancel()
+    public async Task MeetingEndDialog_Success_WhenCancel()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var qrCodeService = Substitute.For<IQRCodeService>();
         var mapper = Substitute.For<IMapper>();
         _ = mapper
@@ -98,12 +96,12 @@ public class StartMeetingDialogTests
             .Returns(
                 new CommandSettings()
                 {
-                    StartMeetingSchedule = 5,
-                    StartMeetingMessage = "Hello world!",
-                    StartMeetingUrl = "https://www.example.com"
+                    MeetingEndSchedule = 5,
+                    MeetingEndMessage = "Hello world!",
+                    MeetingEndUrl = "https://www.example.com"
                 }
             );
-        var logger = Substitute.For<ILogger<StartMeetingDialog>>();
+        var logger = Substitute.For<ILogger<MeetingEndDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -114,7 +112,7 @@ public class StartMeetingDialogTests
             }
         );
         // Execute
-        var target = new StartMeetingDialog(
+        var target = new MeetingEndDialog(
             conversationState,
             qrCodeService,
             mapper,
@@ -130,13 +128,13 @@ public class StartMeetingDialogTests
             )
         );
         // Assert
+        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.StartMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.StartMeetingMessage, Is.Null);
-                Assert.That(commandSettings.StartMeetingUrl, Is.Null);
+                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(-1));
+                Assert.That(commandSettings.MeetingEndMessage, Is.Null);
+                Assert.That(commandSettings.MeetingEndUrl, Is.Null);
             }
         );
     }

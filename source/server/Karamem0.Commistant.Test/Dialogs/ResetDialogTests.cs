@@ -52,9 +52,9 @@ public class ResetDialogTests
             client.DialogContext.Context,
             new CommandSettings()
             {
-                StartMeetingSchedule = 5,
-                EndMeetingSchedule = 5,
-                InMeetingSchedule = 5
+                MeetingStartSchedule = 5,
+                MeetingEndSchedule = 5,
+                MeetingRunSchedule = 5
             }
         );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
@@ -67,12 +67,11 @@ public class ResetDialogTests
         );
         // Assert
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.StartMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.EndMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.InMeetingSchedule, Is.EqualTo(-1));
+                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(-1));
+                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(-1));
+                Assert.That(commandSettings.MeetingRunSchedule, Is.EqualTo(-1));
             }
         );
     }
@@ -102,9 +101,9 @@ public class ResetDialogTests
             client.DialogContext.Context,
             new CommandSettings()
             {
-                StartMeetingSchedule = 5,
-                EndMeetingSchedule = 5,
-                InMeetingSchedule = 5
+                MeetingStartSchedule = 5,
+                MeetingEndSchedule = 5,
+                MeetingRunSchedule = 5
             }
         );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
@@ -117,12 +116,11 @@ public class ResetDialogTests
         );
         // Assert
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.StartMeetingSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.EndMeetingSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.InMeetingSchedule, Is.EqualTo(5));
+                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(5));
+                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(5));
+                Assert.That(commandSettings.MeetingRunSchedule, Is.EqualTo(5));
             }
         );
     }

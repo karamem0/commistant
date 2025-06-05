@@ -7,10 +7,12 @@
 //
 
 using AdaptiveCards;
+using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -26,10 +28,19 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs;
 
-public class ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger) : ComponentDialog
+public class MeetingRunDialog(
+    ConversationState conversationState,
+    IQRCodeService qrCodeService,
+    IMapper mapper,
+    ILogger<MeetingRunDialog> logger
+) : ComponentDialog
 {
 
     private readonly ConversationState conversationState = conversationState;
+
+    private readonly IQRCodeService qrCodeService = qrCodeService;
+
+    private readonly IMapper mapper = mapper;
 
     private readonly ILogger logger = logger;
 
@@ -50,7 +61,25 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
 
     private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
-        var card = await AdaptiveCardHelper.CreateEditCardAsync("Reset");
+        var commandSettingsAccessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+        var commandSettings = await commandSettingsAccessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
+        var commandOptions = this.mapper.Map(
+            (CommandOptions?)stepContext.Options,
+            commandSettings with
+            {
+            }
+        );
+        var data = new AdaptiveCardMeetingData()
+        {
+            Schedule = commandOptions.MeetingRunSchedule.ToString(),
+            Message = commandOptions.MeetingRunMessage,
+            Url = commandOptions.MeetingRunUrl
+        };
+        var card = await AdaptiveCardHelper.CreateEditCardAsync("MeetingRun", data);
         var activity = MessageFactory.Attachment(
             new Attachment()
             {
@@ -58,7 +87,7 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
                 Content = card
             }
         );
-        this.logger.SettingsResetting(conversationId: stepContext.Context.Activity.Id);
+        this.logger.SettingsUpdating(conversationId: stepContext.Context.Activity.Id);
         return await stepContext.PromptAsync(
             nameof(this.OnBeforeAsync),
             new PromptOptions()
@@ -76,34 +105,48 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
         {
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
-        if (value.Value<string>("Button") == "Yes")
+        var commandSettingsAccessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+        var commandSettings = await commandSettingsAccessor.GetAsync(
+            stepContext.Context,
+            () => new(),
+            cancellationToken
+        );
+        if (value.Value<string>("Button") == "Submit")
         {
-            var accessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
-            await accessor.SetAsync(
-                stepContext.Context,
-                new(),
-                cancellationToken
-            );
-            this.logger.SettingsReseted(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendSettingsResetedAsync(cancellationToken);
+            commandSettings.MeetingRunSchedule = value.Value("Schedule", 0);
+            commandSettings.MeetingRunMessage = value.Value<string>("Message", null);
+            commandSettings.MeetingRunUrl = value.Value<string>("Url", null);
+            this.logger.SettingsUpdated(conversationId: stepContext.Context.Activity.Id);
+            _ = await stepContext.Context.SendSettingsUpdatedAsync(cancellationToken);
         }
-        if (value.Value<string>("Button") == "No")
+        if (value.Value<string>("Button") == "Cancel")
         {
             this.logger.SettingsCancelled(conversationId: stepContext.Context.Activity.Id);
             _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
-            var data = new AdaptiveCardResponseData()
+            var data = new AdaptiveCardMeetingData()
             {
-                Value = value.Value<string>("Button") switch
+                Schedule = commandSettings.MeetingRunSchedule switch
                 {
-                    "Yes" => "はい",
-                    "No" => "いいえ",
-                    _ => ""
-                }
+                    -1 => "なし",
+                    _ => $"{commandSettings.MeetingRunSchedule} 分ごと"
+                },
+                Message = commandSettings.MeetingRunMessage,
+                Url = commandSettings.MeetingRunUrl
             };
-            var card = await AdaptiveCardHelper.CreateViewCardAsync("Reset", data);
+            if (Uri.TryCreate(
+                    commandSettings.MeetingRunUrl,
+                    UriKind.Absolute,
+                    out var url
+                ))
+            {
+                var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
+                var base64 = Convert.ToBase64String(bytes);
+                data.QrCode = base64;
+            }
+            var card = await AdaptiveCardHelper.CreateViewCardAsync("MeetingRun", data);
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {

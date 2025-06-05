@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "This must be \"会議終了前\"."
+    },
+    "value": {
+      "type": "object",
+      "description": "The settings about message to send before the end of the meeting.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether to send the message."
+        },
+        "schedule": {
+          "type": "integer",
+          "description": "The frequency in minutes."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message."
+        },
+        "url": {
+          "type": "string",
+          "description": "The attached URL."
+        }
+      }
+    }
+  },
+  "required": [
+    "type",
+    "value"
+  ]
+}

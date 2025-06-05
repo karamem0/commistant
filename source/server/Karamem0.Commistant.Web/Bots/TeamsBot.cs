@@ -131,18 +131,18 @@ public class TeamsBot(
                     var arguments = await this.openAIService.GetCommandOptionsAsync(command, cancellationToken);
                     var result = arguments?.Type switch
                     {
-                        Constants.StartMeetingCommand => await dialogContext.BeginDialogAsync(
-                            nameof(StartMeetingDialog),
+                        Constants.MeetingStartCommand => await dialogContext.BeginDialogAsync(
+                            nameof(MeetingStartDialog),
                             arguments,
                             cancellationToken: cancellationToken
                         ),
-                        Constants.EndMeetingCommand => await dialogContext.BeginDialogAsync(
-                            nameof(EndMeetingDialog),
+                        Constants.MeetingEndCommand => await dialogContext.BeginDialogAsync(
+                            nameof(MeetingEndDialog),
                             arguments,
                             cancellationToken: cancellationToken
                         ),
-                        Constants.InMeetingCommand => await dialogContext.BeginDialogAsync(
-                            nameof(InMeetingDialog),
+                        Constants.MeetingRunCommand => await dialogContext.BeginDialogAsync(
+                            nameof(MeetingRunDialog),
                             arguments,
                             cancellationToken: cancellationToken
                         ),
@@ -180,9 +180,9 @@ public class TeamsBot(
             cancellationToken
         );
         var meetingInfo = await TeamsInfo.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
-        property.InMeeting = true;
-        property.StartMeetingSended = false;
-        property.EndMeetingSended = false;
+        property.MeetingRunning = true;
+        property.MeetingStartSended = false;
+        property.MeetingEndSended = false;
         property.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
         property.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
         await propertyAccessor.SetAsync(
@@ -205,9 +205,9 @@ public class TeamsBot(
             () => new(),
             cancellationToken
         );
-        property.InMeeting = false;
-        property.StartMeetingSended = false;
-        property.EndMeetingSended = false;
+        property.MeetingRunning = false;
+        property.MeetingStartSended = false;
+        property.MeetingEndSended = false;
         property.ScheduledStartTime = null;
         property.ScheduledEndTime = null;
         await propertyAccessor.SetAsync(

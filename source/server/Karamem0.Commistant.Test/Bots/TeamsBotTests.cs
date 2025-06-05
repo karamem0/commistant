@@ -78,8 +78,7 @@ public class TeamsBotTests
         var convesationReferenceAccessor = conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
         var convesationReference = await convesationReferenceAccessor.GetAsync(turnContext);
         // Validate
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
                 Assert.That(adapter.ActiveQueue, Has.Count.EqualTo(1));
                 Assert.That(convesationReference, Is.Not.Null);
@@ -139,8 +138,7 @@ public class TeamsBotTests
         var convesationReferenceAccessor = conversationState.CreateProperty<ConversationReference>(nameof(ConversationReference));
         var convesationReference = await convesationReferenceAccessor.GetAsync(turnContext);
         // Validate
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
                 Assert.That(adapter.ActiveQueue, Has.Count.EqualTo(0));
                 Assert.That(convesationReference, Is.Null);

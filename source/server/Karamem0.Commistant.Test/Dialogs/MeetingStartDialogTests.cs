@@ -26,11 +26,11 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Dialogs.Tests;
 
 [Category("Karamem0.Commistant.Dialogs")]
-public class InMeetingDialogTests
+public class MeetingStartDialogTests
 {
 
     [Test()]
-    public async Task InMeetingDialog_Success_WhenSubmit()
+    public async Task MeetingStartDialog_Success_WhenSubmit()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -42,12 +42,12 @@ public class InMeetingDialogTests
             .Returns(
                 new CommandSettings()
                 {
-                    InMeetingSchedule = 5,
-                    InMeetingMessage = "Hello world!",
-                    InMeetingUrl = "https://www.example.com"
+                    MeetingStartSchedule = 5,
+                    MeetingStartMessage = "Hello world!",
+                    MeetingStartUrl = "https://www.example.com"
                 }
             );
-        var logger = Substitute.For<ILogger<InMeetingDialog>>();
+        var logger = Substitute.For<ILogger<MeetingStartDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -58,7 +58,7 @@ public class InMeetingDialogTests
             }
         );
         // Execute
-        var target = new InMeetingDialog(
+        var target = new MeetingStartDialog(
             conversationState,
             qrCodeService,
             mapper,
@@ -75,18 +75,17 @@ public class InMeetingDialogTests
         );
         // Assert
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.InMeetingSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.InMeetingMessage, Is.EqualTo("Hello world!"));
-                Assert.That(commandSettings.InMeetingUrl, Is.EqualTo("https://www.example.com"));
+                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(5));
+                Assert.That(commandSettings.MeetingStartMessage, Is.EqualTo("Hello world!"));
+                Assert.That(commandSettings.MeetingStartUrl, Is.EqualTo("https://www.example.com"));
             }
         );
     }
 
     [Test()]
-    public async Task InMeetingDialog_Success_WhenCancel()
+    public async Task MeetingStartDialog_Success_WhenCancel()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
@@ -98,12 +97,12 @@ public class InMeetingDialogTests
             .Returns(
                 new CommandSettings()
                 {
-                    InMeetingSchedule = 5,
-                    InMeetingMessage = "Hello world!",
-                    InMeetingUrl = "https://www.example.com"
+                    MeetingStartSchedule = 5,
+                    MeetingStartMessage = "Hello world!",
+                    MeetingStartUrl = "https://www.example.com"
                 }
             );
-        var logger = Substitute.For<ILogger<InMeetingDialog>>();
+        var logger = Substitute.For<ILogger<MeetingStartDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -114,7 +113,7 @@ public class InMeetingDialogTests
             }
         );
         // Execute
-        var target = new InMeetingDialog(
+        var target = new MeetingStartDialog(
             conversationState,
             qrCodeService,
             mapper,
@@ -131,12 +130,11 @@ public class InMeetingDialogTests
         );
         // Assert
         var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
-                Assert.That(commandSettings.InMeetingSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.InMeetingMessage, Is.Null);
-                Assert.That(commandSettings.InMeetingUrl, Is.Null);
+                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(-1));
+                Assert.That(commandSettings.MeetingStartMessage, Is.Null);
+                Assert.That(commandSettings.MeetingStartUrl, Is.Null);
             }
         );
     }

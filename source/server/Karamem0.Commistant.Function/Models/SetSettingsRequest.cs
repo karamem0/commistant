@@ -24,31 +24,31 @@ public record SetSettingsRequest
     [JsonPropertyName("meetingId")]
     public string? MeetingId { get; set; }
 
-    [JsonPropertyName("startMeetingSchedule")]
-    public int StartMeetingSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingStartSchedule")]
+    public int MeetingStartSchedule { get; set; } = -1;
 
-    [JsonPropertyName("startMeetingMessage")]
-    public string? StartMeetingMessage { get; set; }
+    [JsonPropertyName("meetingStartMessage")]
+    public string? MeetingStartMessage { get; set; }
 
-    [JsonPropertyName("startMeetingUrl")]
-    public string? StartMeetingUrl { get; set; }
+    [JsonPropertyName("meetingStartUrl")]
+    public string? MeetingStartUrl { get; set; }
 
-    [JsonPropertyName("endMeetingSchedule")]
-    public int EndMeetingSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingEndSchedule")]
+    public int MeetingEndSchedule { get; set; } = -1;
 
-    [JsonPropertyName("endMeetingMessage")]
-    public string? EndMeetingMessage { get; set; }
+    [JsonPropertyName("meetingEndMessage")]
+    public string? MeetingEndMessage { get; set; }
 
-    [JsonPropertyName("endMeetingUrl")]
-    public string? EndMeetingUrl { get; set; }
+    [JsonPropertyName("meetingEndUrl")]
+    public string? MeetingEndUrl { get; set; }
 
-    [JsonPropertyName("inMeetingSchedule")]
-    public int InMeetingSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingRunSchedule")]
+    public int MeetingRunSchedule { get; set; } = -1;
 
-    [JsonPropertyName("inMeetingMessage")]
-    public string? InMeetingMessage { get; set; }
+    [JsonPropertyName("meetingRunMessage")]
+    public string? MeetingRunMessage { get; set; }
 
-    [JsonPropertyName("inMeetingUrl")]
-    public string? InMeetingUrl { get; set; }
+    [JsonPropertyName("meetingRunUrl")]
+    public string? MeetingRunUrl { get; set; }
 
 }

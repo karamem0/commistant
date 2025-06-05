@@ -37,8 +37,7 @@ public static class ConfigureServices
 
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddSingleton(
-            provider =>
+        _ = services.AddSingleton(provider =>
             {
                 var options = configuration
                                   .GetSection("AzureStorageBlobs")
@@ -48,8 +47,7 @@ public static class ConfigureServices
             }
         );
         _ = services.AddScoped<IBlobService, BlobService>();
-        _ = services.AddSingleton<ServiceClientCredentials>(
-            provider =>
+        _ = services.AddSingleton<ServiceClientCredentials>(provider =>
             {
                 var options = configuration
                                   .GetSection("BotFramework")
@@ -63,8 +61,7 @@ public static class ConfigureServices
         _ = services.AddScoped<IDateTimeService, DateTimeService>();
         _ = services.AddSingleton<QRCodeGenerator>();
         _ = services.AddScoped<IQRCodeService, QRCodeService>();
-        _ = services.AddSingleton(
-            provider =>
+        _ = services.AddSingleton(provider =>
             {
                 var options = configuration
                                   .GetSection("AzureOpenAI")

@@ -34,8 +34,7 @@ public static class ConfigureServices
     {
         _ = services.AddSingleton<BotFrameworkAuthentication>(provider => new ConfigurationBotFrameworkAuthentication(configuration.GetSection("BotFramework")));
         _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
-        _ = services.AddSingleton<IStorage>(
-            provider =>
+        _ = services.AddSingleton<IStorage>(provider =>
             {
                 var options = configuration
                                   .GetSection("AzureStorageBlobs")
@@ -55,20 +54,19 @@ public static class ConfigureServices
 
     public static IServiceCollection AddDialogs(this IServiceCollection services)
     {
-        _ = services.AddScoped<StartMeetingDialog>();
-        _ = services.AddScoped<EndMeetingDialog>();
-        _ = services.AddScoped<InMeetingDialog>();
+        _ = services.AddScoped<MeetingStartDialog>();
+        _ = services.AddScoped<MeetingEndDialog>();
+        _ = services.AddScoped<MeetingRunDialog>();
         _ = services.AddScoped<ResetDialog>();
-        _ = services.AddScoped(
-            provider => new DialogSet(
-                    provider
-                        .GetService<ConversationState>()
-                        ?.CreateProperty<DialogState>(nameof(DialogState))
-                )
-                .Add(provider.GetService<StartMeetingDialog>())
-                .Add(provider.GetService<EndMeetingDialog>())
-                .Add(provider.GetService<InMeetingDialog>())
-                .Add(provider.GetService<ResetDialog>())
+        _ = services.AddScoped(provider => new DialogSet(
+                provider
+                    .GetService<ConversationState>()
+                    ?.CreateProperty<DialogState>(nameof(DialogState))
+            )
+            .Add(provider.GetService<MeetingStartDialog>())
+            .Add(provider.GetService<MeetingEndDialog>())
+            .Add(provider.GetService<MeetingRunDialog>())
+            .Add(provider.GetService<ResetDialog>())
         );
         return services;
     }

@@ -1,0 +1,98 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "90px",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "bolder",
+              "text": "スケジュール"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${Schedule}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "90px",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "bolder",
+              "text": "メッセージ"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${Message}",
+              "wrap": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "90px",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "bolder",
+              "text": "URL"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${Url}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Image",
+      "size": "large",
+      "url": "data:image/png;base64,${Image}",
+      "altText": "${Url}"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "url": "${Url}",
+      "title": "URL を開く"
+    }
+  ]
+}

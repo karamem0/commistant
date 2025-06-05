@@ -24,24 +24,23 @@ public class AutoMapperProfile : Profile
         _ = this
             .CreateMap<CommandOptions, CommandSettings>()
             .ForMember(
-                d => d.StartMeetingSchedule,
+                d => d.MeetingStartSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingStartCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.StartMeetingSchedule;
+                                return d.MeetingStartSchedule;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.StartMeetingSchedule;
+                                return d.MeetingStartSchedule;
                             }
-                            if (Constants.StartMeetingSchedules.Any(_ => _ == s.Value.Schedule))
+                            if (Constants.MeetingStartSchedules.Any(_ => _ == s.Value.Schedule))
                             {
-                                return d.StartMeetingSchedule;
+                                return d.MeetingStartSchedule;
                             }
                             return s.Value.Schedule;
                         }
@@ -49,24 +48,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.StartMeetingMessage,
+                d => d.MeetingStartMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingStartCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.StartMeetingMessage;
+                                return d.MeetingStartMessage;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.StartMeetingMessage;
+                                return d.MeetingStartMessage;
                             }
                             if (string.IsNullOrEmpty(s.Value.Message))
                             {
-                                return d.StartMeetingMessage;
+                                return d.MeetingStartMessage;
                             }
                             return s.Value.Message;
                         }
@@ -74,24 +72,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.StartMeetingUrl,
+                d => d.MeetingStartUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.StartMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingStartCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.StartMeetingUrl;
+                                return d.MeetingStartUrl;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.StartMeetingUrl;
+                                return d.MeetingStartUrl;
                             }
                             if (string.IsNullOrEmpty(s.Value.Url))
                             {
-                                return d.StartMeetingUrl;
+                                return d.MeetingStartUrl;
                             }
                             return s.Value.Url;
                         }
@@ -99,24 +96,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.EndMeetingSchedule,
+                d => d.MeetingEndSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingEndCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.EndMeetingSchedule;
+                                return d.MeetingEndSchedule;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.EndMeetingSchedule;
+                                return d.MeetingEndSchedule;
                             }
-                            if (Constants.EndMeetingSchedules.Any(_ => _ == s.Value.Schedule))
+                            if (Constants.MeetingEndSchedules.Any(_ => _ == s.Value.Schedule))
                             {
-                                return d.EndMeetingSchedule;
+                                return d.MeetingEndSchedule;
                             }
                             return s.Value.Schedule;
                         }
@@ -124,24 +120,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.EndMeetingMessage,
+                d => d.MeetingEndMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingEndCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.EndMeetingMessage;
+                                return d.MeetingEndMessage;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.EndMeetingMessage;
+                                return d.MeetingEndMessage;
                             }
                             if (string.IsNullOrEmpty(s.Value.Message))
                             {
-                                return d.EndMeetingMessage;
+                                return d.MeetingEndMessage;
                             }
                             return s.Value.Message;
                         }
@@ -149,24 +144,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.EndMeetingUrl,
+                d => d.MeetingEndUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.EndMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingEndCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.EndMeetingUrl;
+                                return d.MeetingEndUrl;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.EndMeetingUrl;
+                                return d.MeetingEndUrl;
                             }
                             if (string.IsNullOrEmpty(s.Value.Url))
                             {
-                                return d.EndMeetingUrl;
+                                return d.MeetingEndUrl;
                             }
                             return s.Value.Url;
                         }
@@ -174,24 +168,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.InMeetingSchedule,
+                d => d.MeetingRunSchedule,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.InMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingRunCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.InMeetingSchedule;
+                                return d.MeetingRunSchedule;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.InMeetingSchedule;
+                                return d.MeetingRunSchedule;
                             }
-                            if (Constants.InMeetingSchedules.Any(_ => _ == s.Value.Schedule))
+                            if (Constants.MeetingRunSchedules.Any(_ => _ == s.Value.Schedule))
                             {
-                                return d.InMeetingSchedule;
+                                return d.MeetingRunSchedule;
                             }
                             return s.Value.Schedule;
                         }
@@ -199,24 +192,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.InMeetingMessage,
+                d => d.MeetingRunMessage,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.InMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingRunCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.InMeetingMessage;
+                                return d.MeetingRunMessage;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.InMeetingMessage;
+                                return d.MeetingRunMessage;
                             }
                             if (string.IsNullOrEmpty(s.Value.Message))
                             {
-                                return d.InMeetingMessage;
+                                return d.MeetingRunMessage;
                             }
                             return s.Value.Message;
                         }
@@ -224,24 +216,23 @@ public class AutoMapperProfile : Profile
                 }
             )
             .ForMember(
-                d => d.InMeetingUrl,
+                d => d.MeetingRunUrl,
                 o =>
                 {
-                    o.Condition(s => s.Type == Constants.InMeetingCommand);
-                    o.MapFrom(
-                        (s, d) =>
+                    o.Condition(s => s.Type == Constants.MeetingRunCommand);
+                    o.MapFrom((s, d) =>
                         {
                             if (s.Value is null)
                             {
-                                return d.InMeetingUrl;
+                                return d.MeetingRunUrl;
                             }
                             if (s.Value.Enabled is false)
                             {
-                                return d.InMeetingUrl;
+                                return d.MeetingRunUrl;
                             }
                             if (string.IsNullOrEmpty(s.Value.Url))
                             {
-                                return d.InMeetingUrl;
+                                return d.MeetingRunUrl;
                             }
                             return s.Value.Url;
                         }

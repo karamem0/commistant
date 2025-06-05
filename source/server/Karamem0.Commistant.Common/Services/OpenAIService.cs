@@ -6,8 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Models;
-using Karamem0.Commistant.Resources;
 using Newtonsoft.Json;
 using OpenAI.Chat;
 using System;
@@ -39,24 +39,24 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
             Tools =
             {
                 ChatTool.CreateFunctionTool(
-                    "StartMeeting",
+                    "MeetingStart",
                     "Update the schedule, text, and URL of messages sent the start of the meeting.",
-                    BinaryData.FromString(StringResources.StartMeetingJson)
+                    await FunctionToolHelper.GetSchemaAsync("MeetingStart")
                 ),
                 ChatTool.CreateFunctionTool(
-                    "EndMeeting",
+                    "MeetingEnd",
                     "Update the schedule, text, and URL of messages sent the end of the meeting.",
-                    BinaryData.FromString(StringResources.EndMeetingJson)
+                    await FunctionToolHelper.GetSchemaAsync("MeetingEnd")
                 ),
                 ChatTool.CreateFunctionTool(
-                    "InMeeting",
+                    "MeetingRun",
                     "Update the schedule, text, and URL of messages sent during the meeting.",
-                    BinaryData.FromString(StringResources.InMeetingJson)
+                    await FunctionToolHelper.GetSchemaAsync("MeetingRun")
                 ),
                 ChatTool.CreateFunctionTool(
                     "Reset",
                     "Reset all settings.",
-                    BinaryData.FromString(StringResources.ResetJson)
+                    await FunctionToolHelper.GetSchemaAsync("Reset")
                 ),
             }
         };

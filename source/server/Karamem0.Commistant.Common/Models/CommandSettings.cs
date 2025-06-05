@@ -17,29 +17,29 @@ namespace Karamem0.Commistant.Models;
 public record CommandSettings
 {
 
-    public bool StartMeetingSended { get; set; }
+    public bool MeetingStartSended { get; set; }
 
-    public int StartMeetingSchedule { get; set; } = -1;
+    public int MeetingStartSchedule { get; set; } = -1;
 
-    public string? StartMeetingMessage { get; set; }
+    public string? MeetingStartMessage { get; set; }
 
-    public string? StartMeetingUrl { get; set; }
+    public string? MeetingStartUrl { get; set; }
 
-    public bool EndMeetingSended { get; set; }
+    public bool MeetingEndSended { get; set; }
 
-    public int EndMeetingSchedule { get; set; } = -1;
+    public int MeetingEndSchedule { get; set; } = -1;
 
-    public string? EndMeetingMessage { get; set; }
+    public string? MeetingEndMessage { get; set; }
 
-    public string? EndMeetingUrl { get; set; }
+    public string? MeetingEndUrl { get; set; }
 
-    public bool InMeeting { get; set; }
+    public bool MeetingRunning { get; set; }
 
-    public int InMeetingSchedule { get; set; } = -1;
+    public int MeetingRunSchedule { get; set; } = -1;
 
-    public string? InMeetingMessage { get; set; }
+    public string? MeetingRunMessage { get; set; }
 
-    public string? InMeetingUrl { get; set; }
+    public string? MeetingRunUrl { get; set; }
 
     public DateTime? ScheduledEndTime { get; set; }
 

@@ -1,0 +1,30 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "TextBlock",
+      "id": "Message",
+      "text": "すべての設定を初期化します。よろしいですか？",
+      "wrap": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "id": "Yes",
+      "data": {
+        "Button": "Yes"
+      },
+      "title": "はい"
+    },
+    {
+      "type": "Action.Submit",
+      "id": "No",
+      "data": {
+        "Button": "No"
+      },
+      "title": "いいえ"
+    }
+  ]
+}

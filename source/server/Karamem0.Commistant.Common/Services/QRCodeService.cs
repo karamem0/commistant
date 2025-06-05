@@ -19,7 +19,7 @@ namespace Karamem0.Commistant.Services;
 public interface IQRCodeService
 {
 
-    Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default);
+    Task<BinaryData> CreateAsync(string text, CancellationToken cancellationToken = default);
 
 }
 
@@ -28,11 +28,11 @@ public class QRCodeService(QRCodeGenerator qrCodeGenerator) : IQRCodeService
 
     private readonly QRCodeGenerator qrCodeGenerator = qrCodeGenerator;
 
-    public Task<byte[]> CreateAsync(string text, CancellationToken cancellationToken = default)
+    public Task<BinaryData> CreateAsync(string text, CancellationToken cancellationToken = default)
     {
         var qrCodeData = this.qrCodeGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
         var qrCodePngByte = new PngByteQRCode(qrCodeData);
-        return Task.FromResult(qrCodePngByte.GetGraphic(10));
+        return Task.FromResult(BinaryData.FromBytes(qrCodePngByte.GetGraphic(10)));
     }
 
 }

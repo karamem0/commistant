@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Validators;
 
-public static class AdaptiveCardvalidator
+public static class AdaptiveCardValidator
 {
 
     public static Task<bool> Validate(PromptValidatorContext<string> promptContext, CancellationToken _)

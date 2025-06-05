@@ -52,8 +52,7 @@ public class BlobServiceTests
             .GetBlobNamesAsync()
             .ToListAsync();
         // Assert
-        Assert.Multiple(
-            () =>
+        Assert.Multiple(() =>
             {
                 Assert.That(actual[0], Is.EqualTo("item1"));
                 Assert.That(actual[1], Is.EqualTo("item2"));
@@ -72,17 +71,7 @@ public class BlobServiceTests
             .Returns(Response.FromValue(true, Substitute.For<Response>()));
         _ = blobClient
             .DownloadContentAsync(default)
-            .Returns(
-                Response.FromValue(
-                    BlobsModelFactory.BlobDownloadResult(
-                        content: BinaryData.FromObjectAsJson("value1"),
-                        details: BlobsModelFactory.BlobDownloadDetails(
-                            eTag: new ETag()
-                        )
-                    ),
-                    Substitute.For<Response>()
-                )
-            );
+            .Returns(Response.FromValue(BlobsModelFactory.BlobDownloadResult(content: BinaryData.FromObjectAsJson("value1"), details: BlobsModelFactory.BlobDownloadDetails(eTag: new ETag())), Substitute.For<Response>()));
         var blobContainerClient = Substitute.For<BlobContainerClient>();
         _ = blobContainerClient
             .GetBlobClient(Arg.Any<string>())

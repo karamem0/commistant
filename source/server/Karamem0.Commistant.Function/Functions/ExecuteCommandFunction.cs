@@ -63,9 +63,9 @@ public class ExecuteCommandFunction(
                 }
                 var commandContext = this.commandSet.CreateContext(property, reference);
                 await Task.WhenAll(
-                    commandContext.ExecuteCommandAsync(nameof(StartMeetingCommand), cancellationToken),
-                    commandContext.ExecuteCommandAsync(nameof(EndMeetingCommand), cancellationToken),
-                    commandContext.ExecuteCommandAsync(nameof(InMeetingCommand), cancellationToken)
+                    commandContext.ExecuteCommandAsync(nameof(MeetingStartCommand), cancellationToken),
+                    commandContext.ExecuteCommandAsync(nameof(MeetingEndCommand), cancellationToken),
+                    commandContext.ExecuteCommandAsync(nameof(MeetingRunCommand), cancellationToken)
                 );
                 await this.blobService.SetObjectAsync(
                     blobName,

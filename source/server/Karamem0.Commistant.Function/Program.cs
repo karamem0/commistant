@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
+var environmentName = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT");
 var configuration = builder.Configuration;
 _ = configuration.AddJsonFile(
     "appsettings.json",
@@ -28,7 +29,7 @@ _ = configuration.AddJsonFile(
     true
 );
 _ = configuration.AddJsonFile(
-    $"appsettings.{builder.Environment}.json",
+    $"appsettings.{environmentName}.json",
     true,
     true
 );

@@ -1,0 +1,15 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "FactSet",
+      "facts": [
+        {
+          "title": "応答",
+          "value": "${Value}"
+        }
+      ]
+    }
+  ]
+}

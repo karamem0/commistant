@@ -141,13 +141,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> startMeetingMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1005),
         "[{MemberName}] 会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void StartMeetingMessageNotifying(
+    public static void MeetingStartMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -156,7 +156,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        startMeetingMessageNotifying.Invoke(
+        meetingStartMessageNotifying.Invoke(
             logger,
             memberName,
             conversationId,
@@ -166,13 +166,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> startMeetingMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1006),
         "[{MemberName}] 会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void StartMeetingMessageNotified(
+    public static void MeetingStartMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -181,7 +181,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        startMeetingMessageNotified.Invoke(
+        meetingStartMessageNotified.Invoke(
             logger,
             memberName,
             conversationId,
@@ -191,13 +191,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> endMeetingMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1007),
         "[{MemberName}] 会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void EndMeetingMessageNotifying(
+    public static void MeetingEndMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -206,7 +206,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        endMeetingMessageNotifying.Invoke(
+        meetingEndMessageNotifying.Invoke(
             logger,
             memberName,
             conversationId,
@@ -216,13 +216,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> endMeetingMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1008),
         "[{MemberName}] 会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void EndMeetingMessageNotified(
+    public static void MeetingEndMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -231,7 +231,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        endMeetingMessageNotified.Invoke(
+        meetingEndMessageNotified.Invoke(
             logger,
             memberName,
             conversationId,
@@ -241,13 +241,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> inMeetingMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingRunMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1009),
         "[{MemberName}] 会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void InMeetingMessageNotifying(
+    public static void MeetingRunMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -256,7 +256,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        inMeetingMessageNotifying.Invoke(
+        meetingRunMessageNotifying.Invoke(
             logger,
             memberName,
             conversationId,
@@ -266,13 +266,13 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> inMeetingMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingRunMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
         LogLevel.Information,
         new EventId(1010),
         "[{MemberName}] 会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
     );
 
-    public static void InMeetingMessageNotified(
+    public static void MeetingRunMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
@@ -281,7 +281,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        inMeetingMessageNotified.Invoke(
+        meetingRunMessageNotified.Invoke(
             logger,
             memberName,
             conversationId,

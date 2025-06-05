@@ -23,11 +23,11 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands;
 
-public class InMeetingCommand(
+public class MeetingStartCommand(
     IBotConnectorService botConnectorService,
     IDateTimeService dateTimeService,
     IQRCodeService qrCodeService,
-    ILogger<InMeetingCommand> logger
+    ILogger<MeetingStartCommand> logger
 ) : Command()
 {
 
@@ -45,11 +45,15 @@ public class InMeetingCommand(
         CancellationToken cancellationToken = default
     )
     {
-        if (commandSettings.InMeeting is false)
+        if (commandSettings.MeetingRunning is false)
         {
             return;
         }
-        if (commandSettings.InMeetingSchedule <= 0)
+        if (commandSettings.MeetingStartSchedule < 0)
+        {
+            return;
+        }
+        if (commandSettings.MeetingStartSended is true)
         {
             return;
         }
@@ -64,30 +68,30 @@ public class InMeetingCommand(
         {
             return;
         }
-        if ((int)timeSpan.TotalMinutes % commandSettings.InMeetingSchedule > 0)
+        if (commandSettings.MeetingStartSchedule > (int)timeSpan.TotalMinutes)
         {
             return;
         }
         try
         {
-            this.logger.InMeetingMessageNotifying(
+            this.logger.MeetingStartMessageNotifying(
                 conversationId: conversationReference.Conversation.Id,
-                message: commandSettings.InMeetingMessage,
-                url: commandSettings.InMeetingUrl
+                message: commandSettings.MeetingStartMessage,
+                url: commandSettings.MeetingStartUrl
             );
             var card = new AdaptiveCard("1.3");
-            if (string.IsNullOrEmpty(commandSettings.InMeetingMessage) is false)
+            if (string.IsNullOrEmpty(commandSettings.MeetingStartMessage) is false)
             {
                 card.Body.Add(
                     new AdaptiveTextBlock()
                     {
-                        Text = commandSettings.InMeetingMessage,
+                        Text = commandSettings.MeetingStartMessage,
                         Wrap = true
                     }
                 );
             }
             if (Uri.TryCreate(
-                    commandSettings.InMeetingUrl,
+                    commandSettings.MeetingStartUrl,
                     UriKind.Absolute,
                     out var url
                 ))
@@ -128,12 +132,13 @@ public class InMeetingCommand(
         }
         finally
         {
-            this.logger.InMeetingMessageNotified(
+            this.logger.MeetingStartMessageNotified(
                 conversationId: conversationReference.Conversation.Id,
-                message: commandSettings.InMeetingMessage,
-                url: commandSettings.InMeetingUrl
+                message: commandSettings.MeetingStartMessage,
+                url: commandSettings.MeetingStartUrl
             );
         }
+        commandSettings.MeetingStartSended = true;
     }
 
 }

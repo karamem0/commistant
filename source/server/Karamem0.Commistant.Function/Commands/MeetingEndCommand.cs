@@ -23,11 +23,11 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Commands;
 
-public class StartMeetingCommand(
+public class MeetingEndCommand(
     IBotConnectorService botConnectorService,
     IDateTimeService dateTimeService,
     IQRCodeService qrCodeService,
-    ILogger<StartMeetingCommand> logger
+    ILogger<MeetingEndCommand> logger
 ) : Command()
 {
 
@@ -45,53 +45,53 @@ public class StartMeetingCommand(
         CancellationToken cancellationToken = default
     )
     {
-        if (commandSettings.InMeeting is false)
+        if (commandSettings.MeetingRunning is false)
         {
             return;
         }
-        if (commandSettings.StartMeetingSchedule < 0)
+        if (commandSettings.MeetingEndSchedule < 0)
         {
             return;
         }
-        if (commandSettings.StartMeetingSended is true)
+        if (commandSettings.MeetingEndSended is true)
         {
             return;
         }
-        var startTime = commandSettings.ScheduledStartTime;
-        if (startTime is null)
+        var endTime = commandSettings.ScheduledEndTime;
+        if (endTime is null)
         {
             return;
         }
         var currentTime = this.dateTimeService.GetCurrentDateTime();
-        var timeSpan = currentTime - (DateTime)startTime;
+        var timeSpan = (DateTime)endTime - currentTime;
         if (timeSpan.TotalMinutes < 0)
         {
             return;
         }
-        if (commandSettings.StartMeetingSchedule > (int)timeSpan.TotalMinutes)
+        if ((int)timeSpan.TotalMinutes > commandSettings.MeetingEndSchedule)
         {
             return;
         }
         try
         {
-            this.logger.StartMeetingMessageNotifying(
+            this.logger.MeetingEndMessageNotifying(
                 conversationId: conversationReference.Conversation.Id,
-                message: commandSettings.StartMeetingMessage,
-                url: commandSettings.StartMeetingUrl
+                message: commandSettings.MeetingEndMessage,
+                url: commandSettings.MeetingEndUrl
             );
             var card = new AdaptiveCard("1.3");
-            if (string.IsNullOrEmpty(commandSettings.StartMeetingMessage) is false)
+            if (string.IsNullOrEmpty(commandSettings.MeetingEndMessage) is false)
             {
                 card.Body.Add(
                     new AdaptiveTextBlock()
                     {
-                        Text = commandSettings.StartMeetingMessage,
+                        Text = commandSettings.MeetingEndMessage,
                         Wrap = true
                     }
                 );
             }
             if (Uri.TryCreate(
-                    commandSettings.StartMeetingUrl,
+                    commandSettings.MeetingEndUrl,
                     UriKind.Absolute,
                     out var url
                 ))
@@ -132,13 +132,13 @@ public class StartMeetingCommand(
         }
         finally
         {
-            this.logger.StartMeetingMessageNotified(
+            this.logger.MeetingEndMessageNotified(
                 conversationId: conversationReference.Conversation.Id,
-                message: commandSettings.StartMeetingMessage,
-                url: commandSettings.StartMeetingUrl
+                message: commandSettings.MeetingEndMessage,
+                url: commandSettings.MeetingEndUrl
             );
         }
-        commandSettings.StartMeetingSended = true;
+        commandSettings.MeetingEndSended = true;
     }
 
 }

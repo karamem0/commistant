@@ -22,14 +22,13 @@ public static class ConfigureServices
 
     public static IServiceCollection AddCommands(this IServiceCollection services)
     {
-        _ = services.AddSingleton<StartMeetingCommand>();
-        _ = services.AddSingleton<EndMeetingCommand>();
-        _ = services.AddSingleton<InMeetingCommand>();
-        _ = services.AddSingleton(
-            (provider) => new CommandSet()
-                .Add(provider.GetService<StartMeetingCommand>())
-                .Add(provider.GetService<EndMeetingCommand>())
-                .Add(provider.GetService<InMeetingCommand>())
+        _ = services.AddSingleton<MeetingStartCommand>();
+        _ = services.AddSingleton<MeetingEndCommand>();
+        _ = services.AddSingleton<MeetingRunCommand>();
+        _ = services.AddSingleton((provider) => new CommandSet()
+            .Add(provider.GetService<MeetingStartCommand>())
+            .Add(provider.GetService<MeetingEndCommand>())
+            .Add(provider.GetService<MeetingRunCommand>())
         );
         return services;
     }
