@@ -17,12 +17,12 @@ namespace Karamem0.Commistant.Models;
 public record AdaptiveCardMeetingData
 {
 
-    public string? Schedule { get; set; }
+    public string Schedule { get; set; } = "";
 
-    public string? Message { get; set; }
+    public string Message { get; set; } = "";
 
-    public string? Url { get; set; }
+    public string Url { get; set; } = "";
 
-    public string? QrCode { get; set; }
+    public string QrCode { get; set; } = "";
 
 }

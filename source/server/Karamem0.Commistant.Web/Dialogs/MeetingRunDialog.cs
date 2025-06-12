@@ -75,9 +75,9 @@ public class MeetingRunDialog(
         );
         var data = new AdaptiveCardMeetingData()
         {
-            Schedule = commandOptions.MeetingRunSchedule.ToString(),
-            Message = commandOptions.MeetingRunMessage,
-            Url = commandOptions.MeetingRunUrl
+            Schedule = $"{commandOptions.MeetingRunSchedule}",
+            Message = $"{commandOptions.MeetingRunMessage}",
+            Url = $"{commandOptions.MeetingRunUrl}"
         };
         var card = await AdaptiveCardHelper.CreateEditCardAsync("MeetingRun", data);
         var activity = MessageFactory.Attachment(
@@ -133,8 +133,8 @@ public class MeetingRunDialog(
                     -1 => "なし",
                     _ => $"{commandSettings.MeetingRunSchedule} 分ごと"
                 },
-                Message = commandSettings.MeetingRunMessage,
-                Url = commandSettings.MeetingRunUrl
+                Message = $"{commandSettings.MeetingRunMessage}",
+                Url = $"{commandSettings.MeetingRunUrl}"
             };
             if (Uri.TryCreate(
                     commandSettings.MeetingRunUrl,

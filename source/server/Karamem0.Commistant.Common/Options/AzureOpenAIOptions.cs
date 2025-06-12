@@ -21,4 +21,6 @@ public record AzureOpenAIOptions
 
     public string? ModelName { get; set; }
 
+    public string? ClientId { get; set; }
+
 }

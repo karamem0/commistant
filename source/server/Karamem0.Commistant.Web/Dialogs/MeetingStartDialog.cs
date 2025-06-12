@@ -75,9 +75,9 @@ public class MeetingStartDialog(
         );
         var data = new AdaptiveCardMeetingData()
         {
-            Schedule = commandOptions.MeetingStartSchedule.ToString(),
-            Message = commandOptions.MeetingStartMessage,
-            Url = commandOptions.MeetingStartUrl
+            Schedule = $"{commandOptions.MeetingStartSchedule}",
+            Message = $"{commandOptions.MeetingStartMessage}",
+            Url = $"{commandOptions.MeetingStartUrl}"
         };
         var card = await AdaptiveCardHelper.CreateEditCardAsync("MeetingStart", data);
         var activity = MessageFactory.Attachment(
@@ -134,8 +134,8 @@ public class MeetingStartDialog(
                     0 => "予定時刻",
                     _ => $"{commandSettings.MeetingStartSchedule} 分後"
                 },
-                Message = commandSettings.MeetingStartMessage,
-                Url = commandSettings.MeetingStartUrl
+                Message = $"{commandSettings.MeetingStartMessage}",
+                Url = $"{commandSettings.MeetingStartUrl}"
             };
             if (Uri.TryCreate(
                     commandSettings.MeetingStartUrl,

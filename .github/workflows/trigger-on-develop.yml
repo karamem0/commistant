@@ -27,6 +27,7 @@ jobs:
       secrets: inherit
       with:
         environment: dev
+        slot-name: dev
   build-manifest:
     name: Build manifest
     uses: ./.github/workflows/build-manifest.yml

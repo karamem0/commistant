@@ -75,9 +75,9 @@ public class MeetingEndDialog(
         );
         var data = new AdaptiveCardMeetingData()
         {
-            Schedule = commandOptions.MeetingEndSchedule.ToString(),
-            Message = commandOptions.MeetingEndMessage,
-            Url = commandOptions.MeetingEndUrl
+            Schedule = $"{commandOptions.MeetingEndSchedule}",
+            Message = $"{commandOptions.MeetingEndMessage}",
+            Url = $"{commandOptions.MeetingEndUrl}"
         };
         var card = await AdaptiveCardHelper.CreateEditCardAsync("MeetingEnd", data);
         var activity = MessageFactory.Attachment(
@@ -134,8 +134,8 @@ public class MeetingEndDialog(
                     0 => "予定時刻",
                     _ => $"{commandSettings.MeetingEndSchedule} 分前"
                 },
-                Message = commandSettings.MeetingEndMessage,
-                Url = commandSettings.MeetingEndUrl
+                Message = $"{commandSettings.MeetingEndMessage}",
+                Url = $"{commandSettings.MeetingEndUrl}"
             };
             if (Uri.TryCreate(
                     commandSettings.MeetingEndUrl,

@@ -25,7 +25,7 @@ public static class AdaptiveCardValidator
         {
             return Task.FromResult(false);
         }
-        var value = promptContext.Context.Activity.Value.ToString();
+        var value = promptContext.Context.Activity.Value;
         if (value is null)
         {
             return Task.FromResult(false);

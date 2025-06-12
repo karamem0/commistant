@@ -22,7 +22,7 @@
           "items": [
             {
               "type": "TextBlock",
-              "text": "${Schedule}"
+              "text": "${schedule}"
             }
           ]
         }
@@ -48,7 +48,7 @@
           "items": [
             {
               "type": "TextBlock",
-              "text": "${Message}",
+              "text": "${message}",
               "wrap": true
             }
           ]
@@ -75,7 +75,7 @@
           "items": [
             {
               "type": "TextBlock",
-              "text": "${Url}"
+              "text": "${url}"
             }
           ]
         }
@@ -84,14 +84,15 @@
     {
       "type": "Image",
       "size": "large",
-      "url": "data:image/png;base64,${QrCode}",
-      "altText": "${Url}"
+      "url": "${if(length(qrCode) > 0, 'data:image/png;base64,' & qrCode, '')}",
+      "altText": "${url}",
+      "$when": "${length(qrCode) > 0}"
     }
   ],
   "actions": [
     {
       "type": "Action.OpenUrl",
-      "url": "${Url}",
+      "url": "${url}",
       "title": "URL を開く"
     }
   ]

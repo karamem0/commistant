@@ -37,12 +37,17 @@ public static class ConfigureServices
         _ = services.AddSingleton<IStorage>(provider =>
             {
                 var options = configuration
-                                  .GetSection("AzureStorageBlobs")
-                                  .Get<AzureStorageBlobsOptions>() ??
-                              throw new InvalidOperationException();
+                    .GetSection("AzureStorageBlobs")
+                    .Get<AzureStorageBlobsOptions>();
+                _ = options ?? throw new InvalidOperationException();
                 return new BlobsStorage(
                     new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),
-                    new DefaultAzureCredential(),
+                    new DefaultAzureCredential(
+                        new DefaultAzureCredentialOptions()
+                        {
+                            ManagedIdentityClientId = options.ClientId
+                        }
+                    ),
                     new StorageTransferOptions()
                 );
             }
@@ -60,8 +65,8 @@ public static class ConfigureServices
         _ = services.AddScoped<ResetDialog>();
         _ = services.AddScoped(provider => new DialogSet(
                 provider
-                    .GetService<ConversationState>()
-                    ?.CreateProperty<DialogState>(nameof(DialogState))
+                    .GetRequiredService<ConversationState>()
+                    .CreateProperty<DialogState>(nameof(DialogState))
             )
             .Add(provider.GetService<MeetingStartDialog>())
             .Add(provider.GetService<MeetingEndDialog>())

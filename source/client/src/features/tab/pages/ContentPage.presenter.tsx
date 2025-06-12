@@ -88,12 +88,12 @@ function ContentPage(props: Readonly<ContentPageProps>) {
           `}>
           <div>
             <Subtitle2>
-              <FormattedMessage {...messages.StartMeeting} />
+              <FormattedMessage {...messages.MeetingStart} />
             </Subtitle2>
             <Controller
               control={form.control}
-              defaultValue={value.startMeetingSchedule}
-              name="startMeetingSchedule"
+              defaultValue={value.meetingStartSchedule}
+              name="meetingStartSchedule"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
@@ -113,35 +113,35 @@ function ContentPage(props: Readonly<ContentPageProps>) {
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.startMeetingMessage}
-              name="startMeetingMessage"
+              defaultValue={value.meetingStartMessage}
+              name="meetingStartMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled || watch.startMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingStartSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.startMeetingUrl}
-              name="startMeetingUrl"
+              defaultValue={value.meetingStartUrl}
+              name="meetingStartUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled || watch.startMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingStartSchedule === '-1'} />
                 </Field>
               )} />
           </div>
           <div>
             <Subtitle2>
-              <FormattedMessage {...messages.EndMeeting} />
+              <FormattedMessage {...messages.MeetingEnd} />
             </Subtitle2>
             <Controller
               control={form.control}
-              defaultValue={value.endMeetingSchedule}
-              name="endMeetingSchedule"
+              defaultValue={value.meetingEndSchedule}
+              name="meetingEndSchedule"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
@@ -161,35 +161,35 @@ function ContentPage(props: Readonly<ContentPageProps>) {
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.endMeetingMessage}
-              name="endMeetingMessage"
+              defaultValue={value.meetingEndMessage}
+              name="meetingEndMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled || watch.endMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingEndSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.endMeetingUrl}
-              name="endMeetingUrl"
+              defaultValue={value.meetingEndUrl}
+              name="meetingEndUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled || watch.endMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingEndSchedule === '-1'} />
                 </Field>
               )} />
           </div>
           <div>
             <Subtitle2>
-              <FormattedMessage {...messages.InMeeting} />
+              <FormattedMessage {...messages.MeetingRun} />
             </Subtitle2>
             <Controller
               control={form.control}
-              defaultValue={value.inMeetingSchedule}
-              name="inMeetingSchedule"
+              defaultValue={value.meetingRunSchedule}
+              name="meetingRunSchedule"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Schedule)}>
                   <ScheduleDropdown
@@ -210,24 +210,24 @@ function ContentPage(props: Readonly<ContentPageProps>) {
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.inMeetingMessage}
-              name="inMeetingMessage"
+              defaultValue={value.meetingRunMessage}
+              name="meetingRunMessage"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Message)}>
                   <Textarea
                     {...field}
-                    disabled={disabled || watch.inMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingRunSchedule === '-1'} />
                 </Field>
               )} />
             <Controller
               control={form.control}
-              defaultValue={value.inMeetingUrl}
-              name="inMeetingUrl"
+              defaultValue={value.meetingRunUrl}
+              name="meetingRunUrl"
               render={({ field }) => (
                 <Field label={intl.formatMessage(messages.Url)}>
                   <Input
                     {...field}
-                    disabled={disabled || watch.inMeetingSchedule === '-1'} />
+                    disabled={disabled || watch.meetingRunSchedule === '-1'} />
                 </Field>
               )} />
           </div>

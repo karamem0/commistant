@@ -40,19 +40,27 @@ public static class ConfigureServices
         _ = services.AddSingleton(provider =>
             {
                 var options = configuration
-                                  .GetSection("AzureStorageBlobs")
-                                  .Get<AzureStorageBlobsOptions>() ??
-                              throw new InvalidOperationException();
-                return new BlobContainerClient(new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName), new DefaultAzureCredential());
+                    .GetSection("AzureStorageBlobs")
+                    .Get<AzureStorageBlobsOptions>();
+                _ = options ?? throw new InvalidOperationException();
+                return new BlobContainerClient(
+                    new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),
+                    new DefaultAzureCredential(
+                        new DefaultAzureCredentialOptions()
+                        {
+                            ManagedIdentityClientId = options.ClientId
+                        }
+                    )
+                );
             }
         );
         _ = services.AddScoped<IBlobService, BlobService>();
         _ = services.AddSingleton<ServiceClientCredentials>(provider =>
             {
                 var options = configuration
-                                  .GetSection("BotFramework")
-                                  .Get<BotFrameworkOptions>() ??
-                              throw new InvalidOperationException();
+                    .GetSection("BotFramework")
+                    .Get<BotFrameworkOptions>();
+                _ = options ?? throw new InvalidOperationException();
                 return new MicrosoftAppCredentials(options.MicrosoftAppId, options.MicrosoftAppPassword);
             }
         );
@@ -64,10 +72,18 @@ public static class ConfigureServices
         _ = services.AddSingleton(provider =>
             {
                 var options = configuration
-                                  .GetSection("AzureOpenAI")
-                                  .Get<AzureOpenAIOptions>() ??
-                              throw new InvalidOperationException();
-                var client = new AzureOpenAIClient(options.Endpoint, new DefaultAzureCredential());
+                    .GetSection("AzureOpenAI")
+                    .Get<AzureOpenAIOptions>();
+                _ = options ?? throw new InvalidOperationException();
+                var client = new AzureOpenAIClient(
+                    options.Endpoint,
+                    new DefaultAzureCredential(
+                        new DefaultAzureCredentialOptions()
+                        {
+                            ManagedIdentityClientId = options.ClientId
+                        }
+                    )
+                );
                 return client.GetChatClient(options.ModelName);
             }
         );

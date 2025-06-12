@@ -5,7 +5,7 @@
     {
       "type": "Input.ChoiceSet",
       "id": "Schedule",
-      "value": "${Schedule}",
+      "value": "${schedule}",
       "style": "compact",
       "isMultiSelect": false,
       "choices": [
@@ -37,7 +37,7 @@
       "type": "Input.Text",
       "id": "Message",
       "placeholder": "会議開始後に表示されるメッセージ",
-      "value": "${Message}",
+      "value": "${message}",
       "isMultiline": true,
       "label": "メッセージ"
     },
@@ -45,7 +45,7 @@
       "type": "Input.Text",
       "id": "Url",
       "placeholder": "会議開始後に表示されるリンクの URL",
-      "value": "${Url}",
+      "value": "${url}",
       "style": "url",
       "label": "URL"
     }
