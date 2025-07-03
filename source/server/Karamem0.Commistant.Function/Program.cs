@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
+_ = builder.ConfigureFunctionsWebApplication();
+
 var environmentName = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT");
 var configuration = builder.Configuration;
 _ = configuration.AddJsonFile(

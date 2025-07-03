@@ -4,8 +4,8 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "start": "tsc && vite",
-    "build": "tsc && vite build",
+    "dev": "tsc && vite",
+    "build": "tsc -b && vite build",
     "eslint": "eslint src",
     "eslint:fix": "eslint src --fix",
     "stylelint": "stylelint 'src/**/*.{css,scss,jsx,tsx}'",

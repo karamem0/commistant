@@ -20,9 +20,9 @@ public record GetSettingsRequest
 {
 
     [JsonPropertyName("channelId")]
-    public string? ChannelId { get; set; }
+    public required string ChannelId { get; set; }
 
     [JsonPropertyName("meetingId")]
-    public string? MeetingId { get; set; }
+    public required string MeetingId { get; set; }
 
 }

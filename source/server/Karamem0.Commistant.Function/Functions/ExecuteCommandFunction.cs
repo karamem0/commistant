@@ -39,7 +39,7 @@ public class ExecuteCommandFunction(
 
 #pragma warning disable IDE0060
     [Function("ExecuteCommand")]
-    public async Task RunAsync([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo, CancellationToken cancellationToken)
+    public async Task RunAsync([TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo, CancellationToken cancellationToken = default)
     {
         try
         {

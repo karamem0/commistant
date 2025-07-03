@@ -2,6 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch AppHost",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Karamem0.Commistant.AppHost/Karamem0.Commistant.AppHost.csproj"
+    },
+    {
       "name": "Launch Function",
       "type": "coreclr",
       "request": "attach",

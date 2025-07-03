@@ -1,7 +1,9 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karamem0.Commistant.AppHost", "Karamem0.Commistant.AppHost\Karamem0.Commistant.AppHost.csproj", "{83CEDF1A-1D6A-4013-AE3A-E7F6510AC4A7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karamem0.Commistant.Common", "Karamem0.Commistant.Common\Karamem0.Commistant.Common.csproj", "{7D398A96-0076-48EB-BBD7-D8FC5F8D95E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karamem0.Commistant.Function", "Karamem0.Commistant.Function\Karamem0.Commistant.Function.csproj", "{4D0A5F14-57ED-4F65-9AE5-E3E49ADCFB55}"
@@ -19,6 +21,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83CEDF1A-1D6A-4013-AE3A-E7F6510AC4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83CEDF1A-1D6A-4013-AE3A-E7F6510AC4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83CEDF1A-1D6A-4013-AE3A-E7F6510AC4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83CEDF1A-1D6A-4013-AE3A-E7F6510AC4A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D398A96-0076-48EB-BBD7-D8FC5F8D95E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D398A96-0076-48EB-BBD7-D8FC5F8D95E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D398A96-0076-48EB-BBD7-D8FC5F8D95E4}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -9,10 +9,11 @@
 using AdaptiveCards;
 using AutoMapper;
 using Karamem0.Commistant.Extensions;
+using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
-using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Services;
+using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -24,7 +25,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Karamem0.Commistant.Validators;
 
 namespace Karamem0.Commistant.Dialogs;
 

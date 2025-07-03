@@ -10,8 +10,9 @@ using AutoMapper;
 using Azure.Core.Serialization;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,9 +22,7 @@ using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,10 +67,22 @@ public class GetSettingsFunctionTests
         var mapper = Substitute.For<IMapper>();
         _ = mapper
             .Map<GetSettingsResponse>(Arg.Any<GetSettingsRequest>())
-            .Returns(new GetSettingsResponse());
+            .Returns(
+                new GetSettingsResponse()
+                {
+                    ChannelId = "19:1234567890",
+                    MeetingId = "1234567890"
+                }
+            );
         _ = mapper
             .Map(Arg.Any<CommandSettings>(), Arg.Any<GetSettingsResponse>())
-            .Returns(new GetSettingsResponse());
+            .Returns(
+                new GetSettingsResponse()
+                {
+                    ChannelId = "19:1234567890",
+                    MeetingId = "1234567890"
+                }
+            );
         var logger = Substitute.For<ILogger<GetSettingsFunction>>();
         // Execute
         var objectSerializer = Substitute.For<ObjectSerializer>();
@@ -84,22 +95,13 @@ public class GetSettingsFunctionTests
         );
         var serviceCollection = new ServiceCollection();
         _ = serviceCollection.AddSingleton(workerOptions);
-        var functionContext = Substitute.For<FunctionContext>();
-        _ = functionContext.InstanceServices.Returns(serviceCollection.BuildServiceProvider());
-        var responseData = Substitute.For<HttpResponseData>(functionContext);
-        _ = responseData.Headers.Returns([]);
-        _ = responseData.Body.Returns(new MemoryStream());
-        var requestData = Substitute.For<HttpRequestData>(functionContext);
+        var requestData = Substitute.For<HttpRequest>();
         _ = requestData.Headers.Returns(
-            new HttpHeadersCollection(
-                [
-                    new KeyValuePair<string, string>("X-MS-CLIENT-PRINCIPAL-ID", "48d31887-5fad-4d73-a9f5-3c356e68a038")
-                ]
-            )
+            new HeaderDictionary()
+            {
+                ["X-MS-CLIENT-PRINCIPAL-ID"] = "48d31887-5fad-4d73-a9f5-3c356e68a038"
+            }
         );
-        _ = requestData
-            .CreateResponse()
-            .Returns(responseData);
         var requestBody = new GetSettingsRequest()
         {
             ChannelId = "19:1234567890",
@@ -115,9 +117,9 @@ public class GetSettingsFunctionTests
             requestData,
             requestBody,
             default
-        );
+        ) as OkObjectResult;
         // Assert
-        Assert.That(actual.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.That(actual?.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
     }
 
 }

@@ -22,10 +22,10 @@ public record GetSettingsResponse
     public bool IsOrganizer { get; set; } = false;
 
     [JsonPropertyName("channelId")]
-    public string? ChannelId { get; set; }
+    public required string ChannelId { get; set; }
 
     [JsonPropertyName("meetingId")]
-    public string? MeetingId { get; set; }
+    public required string MeetingId { get; set; }
 
     [JsonPropertyName("meetingStartSchedule")]
     public int MeetingStartSchedule { get; set; } = -1;

@@ -6,7 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +15,16 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Extensions;
 
-public static partial class HttpRequestDataExtensions
+public static partial class HttpRequestExtensions
 {
 
-    public static string? GetUserId(this HttpRequestData target)
+    public static string? GetUserId(this HttpRequest target)
     {
-        if (target.Headers.TryGetValues("X-MS-CLIENT-PRINCIPAL-ID", out var headerValues) is false)
+        if (target.Headers.TryGetValue("X-MS-CLIENT-PRINCIPAL-ID", out var headerValues))
         {
-            return null;
+            return headerValues.Single();
         }
-        return headerValues.Single();
+        return null;
     }
 
 }
