@@ -19,14 +19,19 @@
     <RootNamespace>Karamem0.Commistant</RootNamespace>
     <Nullable>enable</Nullable>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <UserSecretsId>2eb68d98-313d-4456-9ea3-adf0ea7044d9</UserSecretsId>
+    <UserSecretsId>5d582e4c-6872-4797-9dc7-046a6fc6abff</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
+    <PackageReference Include="Aspire.Hosting.Azure.CognitiveServices" Version="9.3.1" />
+    <PackageReference Include="Aspire.Hosting.Azure.Functions" Version="9.3.1-preview.1.25305.6" />
     <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.3.1" />
-    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.3.1" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Karamem0.Commistant.Function\Karamem0.Commistant.Function.csproj" />
+    <ProjectReference Include="..\Karamem0.Commistant.Web\Karamem0.Commistant.Web.csproj" />
   </ItemGroup>
 
 </Project>

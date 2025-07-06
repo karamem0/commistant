@@ -27,14 +27,14 @@ using System.Web;
 namespace Karamem0.Commistant.Functions;
 
 public class GetSettingsFunction(
-    IBlobService blobService,
+    IBlobsService blobsService,
     IBotConnectorService botConnectorService,
     IMapper mapper,
     ILogger<GetSettingsFunction> logger
 )
 {
 
-    private readonly IBlobService blobService = blobService;
+    private readonly IBlobsService blobsService = blobsService;
 
     private readonly IBotConnectorService botConnectorService = botConnectorService;
 
@@ -54,7 +54,7 @@ public class GetSettingsFunction(
             this.logger.FunctionExecuting();
             var responseBody = this.mapper.Map<GetSettingsResponse>(requestBody);
             var blobName = HttpUtility.UrlEncode($"{requestBody.ChannelId}/conversations/{requestBody.MeetingId}");
-            var blobContent = await this.blobService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
+            var blobContent = await this.blobsService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
             _ = blobContent.Data ?? throw new InvalidOperationException();
             var conversationReference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
             _ = conversationReference?.ServiceUrl ?? throw new InvalidOperationException();

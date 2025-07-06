@@ -6,12 +6,10 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Azure.Identity;
-using Azure.Storage;
+using Azure.Storage.Blobs;
 using Karamem0.Commistant.Adapters;
 using Karamem0.Commistant.Bots;
 using Karamem0.Commistant.Dialogs;
-using Karamem0.Commistant.Options;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.Dialogs;
@@ -22,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,20 +35,15 @@ public static class ConfigureServices
         _ = services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
         _ = services.AddSingleton<IStorage>(provider =>
             {
-                var options = configuration
-                    .GetSection("AzureStorageBlobs")
-                    .Get<AzureStorageBlobsOptions>();
-                _ = options ?? throw new InvalidOperationException();
-                return new BlobsStorage(
-                    new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),
-                    new DefaultAzureCredential(
-                        new DefaultAzureCredentialOptions()
-                        {
-                            ManagedIdentityClientId = options.ClientId
-                        }
-                    ),
-                    new StorageTransferOptions()
+                var storage = (BlobsStorage?)Activator.CreateInstance(
+                    typeof(BlobsStorage),
+                    BindingFlags.NonPublic | BindingFlags.Instance,
+                    null,
+                    [provider.GetRequiredService<BlobContainerClient>(), null],
+                    null
                 );
+                _ = storage ?? throw new InvalidOperationException();
+                return storage;
             }
         );
         _ = services.AddSingleton<ConversationState>();

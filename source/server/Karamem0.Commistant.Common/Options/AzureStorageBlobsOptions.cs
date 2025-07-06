@@ -17,9 +17,9 @@ namespace Karamem0.Commistant.Options;
 public record AzureStorageBlobsOptions
 {
 
-    public Uri? Endpoint { get; set; }
+    public required Uri Endpoint { get; set; }
 
-    public string? ContainerName { get; set; }
+    public required string ContainerName { get; set; }
 
     public string? ClientId { get; set; }
 

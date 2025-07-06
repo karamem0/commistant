@@ -21,7 +21,7 @@ using System.Web;
 
 namespace Karamem0.Commistant.Services;
 
-public interface IBlobService
+public interface IBlobsService
 {
 
     IAsyncEnumerable<string> GetBlobNamesAsync(CancellationToken cancellationToken = default);
@@ -43,13 +43,14 @@ public interface IBlobService
 
 }
 
-public class BlobService(BlobContainerClient blobContainerClient) : IBlobService
+public class BlobsService(BlobContainerClient blobContainerClient) : IBlobsService
 {
 
     private readonly BlobContainerClient blobContainerClient = blobContainerClient;
 
     public async IAsyncEnumerable<string> GetBlobNamesAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        _ = this.blobContainerClient.CreateIfNotExists(cancellationToken: cancellationToken);
         await foreach (var blobItem in this.blobContainerClient.GetBlobsAsync(cancellationToken: cancellationToken))
         {
             yield return blobItem.Name;

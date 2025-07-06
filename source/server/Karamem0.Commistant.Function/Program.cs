@@ -21,30 +21,31 @@ using System.Threading.Tasks;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
-_ = builder.ConfigureFunctionsWebApplication();
-
 var environmentName = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT");
 var configuration = builder.Configuration;
-_ = configuration.AddJsonFile(
+configuration.AddJsonFile(
     "appsettings.json",
     true,
     true
 );
-_ = configuration.AddJsonFile(
+configuration.AddJsonFile(
     $"appsettings.{environmentName}.json",
     true,
     true
 );
-_ = configuration.AddUserSecrets(typeof(Program).Assembly, true);
-_ = configuration.AddEnvironmentVariables();
+configuration.AddUserSecrets(typeof(Program).Assembly, true);
+configuration.AddEnvironmentVariables();
+
+builder.ConfigureFunctionsWebApplication();
+builder.AddAzureBlobContainerClient(configuration);
 
 var services = builder.Services;
-_ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
-_ = services.AddApplicationInsightsTelemetryWorkerService();
-_ = services.ConfigureFunctionsApplicationInsights();
-_ = services.ConfigureOptions(configuration);
-_ = services.AddServices(configuration);
-_ = services.AddCommands();
+services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
+services.AddApplicationInsightsTelemetryWorkerService();
+services.ConfigureFunctionsApplicationInsights();
+services.ConfigureOptions(configuration);
+services.AddServices(configuration);
+services.AddCommands();
 
 var app = builder.Build();
 

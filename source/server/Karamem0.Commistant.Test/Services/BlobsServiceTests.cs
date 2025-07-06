@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Services.Tests;
 
 [Category("Karamem0.Commistant.Services")]
-public class BlobServiceTests
+public class BlobsServiceTests
 {
 
     [Test()]
@@ -47,7 +47,7 @@ public class BlobServiceTests
                 )
             );
         // Execute
-        var target = new BlobService(blobContainerClient);
+        var target = new BlobsService(blobContainerClient);
         var actual = await target
             .GetBlobNamesAsync()
             .ToListAsync();
@@ -77,7 +77,7 @@ public class BlobServiceTests
             .GetBlobClient(Arg.Any<string>())
             .Returns(blobClient);
         // Execute
-        var target = new BlobService(blobContainerClient);
+        var target = new BlobsService(blobContainerClient);
         var actual = await target.GetObjectAsync<string>("item1");
         // Assert
         Assert.That(actual?.Data, Is.EqualTo("value1"));

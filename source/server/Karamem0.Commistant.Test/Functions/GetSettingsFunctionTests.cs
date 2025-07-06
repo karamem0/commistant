@@ -36,8 +36,8 @@ public class GetSettingsFunctionTests
     public async Task RunAsync_Success()
     {
         // Setup
-        var blobService = Substitute.For<IBlobService>();
-        _ = blobService
+        var blobsService = Substitute.For<IBlobsService>();
+        _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>())
             .Returns(
                 new BlobContent<Dictionary<string, object?>>()
@@ -108,7 +108,7 @@ public class GetSettingsFunctionTests
             MeetingId = "1234567890"
         };
         var target = new GetSettingsFunction(
-            blobService,
+            blobsService,
             botConnectorService,
             mapper,
             logger

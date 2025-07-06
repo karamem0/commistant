@@ -15,6 +15,8 @@ using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Rest;
+using OpenAI;
+using OpenAI.Chat;
 using QRCoder;
 using System;
 using System.Collections.Generic;
@@ -39,22 +41,14 @@ public static class ConfigureServices
     {
         _ = services.AddSingleton(provider =>
             {
+                var client = provider.GetRequiredService<OpenAIClient>();
                 var options = configuration
-                    .GetSection("AzureStorageBlobs")
-                    .Get<AzureStorageBlobsOptions>();
+                    .GetSection("AzureOpenAI")
+                    .Get<AzureOpenAIOptions>();
                 _ = options ?? throw new InvalidOperationException();
-                return new BlobContainerClient(
-                    new Uri(options.Endpoint ?? throw new InvalidOperationException(), options.ContainerName),
-                    new DefaultAzureCredential(
-                        new DefaultAzureCredentialOptions()
-                        {
-                            ManagedIdentityClientId = options.ClientId
-                        }
-                    )
-                );
+                return client.GetChatClient(options.DeploymentName);
             }
         );
-        _ = services.AddScoped<IBlobService, BlobService>();
         _ = services.AddSingleton<ServiceClientCredentials>(provider =>
             {
                 var options = configuration
@@ -64,32 +58,13 @@ public static class ConfigureServices
                 return new MicrosoftAppCredentials(options.MicrosoftAppId, options.MicrosoftAppPassword);
             }
         );
+        _ = services.AddSingleton<QRCodeGenerator>();
+        _ = services.AddScoped<IBlobsService, BlobsService>();
         _ = services.AddScoped<IBotConnectorFactory, BotConnectorFactory>();
         _ = services.AddScoped<IBotConnectorService, BotConnectorService>();
         _ = services.AddScoped<IDateTimeService, DateTimeService>();
-        _ = services.AddSingleton<QRCodeGenerator>();
         _ = services.AddScoped<IQRCodeService, QRCodeService>();
-        _ = services.AddSingleton(provider =>
-            {
-                var options = configuration
-                    .GetSection("AzureOpenAI")
-                    .Get<AzureOpenAIOptions>();
-                _ = options ?? throw new InvalidOperationException();
-                var client = new AzureOpenAIClient(
-                    options.Endpoint,
-                    new DefaultAzureCredential(
-                        new DefaultAzureCredentialOptions()
-                        {
-                            ManagedIdentityClientId = options.ClientId
-                        }
-                    )
-                );
-                return client.GetChatClient(options.ModelName);
-            }
-        );
         _ = services.AddScoped<IOpenAIService, OpenAIService>();
-        _ = services.AddSingleton<QRCodeGenerator>();
-        _ = services.AddScoped<IQRCodeService, QRCodeService>();
         return services;
     }
 

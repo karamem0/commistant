@@ -31,8 +31,8 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Success()
     {
         // Setup
-        var blobService = Substitute.For<IBlobService>();
-        _ = blobService
+        var blobsService = Substitute.For<IBlobsService>();
+        _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
             .Returns(
                 new List<string>()
@@ -40,7 +40,7 @@ public class ExecuteCommandFunctionTests
                     "BotState"
                 }.ToAsyncEnumerable()
             );
-        _ = blobService
+        _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(
                 new BlobContent<Dictionary<string, object?>>()
@@ -60,7 +60,7 @@ public class ExecuteCommandFunctionTests
         var logger = Substitute.For<ILogger<ExecuteCommandFunction>>();
         // Execute
         var target = new ExecuteCommandFunction(
-            blobService,
+            blobsService,
             commandSet,
             logger
         );
@@ -75,8 +75,8 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Failure_WhenDataIsNull()
     {
         // Setup
-        var blobService = Substitute.For<IBlobService>();
-        _ = blobService
+        var blobsService = Substitute.For<IBlobsService>();
+        _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
             .Returns(
                 new List<string>()
@@ -84,7 +84,7 @@ public class ExecuteCommandFunctionTests
                     "BotState"
                 }.ToAsyncEnumerable()
             );
-        _ = blobService
+        _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(
                 new BlobContent<Dictionary<string, object?>>()
@@ -100,7 +100,7 @@ public class ExecuteCommandFunctionTests
         var logger = Substitute.For<ILogger<ExecuteCommandFunction>>();
         // Execute
         var target = new ExecuteCommandFunction(
-            blobService,
+            blobsService,
             commandSet,
             logger
         );
@@ -115,8 +115,8 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Failure_WhenCommandSettingsIsNull()
     {
         // Setup
-        var blobService = Substitute.For<IBlobService>();
-        _ = blobService
+        var blobsService = Substitute.For<IBlobsService>();
+        _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
             .Returns(
                 new List<string>()
@@ -124,7 +124,7 @@ public class ExecuteCommandFunctionTests
                     "BotState"
                 }.ToAsyncEnumerable()
             );
-        _ = blobService
+        _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(
                 new BlobContent<Dictionary<string, object?>>()
@@ -144,7 +144,7 @@ public class ExecuteCommandFunctionTests
         var logger = Substitute.For<ILogger<ExecuteCommandFunction>>();
         // Execute
         var target = new ExecuteCommandFunction(
-            blobService,
+            blobsService,
             commandSet,
             logger
         );
@@ -159,8 +159,8 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Failure_WhenConversationReferenceIsNull()
     {
         // Setup
-        var blobService = Substitute.For<IBlobService>();
-        _ = blobService
+        var blobsService = Substitute.For<IBlobsService>();
+        _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
             .Returns(
                 new List<string>()
@@ -168,7 +168,7 @@ public class ExecuteCommandFunctionTests
                     "BotState"
                 }.ToAsyncEnumerable()
             );
-        _ = blobService
+        _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(
                 new BlobContent<Dictionary<string, object?>>()
@@ -188,7 +188,7 @@ public class ExecuteCommandFunctionTests
         var logger = Substitute.For<ILogger<ExecuteCommandFunction>>();
         // Execute
         var target = new ExecuteCommandFunction(
-            blobService,
+            blobsService,
             commandSet,
             logger
         );

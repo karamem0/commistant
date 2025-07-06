@@ -25,13 +25,13 @@ using System.Threading.Tasks;
 namespace Karamem0.Commistant.Functions;
 
 public class ExecuteCommandFunction(
-    IBlobService blobService,
+    IBlobsService blobsService,
     ICommandSet commandSet,
     ILogger<ExecuteCommandFunction> logger
 )
 {
 
-    private readonly IBlobService blobService = blobService;
+    private readonly IBlobsService blobsService = blobsService;
 
     private readonly ICommandSet commandSet = commandSet;
 
@@ -44,9 +44,9 @@ public class ExecuteCommandFunction(
         try
         {
             this.logger.FunctionExecuting();
-            await foreach (var blobName in this.blobService.GetBlobNamesAsync(cancellationToken))
+            await foreach (var blobName in this.blobsService.GetBlobNamesAsync(cancellationToken))
             {
-                var blobContent = await this.blobService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
+                var blobContent = await this.blobsService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
                 if (blobContent.Data is null)
                 {
                     continue;
@@ -67,7 +67,7 @@ public class ExecuteCommandFunction(
                     commandContext.ExecuteCommandAsync(nameof(MeetingEndCommand), cancellationToken),
                     commandContext.ExecuteCommandAsync(nameof(MeetingRunCommand), cancellationToken)
                 );
-                await this.blobService.SetObjectAsync(
+                await this.blobsService.SetObjectAsync(
                     blobName,
                     blobContent,
                     cancellationToken

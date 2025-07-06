@@ -21,28 +21,32 @@ using System.Threading.Tasks;
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
+
+builder.AddAzureOpenAIClient(configuration);
+builder.AddAzureBlobContainerClient(configuration);
+
 var services = builder.Services;
-_ = services.AddHttpClient();
-_ = services
+services.AddHttpClient();
+services
     .AddControllers()
     .AddNewtonsoftJson();
-_ = services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
-_ = services.AddApplicationInsightsTelemetry();
-_ = services.ConfigureOptions(configuration);
-_ = services.AddServices(configuration);
-_ = services.AddBots(configuration);
-_ = services.AddDialogs();
+services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
+services.AddApplicationInsightsTelemetry();
+services.ConfigureOptions(configuration);
+services.AddServices(configuration);
+services.AddBots(configuration);
+services.AddDialogs();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
-    _ = app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();
 }
-_ = app.UseDefaultFiles();
-_ = app.UseStaticFiles();
-_ = app.UseWebSockets();
-_ = app.UseRouting();
-_ = app.MapControllers();
-_ = app.MapFallbackToFile("index.html");
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseWebSockets();
+app.UseRouting();
+app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 await app.RunAsync();

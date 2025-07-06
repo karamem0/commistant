@@ -17,8 +17,8 @@ namespace Karamem0.Commistant.Options;
 public record BotFrameworkOptions
 {
 
-    public string? MicrosoftAppId { get; set; }
+    public required string MicrosoftAppId { get; set; }
 
-    public string? MicrosoftAppPassword { get; set; }
+    public required string MicrosoftAppPassword { get; set; }
 
 }

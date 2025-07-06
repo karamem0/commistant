@@ -17,9 +17,9 @@ namespace Karamem0.Commistant.Options;
 public record AzureOpenAIOptions
 {
 
-    public Uri? Endpoint { get; set; }
+    public required Uri Endpoint { get; set; }
 
-    public string? ModelName { get; set; }
+    public required string DeploymentName { get; set; }
 
     public string? ClientId { get; set; }
 

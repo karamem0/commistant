@@ -8,7 +8,8 @@
 
 import React from 'react';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Text } from '@fluentui/react-components';
 import { css } from '@emotion/react';
 import messages from '../messages';
@@ -16,18 +17,34 @@ import { useTheme } from '../../../providers/ThemeProvider';
 
 function ConfigurePage() {
 
+  const intl = useIntl();
   const { theme } = useTheme();
 
   return (
-    <div
-      css={css`
-        min-height: 100vh;
-        background-color: ${theme.colorNeutralBackground1};
-      `}>
-      <Text>
-        <FormattedMessage {...messages.AppDescription} />
-      </Text>
-    </div>
+    <React.Fragment>
+      <HelmetProvider>
+        <Helmet>
+          <meta
+            content={intl.formatMessage(messages.AppCreator)}
+            name="author" />
+          <meta
+            content={intl.formatMessage(messages.AppDescription)}
+            name="description" />
+          <title>
+            {intl.formatMessage(messages.AppTitle)}
+          </title>
+        </Helmet>
+      </HelmetProvider>
+      <div
+        css={css`
+          min-height: 100vh;
+          background-color: ${theme.colorNeutralBackground1};
+        `}>
+        <Text>
+          <FormattedMessage {...messages.AppDescription} />
+        </Text>
+      </div>
+    </React.Fragment>
   );
 
 }
