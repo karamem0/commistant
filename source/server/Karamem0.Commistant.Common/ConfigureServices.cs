@@ -6,9 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Azure.AI.OpenAI;
-using Azure.Identity;
-using Azure.Storage.Blobs;
 using Karamem0.Commistant.Options;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Connector.Authentication;
@@ -16,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Rest;
 using OpenAI;
-using OpenAI.Chat;
 using QRCoder;
 using System;
 using System.Collections.Generic;

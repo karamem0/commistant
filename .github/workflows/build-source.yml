@@ -1,26 +1,20 @@
 name: Build source
 
-on:
-  workflow_call:
-    inputs:
-      environment:
-        required: true
-        type: string
+on: workflow_call
 
 permissions: {}
 
 jobs:
   run:
     name: Run
-    environment: ${{inputs.environment}}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repos
         uses: actions/checkout@v4
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -29,7 +23,7 @@ jobs:
         shell: pwsh
         run: |
           $content = Get-Content -Path ${{env.FILE_PATH}}
-          $content = $content -Replace "{{APP_CLIENT_ID}}", "${{vars.APP_CLIENT_ID}}"
+          $content = $content -Replace "{{MICROSOFT_APP_ID}}", "${{vars.MICROSOFT_APP_ID}}"
           Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
         env:
           FILE_PATH: source/client/public/.well-known/microsoft-identity-association.json
@@ -37,8 +31,7 @@ jobs:
         shell: pwsh
         run: |
           $content = Get-Content -Path ${{env.FILE_PATH}}
-          $content = $content -Replace "{{WEB_HOST_NAME}}", "${{vars.WEB_HOST_NAME}}"
-          $content = $content -Replace "{{FUNCTION_HOST_NAME}}", "${{vars.FUNCTION_HOST_NAME}}"
+          $content = $content -Replace "{{AZURE_FUNCTION_APP_DOMAIN_NAME}}", "${{vars.AZURE_FUNCTION_APP_DOMAIN_NAME}}"
           $content = $content -Replace "{{TELEMETRY_CONNECTION_STRING}}", "${{vars.TELEMETRY_CONNECTION_STRING}}"
           Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
         env:

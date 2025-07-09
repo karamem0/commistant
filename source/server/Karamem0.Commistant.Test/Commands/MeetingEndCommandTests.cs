@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using AutoMapper;
+using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Schema;
@@ -58,17 +60,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await command.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(true));
+        Assert.That(commandSettings.MeetingEndSended, Is.True);
         _ = connectorClientService
             .Received()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -111,17 +120,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await command.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(true));
+        Assert.That(commandSettings.MeetingEndSended, Is.True);
         _ = connectorClientService
             .Received()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -164,17 +180,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(false));
+        Assert.That(commandSettings.MeetingEndSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -217,17 +240,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(true));
+        Assert.That(commandSettings.MeetingEndSended, Is.True);
         _ = connectorClientService
             .DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -270,17 +300,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(true));
+        Assert.That(commandSettings.MeetingEndSended, Is.True);
         _ = connectorClientService
             .DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -323,17 +360,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(false));
+        Assert.That(commandSettings.MeetingEndSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());
@@ -376,17 +420,24 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await command.ExecuteAsync(commandSettings, conversationReference);
         // Assert
-        Assert.That(commandSettings.MeetingEndSended, Is.EqualTo(false));
+        Assert.That(commandSettings.MeetingEndSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
             .SendActivityAsync(new Uri("https://www.example.com/"), Arg.Any<Activity>());

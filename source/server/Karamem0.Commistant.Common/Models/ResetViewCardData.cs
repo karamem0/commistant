@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public record AdaptiveCardResponseData
+public record ResetViewCardData
 {
 
-    public string? Value { get; set; }
+    public required string Value { get; set; }
 
 }

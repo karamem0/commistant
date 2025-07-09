@@ -52,13 +52,12 @@ public class BlobsServiceTests
             .GetBlobNamesAsync()
             .ToListAsync();
         // Assert
-        Assert.Multiple(() =>
-            {
-                Assert.That(actual[0], Is.EqualTo("item1"));
-                Assert.That(actual[1], Is.EqualTo("item2"));
-                Assert.That(actual[2], Is.EqualTo("item3"));
-            }
-        );
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(actual[0], Is.EqualTo("item1"));
+            Assert.That(actual[1], Is.EqualTo("item2"));
+            Assert.That(actual[2], Is.EqualTo("item3"));
+        }
     }
 
     [Test()]

@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using AutoMapper;
+using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Schema;
@@ -57,12 +59,19 @@ public class MeetingRunCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingRunCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingRunCommand>>();
         // Execute
         var target = new MeetingRunCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
@@ -108,12 +117,19 @@ public class MeetingRunCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingRunCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingRunCommand>>();
         // Execute
         var target = new MeetingRunCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
@@ -159,12 +175,19 @@ public class MeetingRunCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingRunCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingRunCommand>>();
         // Execute
         var target = new MeetingRunCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
@@ -210,12 +233,19 @@ public class MeetingRunCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingRunCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingRunCommand>>();
         // Execute
         var target = new MeetingRunCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);
@@ -261,12 +291,19 @@ public class MeetingRunCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingRunCommand.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingRunCommand>>();
         // Execute
         var target = new MeetingRunCommand(
             connectorClientService,
             dateTimeService,
-            qrCodeService,
+            mapper,
             logger
         );
         await target.ExecuteAsync(commandSettings, conversationReference);

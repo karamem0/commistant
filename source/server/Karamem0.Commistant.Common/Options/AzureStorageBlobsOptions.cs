@@ -21,6 +21,4 @@ public record AzureStorageBlobsOptions
 
     public required string ContainerName { get; set; }
 
-    public string? ClientId { get; set; }
-
 }

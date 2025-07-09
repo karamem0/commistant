@@ -26,6 +26,14 @@ public static class Constants
 
     public const string ResetCommand = "初期化";
 
+    public const string SubmitButton = "Submit";
+
+    public const string CancelButton = "Cancel";
+
+    public const string YesButton = "Yes";
+
+    public const string NoButton = "No";
+
     public static readonly ReadOnlyCollection<int> MeetingStartSchedules = Array.AsReadOnly([0, 5, 10, 15]);
 
     public static readonly ReadOnlyCollection<int> MeetingEndSchedules = Array.AsReadOnly([0, 5, 10, 15]);

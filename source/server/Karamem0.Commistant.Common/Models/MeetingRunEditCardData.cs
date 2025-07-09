@@ -14,15 +14,13 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Models;
 
-public record AdaptiveCardMeetingData
+public record MeetingRunEditCardData
 {
 
-    public string Schedule { get; set; } = "";
+    public required string Schedule { get; set; }
 
-    public string Message { get; set; } = "";
+    public required string Message { get; set; }
 
-    public string Url { get; set; } = "";
-
-    public string QrCode { get; set; } = "";
+    public required string Url { get; set; }
 
 }

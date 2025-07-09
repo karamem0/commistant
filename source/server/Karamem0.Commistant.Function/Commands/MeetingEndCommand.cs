@@ -7,10 +7,12 @@
 //
 
 using AdaptiveCards;
+using AutoMapper;
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Karamem0.Commistant.Templates;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
@@ -26,7 +28,7 @@ namespace Karamem0.Commistant.Commands;
 public class MeetingEndCommand(
     IBotConnectorService botConnectorService,
     IDateTimeService dateTimeService,
-    IQRCodeService qrCodeService,
+    IMapper mapper,
     ILogger<MeetingEndCommand> logger
 ) : Command()
 {
@@ -35,7 +37,7 @@ public class MeetingEndCommand(
 
     private readonly IDateTimeService dateTimeService = dateTimeService;
 
-    private readonly IQRCodeService qrCodeService = qrCodeService;
+    private readonly IMapper mapper = mapper;
 
     private readonly ILogger logger = logger;
 
@@ -79,46 +81,13 @@ public class MeetingEndCommand(
                 message: commandSettings.MeetingEndMessage,
                 url: commandSettings.MeetingEndUrl
             );
-            var card = new AdaptiveCard("1.3");
-            if (string.IsNullOrEmpty(commandSettings.MeetingEndMessage) is false)
-            {
-                card.Body.Add(
-                    new AdaptiveTextBlock()
-                    {
-                        Text = commandSettings.MeetingEndMessage,
-                        Wrap = true
-                    }
-                );
-            }
-            if (Uri.TryCreate(
-                    commandSettings.MeetingEndUrl,
-                    UriKind.Absolute,
-                    out var url
-                ))
-            {
-                var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
-                var base64 = Convert.ToBase64String(bytes);
-                card.Body.Add(
-                    new AdaptiveImage()
-                    {
-                        AltText = url.ToString(),
-                        Size = AdaptiveImageSize.Stretch,
-                        Url = new Uri($"data:image/png;base64,{base64}")
-                    }
-                );
-                card.Actions.Add(
-                    new AdaptiveOpenUrlAction()
-                    {
-                        Title = "URL を開く",
-                        Url = url,
-                    }
-                );
-            }
+            var notifyCardData = this.mapper.Map<MeetingEndNotifyCardData>(commandSettings);
+            var notifyCard = MeetingEndNotifyCard.Create(notifyCardData);
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,
-                    Content = card
+                    Content = notifyCard
                 }
             );
             activity.From = conversationReference.Bot;
@@ -139,6 +108,35 @@ public class MeetingEndCommand(
             );
         }
         commandSettings.MeetingEndSended = true;
+    }
+
+    public class AutoMapperProfile : Profile
+    {
+
+        public AutoMapperProfile(IQRCodeService qrCodeService)
+        {
+            _ = this
+                .CreateMap<CommandSettings, MeetingEndNotifyCardData>()
+                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.MeetingEndSchedule))
+                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingEndMessage ?? ""))
+                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingEndUrl ?? ""))
+                .ForMember(d => d.QrCode, o => o.MapFrom(s => ""))
+                .AfterMap(async (s, d) =>
+                    {
+                        if (Uri.TryCreate(
+                                s.MeetingEndUrl,
+                                UriKind.Absolute,
+                                out var url
+                            ))
+                        {
+                            var bytes = await qrCodeService.CreateAsync(url.ToString());
+                            var base64 = Convert.ToBase64String(bytes);
+                            d.QrCode = base64;
+                        }
+                    }
+                );
+        }
+
     }
 
 }

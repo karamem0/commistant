@@ -17,31 +17,32 @@ using System.Threading.Tasks;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var openai = builder.AddAzureOpenAI("openai")
-    .AsExisting(
-        builder.AddParameter("AzureOpenAIResourceName"),
-        builder.AddParameter("AzureOpenAIResourceGroupName")
-    );
+var openAIName = builder.AddParameter("AzureOpenAIName");
+var openAIResourceGroup = builder.AddParameter("AzureOpenAIResourceGroup");
+var openAI = builder
+    .AddAzureOpenAI("openai")
+    .AsExisting(openAIName, openAIResourceGroup);
 
-var storage = builder
+var storageAccountName = builder.AddParameter("AzureStorageAccountName");
+var storageAccountResourceGroup = builder.AddParameter("AzureStorageAccountResourceGroup");
+var storageAccount = builder
     .AddAzureStorage("storage")
-    .RunAsEmulator();
-var blobs = storage.AddBlobs("blobs");
-var container = blobs.AddBlobContainer("container", "azure-bot-states");
+    .AsExisting(storageAccountName, storageAccountResourceGroup);
+var storageBlobs = storageAccount.AddBlobs("blobs");
+var storageContainer = storageBlobs.AddBlobContainer("container", "azure-bot-states");
 
 var functionApp = builder
     .AddAzureFunctionsProject<Projects.Karamem0_Commistant_Function>("function-app")
-    .WithHostStorage(storage)
-    .WithReference(container)
-    .WaitFor(container)
-    .WithEnvironment("AZURE_FUNCTIONS_ENVIRONMENT", builder.Environment.EnvironmentName);
+    .WithReference(storageContainer)
+    .WaitFor(storageContainer)
+    .WithHostStorage(storageAccount);
 
 var webApp = builder
     .AddProject<Projects.Karamem0_Commistant_Web>("web-app")
-    .WithReference(openai)
-    .WaitFor(openai)
-    .WithReference(container)
-    .WaitFor(container);
+    .WithReference(openAI)
+    .WaitFor(openAI)
+    .WithReference(storageContainer)
+    .WaitFor(storageContainer);
 
 var app = builder.Build();
 

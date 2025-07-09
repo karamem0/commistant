@@ -21,6 +21,4 @@ public record AzureOpenAIOptions
 
     public required string DeploymentName { get; set; }
 
-    public string? ClientId { get; set; }
-
 }

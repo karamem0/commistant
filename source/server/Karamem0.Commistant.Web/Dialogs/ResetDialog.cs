@@ -7,10 +7,11 @@
 //
 
 using AdaptiveCards;
+using AutoMapper;
 using Karamem0.Commistant.Extensions;
-using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Templates;
 using Karamem0.Commistant.Validators;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
@@ -26,10 +27,16 @@ using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs;
 
-public class ResetDialog(ConversationState conversationState, ILogger<ResetDialog> logger) : ComponentDialog
+public class ResetDialog(
+    ConversationState conversationState,
+    IMapper mapper,
+    ILogger<ResetDialog> logger
+) : ComponentDialog
 {
 
     private readonly ConversationState conversationState = conversationState;
+
+    private readonly IMapper mapper = mapper;
 
     private readonly ILogger logger = logger;
 
@@ -50,12 +57,13 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
 
     private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
-        var card = await AdaptiveCardHelper.CreateEditCardAsync("Reset");
+        var editCardData = new ResetEditCardData();
+        var editCard = ResetEditCard.Create(editCardData);
         var activity = MessageFactory.Attachment(
             new Attachment()
             {
                 ContentType = AdaptiveCard.ContentType,
-                Content = card
+                Content = editCard
             }
         );
         this.logger.SettingsResetting(conversationId: stepContext.Context.Activity.Id);
@@ -72,14 +80,15 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
     private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
-        if (value is null)
+        var response = value.ToObject<ResetResponse>();
+        if (response is null)
         {
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
-        if (value.Value<string>("Button") == "Yes")
+        if (response.Button == Constants.YesButton)
         {
-            var accessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
-            await accessor.SetAsync(
+            var commandSettingsAccessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+            await commandSettingsAccessor.SetAsync(
                 stepContext.Context,
                 new(),
                 cancellationToken
@@ -87,34 +96,47 @@ public class ResetDialog(ConversationState conversationState, ILogger<ResetDialo
             this.logger.SettingsReseted(conversationId: stepContext.Context.Activity.Id);
             _ = await stepContext.Context.SendSettingsResetedAsync(cancellationToken);
         }
-        if (value.Value<string>("Button") == "No")
+        if (response.Button == Constants.NoButton)
         {
             this.logger.SettingsCancelled(conversationId: stepContext.Context.Activity.Id);
             _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
-            var data = new AdaptiveCardResponseData()
-            {
-                Value = value.Value<string>("Button") switch
-                {
-                    "Yes" => "はい",
-                    "No" => "いいえ",
-                    _ => ""
-                }
-            };
-            var card = await AdaptiveCardHelper.CreateViewCardAsync("Reset", data);
+            var viewCardData = this.mapper.Map<ResetViewCardData>(response);
+            var viewCard = ResetViewCard.Create(viewCardData);
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,
-                    Content = card
+                    Content = viewCard
                 }
             );
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+    }
+
+    public class AutoMapperProfile : Profile
+    {
+
+        public AutoMapperProfile()
+        {
+            _ = this
+                .CreateMap<ResetResponse, ResetViewCardData>()
+                .ForMember(
+                    d => d.Value,
+                    o => o.MapFrom((s, d) => s.Button switch
+                        {
+                            Constants.YesButton => "はい",
+                            Constants.NoButton => "いいえ",
+                            _ => ""
+                        }
+                    )
+                );
+        }
+
     }
 
 }

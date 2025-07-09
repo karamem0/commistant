@@ -7,7 +7,6 @@
 //
 
 using Karamem0.Commistant;
-using Karamem0.Commistant.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,27 +25,27 @@ builder.AddAzureOpenAIClient(configuration);
 builder.AddAzureBlobContainerClient(configuration);
 
 var services = builder.Services;
-services.AddHttpClient();
-services
+_ = services.AddHttpClient();
+_ = services
     .AddControllers()
     .AddNewtonsoftJson();
-services.AddAutoMapper(config => config.AddProfile<AutoMapperProfile>());
-services.AddApplicationInsightsTelemetry();
-services.ConfigureOptions(configuration);
-services.AddServices(configuration);
-services.AddBots(configuration);
-services.AddDialogs();
+_ = services.AddApplicationInsightsTelemetry();
+_ = services.ConfigureOptions(configuration);
+_ = services.AddAutoMapperProfiles();
+_ = services.AddServices(configuration);
+_ = services.AddBots(configuration);
+_ = services.AddDialogs();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    _ = app.UseDeveloperExceptionPage();
 }
-app.UseDefaultFiles();
-app.UseStaticFiles();
-app.UseWebSockets();
-app.UseRouting();
-app.MapControllers();
-app.MapFallbackToFile("index.html");
+_ = app.UseDefaultFiles();
+_ = app.UseStaticFiles();
+_ = app.UseWebSockets();
+_ = app.UseRouting();
+_ = app.MapControllers();
+_ = app.MapFallbackToFile("index.html");
 
 await app.RunAsync();

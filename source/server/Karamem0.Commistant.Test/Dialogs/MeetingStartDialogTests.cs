@@ -7,9 +7,11 @@
 //
 
 using AutoMapper;
+using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Testing;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
@@ -34,37 +36,61 @@ public class MeetingStartDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var qrCodeService = Substitute.For<IQRCodeService>();
-        var mapper = Substitute.For<IMapper>();
-        _ = mapper
-            .Map(Arg.Any<CommandOptions?>(), Arg.Any<CommandSettings>())
-            .Returns(
-                new CommandSettings()
-                {
-                    MeetingStartSchedule = 5,
-                    MeetingStartMessage = "Hello world!",
-                    MeetingStartUrl = "https://www.example.com"
-                }
-            );
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingStartDialog.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingStartDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
-                ["Button"] = "Submit",
-                ["Schedule"] = "5",
-                ["Message"] = "Hello world!",
-                ["Url"] = "https://www.example.com"
+                ["button"] = "Submit",
+                ["schedule"] = "5",
+                ["message"] = "Hello world!",
+                ["url"] = "https://www.example.com"
             }
         );
         // Execute
-        var target = new MeetingStartDialog(
-            conversationState,
-            qrCodeService,
-            mapper,
-            logger
+        var dialog = new ComponentDialog();
+        _ = dialog.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    new WaterfallStep(async (stepContext, cancellationToken) =>
+                        {
+                            var options = new CommandOptions()
+                            {
+                                Type = Constants.MeetingStartCommand,
+                                Value = new CommandOptionsValue()
+                                {
+                                    Enabled = true,
+                                    Schedule = 5,
+                                    Message = "Hello world!",
+                                    Url = "https://www.example.com"
+                                }
+                            };
+                            return await stepContext.BeginDialogAsync(
+                                nameof(MeetingStartDialog),
+                                options,
+                                cancellationToken
+                            );
+                        }
+                    )
+                ]
+            )
         );
-        var client = new DialogTestClient(Channels.Msteams, target);
+        _ = dialog.AddDialog(
+            new MeetingStartDialog(
+                conversationState,
+                mapper,
+                logger
+            )
+        );
+        var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
             new Activity(
@@ -74,14 +100,14 @@ public class MeetingStartDialogTests
             )
         );
         // Assert
-        var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-            {
-                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.MeetingStartMessage, Is.EqualTo("Hello world!"));
-                Assert.That(commandSettings.MeetingStartUrl, Is.EqualTo("https://www.example.com"));
-            }
-        );
+        using (Assert.EnterMultipleScope())
+        {
+            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+            var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+            Assert.That(property.MeetingStartSchedule, Is.EqualTo(5));
+            Assert.That(property.MeetingStartMessage, Is.EqualTo("Hello world!"));
+            Assert.That(property.MeetingStartUrl, Is.EqualTo("https://www.example.com"));
+        }
     }
 
     [Test()]
@@ -89,37 +115,61 @@ public class MeetingStartDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
         var qrCodeService = Substitute.For<IQRCodeService>();
-        var mapper = Substitute.For<IMapper>();
-        _ = mapper
-            .Map(Arg.Any<CommandOptions?>(), Arg.Any<CommandSettings>())
-            .Returns(
-                new CommandSettings()
-                {
-                    MeetingStartSchedule = 5,
-                    MeetingStartMessage = "Hello world!",
-                    MeetingStartUrl = "https://www.example.com"
-                }
-            );
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile(new MeetingStartDialog.AutoMapperProfile(qrCodeService));
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<MeetingStartDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
-                ["Button"] = "Cancel",
-                ["Schedule"] = "5",
-                ["Message"] = "Hello world!",
-                ["Url"] = "https://www.example.com"
+                ["button"] = "Cancel",
+                ["schedule"] = "5",
+                ["message"] = "Hello world!",
+                ["url"] = "https://www.example.com"
             }
         );
         // Execute
-        var target = new MeetingStartDialog(
-            conversationState,
-            qrCodeService,
-            mapper,
-            logger
+        var dialog = new ComponentDialog();
+        _ = dialog.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    new WaterfallStep(async (stepContext, cancellationToken) =>
+                        {
+                            var options = new CommandOptions()
+                            {
+                                Type = Constants.MeetingStartCommand,
+                                Value = new CommandOptionsValue()
+                                {
+                                    Enabled = true,
+                                    Schedule = 5,
+                                    Message = "Hello world!",
+                                    Url = "https://www.example.com"
+                                }
+                            };
+                            return await stepContext.BeginDialogAsync(
+                                nameof(MeetingStartDialog),
+                                options,
+                                cancellationToken
+                            );
+                        }
+                    )
+                ]
+            )
         );
-        var client = new DialogTestClient(Channels.Msteams, target);
+        _ = dialog.AddDialog(
+            new MeetingStartDialog(
+                conversationState,
+                mapper,
+                logger
+            )
+        );
+        var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
         var actual = await client.SendActivityAsync<IMessageActivity>(
             new Activity(
@@ -129,14 +179,14 @@ public class MeetingStartDialogTests
             )
         );
         // Assert
-        var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-            {
-                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.MeetingStartMessage, Is.Null);
-                Assert.That(commandSettings.MeetingStartUrl, Is.Null);
-            }
-        );
+        using (Assert.EnterMultipleScope())
+        {
+            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+            var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+            Assert.That(property.MeetingStartSchedule, Is.EqualTo(-1));
+            Assert.That(property.MeetingStartMessage, Is.Null);
+            Assert.That(property.MeetingStartUrl, Is.Null);
+        }
     }
 
 }

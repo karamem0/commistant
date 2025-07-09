@@ -57,6 +57,25 @@ public static class LoggerExtensions
         );
     }
 
+    private static readonly Action<ILogger, string?, Exception?> functionUnauthorized = LoggerMessage.Define<string?>(
+        LogLevel.Error,
+        new EventId(102),
+        "[{MemberName}] 関数の認証に失敗しました。"
+    );
+
+    public static void FunctionUnauthorized(
+        this ILogger logger,
+        [CallerMemberName()] string? memberName = null,
+        Exception? exception = null
+    )
+    {
+        functionUnauthorized.Invoke(
+            logger,
+            memberName,
+            exception
+        );
+    }
+
     private static readonly Action<ILogger, string?, string?, string?, Exception?> meetingStarted = LoggerMessage.Define<string?, string?, string?>(
         LogLevel.Information,
         new EventId(1001),

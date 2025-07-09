@@ -6,8 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Karamem0.Commistant.Helpers;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Templates;
 using Newtonsoft.Json;
 using OpenAI.Chat;
 using System;
@@ -41,22 +41,22 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
                 ChatTool.CreateFunctionTool(
                     "MeetingStart",
                     "Update the schedule, text, and URL of messages sent the start of the meeting.",
-                    await FunctionToolHelper.GetSchemaAsync("MeetingStart")
+                    MeetingStartFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "MeetingEnd",
                     "Update the schedule, text, and URL of messages sent the end of the meeting.",
-                    await FunctionToolHelper.GetSchemaAsync("MeetingEnd")
+                    MeetingEndFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "MeetingRun",
                     "Update the schedule, text, and URL of messages sent during the meeting.",
-                    await FunctionToolHelper.GetSchemaAsync("MeetingRun")
+                    MeetingRunFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "Reset",
                     "Reset all settings.",
-                    await FunctionToolHelper.GetSchemaAsync("Reset")
+                    ResetFunctionTool.Create()
                 ),
             }
         };

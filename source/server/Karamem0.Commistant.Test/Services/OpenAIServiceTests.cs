@@ -62,7 +62,7 @@ public class OpenAIServiceTests
         // Execute
         var target = new OpenAIService(chatClient);
         var actual = await target.GetCommandOptionsAsync("会議開始後");
-        // Validate
+        // Assert
         Assert.That(actual, Is.EqualTo(options));
     }
 
@@ -83,7 +83,7 @@ public class OpenAIServiceTests
         // Execute
         var target = new OpenAIService(chatClient);
         var actual = await target.GetCommandOptionsAsync("会議開始後");
-        // Validate
+        // Assert
         Assert.That(actual, Is.Null);
     }
 

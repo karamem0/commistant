@@ -6,8 +6,11 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using AutoMapper;
+using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Testing;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
@@ -32,31 +35,58 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile<ResetDialog.AutoMapperProfile>();
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
-                ["Button"] = "Yes"
+                ["button"] = "Yes"
             }
         );
         // Execute
-        var target = new ResetDialog(conversationState, logger);
-        var client = new DialogTestClient(
-            Channels.Msteams,
-            target,
-            conversationState: conversationState
+        var dialog = new ComponentDialog();
+        _ = dialog.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    new WaterfallStep(async (stepContext, cancellationToken) =>
+                        {
+                            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+                            await accessor.SetAsync(
+                                stepContext.Context,
+                                new CommandSettings()
+                                {
+                                    MeetingStartSchedule = 5,
+                                    MeetingEndSchedule = 5,
+                                    MeetingRunSchedule = 5
+                                },
+                                cancellationToken
+                            );
+                            return await stepContext.BeginDialogAsync(
+                                nameof(ResetDialog),
+                                null,
+                                cancellationToken
+                            );
+                        }
+                    )
+                ]
+            )
         );
+        _ = dialog.AddDialog(
+            new ResetDialog(
+                conversationState,
+                mapper,
+                logger
+            )
+        );
+        var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        await commandSettingsAccessor.SetAsync(
-            client.DialogContext.Context,
-            new CommandSettings()
-            {
-                MeetingStartSchedule = 5,
-                MeetingEndSchedule = 5,
-                MeetingRunSchedule = 5
-            }
-        );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
         var actual = await client.SendActivityAsync<IMessageActivity>(
             new Activity(
@@ -66,14 +96,14 @@ public class ResetDialogTests
             )
         );
         // Assert
-        var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-            {
-                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(-1));
-                Assert.That(commandSettings.MeetingRunSchedule, Is.EqualTo(-1));
-            }
-        );
+        using (Assert.EnterMultipleScope())
+        {
+            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+            var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+            Assert.That(property.MeetingStartSchedule, Is.EqualTo(-1));
+            Assert.That(property.MeetingEndSchedule, Is.EqualTo(-1));
+            Assert.That(property.MeetingRunSchedule, Is.EqualTo(-1));
+        }
     }
 
     [Test()]
@@ -81,31 +111,58 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var commandSettingsAccessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+        var mapperConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AutoMapperProfile>();
+                config.AddProfile<ResetDialog.AutoMapperProfile>();
+            }
+        );
+        var mapper = mapperConfig.CreateMapper();
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
-                ["Button"] = "No"
+                ["button"] = "No"
             }
         );
         // Execute
-        var target = new ResetDialog(conversationState, logger);
-        var client = new DialogTestClient(
-            Channels.Msteams,
-            target,
-            conversationState: conversationState
+        var dialog = new ComponentDialog();
+        _ = dialog.AddDialog(
+            new WaterfallDialog(
+                nameof(WaterfallDialog),
+                [
+                    new WaterfallStep(async (stepContext, cancellationToken) =>
+                        {
+                            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+                            await accessor.SetAsync(
+                                stepContext.Context,
+                                new CommandSettings()
+                                {
+                                    MeetingStartSchedule = 5,
+                                    MeetingEndSchedule = 5,
+                                    MeetingRunSchedule = 5
+                                },
+                                cancellationToken
+                            );
+                            return await stepContext.BeginDialogAsync(
+                                nameof(ResetDialog),
+                                null,
+                                cancellationToken
+                            );
+                        }
+                    )
+                ]
+            )
         );
+        _ = dialog.AddDialog(
+            new ResetDialog(
+                conversationState,
+                mapper,
+                logger
+            )
+        );
+        var client = new DialogTestClient(Channels.Msteams, dialog);
         var activity = await client.SendActivityAsync<IMessageActivity>(new Activity(ActivityTypes.Message));
-        await commandSettingsAccessor.SetAsync(
-            client.DialogContext.Context,
-            new CommandSettings()
-            {
-                MeetingStartSchedule = 5,
-                MeetingEndSchedule = 5,
-                MeetingRunSchedule = 5
-            }
-        );
         await conversationState.SaveChangesAsync(client.DialogContext.Context);
         var actual = await client.SendActivityAsync<IMessageActivity>(
             new Activity(
@@ -115,14 +172,14 @@ public class ResetDialogTests
             )
         );
         // Assert
-        var commandSettings = await commandSettingsAccessor.GetAsync(client.DialogContext.Context, () => new());
-        Assert.Multiple(() =>
-            {
-                Assert.That(commandSettings.MeetingStartSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.MeetingEndSchedule, Is.EqualTo(5));
-                Assert.That(commandSettings.MeetingRunSchedule, Is.EqualTo(5));
-            }
-        );
+        using (Assert.EnterMultipleScope())
+        {
+            var accessor = conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
+            var property = await accessor.GetAsync(client.DialogContext.Context, () => new());
+            Assert.That(property.MeetingStartSchedule, Is.EqualTo(5));
+            Assert.That(property.MeetingEndSchedule, Is.EqualTo(5));
+            Assert.That(property.MeetingRunSchedule, Is.EqualTo(5));
+        }
     }
 
 }

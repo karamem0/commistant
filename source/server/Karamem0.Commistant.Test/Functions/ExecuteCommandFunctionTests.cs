@@ -65,7 +65,7 @@ public class ExecuteCommandFunctionTests
             logger
         );
         await target.RunAsync(new TimerInfo(), default);
-        // Validate
+        // Assert
         _ = commandContext
             .Received(3)
             .ExecuteCommandAsync(Arg.Any<string>());
@@ -105,7 +105,7 @@ public class ExecuteCommandFunctionTests
             logger
         );
         await target.RunAsync(new TimerInfo(), default);
-        // Validate
+        // Assert
         _ = commandContext
             .DidNotReceive()
             .ExecuteCommandAsync(Arg.Any<string>());
@@ -149,7 +149,7 @@ public class ExecuteCommandFunctionTests
             logger
         );
         await target.RunAsync(new TimerInfo(), default);
-        // Validate
+        // Assert
         _ = commandContext
             .DidNotReceive()
             .ExecuteCommandAsync(Arg.Any<string>());
@@ -193,7 +193,7 @@ public class ExecuteCommandFunctionTests
             logger
         );
         await target.RunAsync(new TimerInfo(), default);
-        // Validate
+        // Assert
         _ = commandContext
             .DidNotReceive()
             .ExecuteCommandAsync(Arg.Any<string>());

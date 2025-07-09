@@ -17,8 +17,8 @@ namespace Karamem0.Commistant.Models;
 public record CommandOptions
 {
 
-    public string? Type { get; set; }
+    public required string Type { get; set; }
 
-    public CommandOptionsValue? Value { get; set; }
+    public required CommandOptionsValue Value { get; set; }
 
 }

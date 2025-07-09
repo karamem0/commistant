@@ -7,22 +7,21 @@
 //
 
 using AutoMapper;
-using Azure.Core.Serialization;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,23 +84,31 @@ public class GetSettingsFunctionTests
             );
         var logger = Substitute.For<ILogger<GetSettingsFunction>>();
         // Execute
-        var objectSerializer = Substitute.For<ObjectSerializer>();
-        var workerOptions = Substitute.For<IOptions<WorkerOptions>>();
-        _ = workerOptions.Value.Returns(
-            new WorkerOptions()
-            {
-                Serializer = objectSerializer
-            }
-        );
+        var authenticationService = Substitute.For<IAuthenticationService>();
+        _ = authenticationService
+            .AuthenticateAsync(Arg.Any<HttpContext>(), Arg.Any<string>())
+            .Returns(
+                AuthenticateResult.Success(
+                    new AuthenticationTicket(
+                        new ClaimsPrincipal(
+                            new ClaimsIdentity(
+                                [
+                                    new Claim("oid", "48d31887-5fad-4d73-a9f5-3c356e68a038"),
+                                ],
+                                "Bearer"
+                            )
+                        ),
+                        null,
+                        "Bearer"
+                    )
+                )
+            );
         var serviceCollection = new ServiceCollection();
-        _ = serviceCollection.AddSingleton(workerOptions);
+        _ = serviceCollection.AddSingleton(authenticationService);
+        var httpContext = Substitute.For<HttpContext>();
+        _ = httpContext.RequestServices.Returns(serviceCollection.BuildServiceProvider());
         var requestData = Substitute.For<HttpRequest>();
-        _ = requestData.Headers.Returns(
-            new HeaderDictionary()
-            {
-                ["X-MS-CLIENT-PRINCIPAL-ID"] = "48d31887-5fad-4d73-a9f5-3c356e68a038"
-            }
-        );
+        _ = requestData.HttpContext.Returns(httpContext);
         var requestBody = new GetSettingsRequest()
         {
             ChannelId = "19:1234567890",

@@ -1,8 +1,8 @@
 {
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.17",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.22/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.22",
   "version": "{{APP_VERSION}}",
-  "id": "{{APP_CLIENT_ID}}",
+  "id": "{{MICROSOFT_APP_ID}}",
   "name": {
     "short": "Commistant",
     "full": "Commistant"
@@ -24,7 +24,7 @@
   "accentColor": "#ea5549",
   "configurableTabs": [
     {
-      "configurationUrl": "https://{{WEB_HOST_NAME}}/tab/configure",
+      "configurationUrl": "https://{{AZURE_WEB_APP_DOMAIN_NAME}}/tab/configure",
       "canUpdateConfiguration": false,
       "scopes": [
         "groupChat"
@@ -37,7 +37,7 @@
   ],
   "bots": [
     {
-      "botId": "{{APP_CLIENT_ID}}",
+      "botId": "{{MICROSOFT_APP_ID}}",
       "scopes": [
         "groupChat"
       ],
@@ -73,12 +73,12 @@
     }
   ],
   "validDomains": [
-    "{{WEB_HOST_NAME}}",
+    "{{AZURE_WEB_APP_DOMAIN_NAME}}",
     "token.botframework.com"
   ],
   "webApplicationInfo": {
-    "id": "{{APP_CLIENT_ID}}",
-    "resource": "api://{{WEB_HOST_NAME}}/{{APP_CLIENT_ID}}"
+    "id": "{{MICROSOFT_APP_ID}}",
+    "resource": "api://{{AZURE_WEB_APP_DOMAIN_NAME}}/{{MICROSOFT_APP_ID}}"
   },
   "authorization": {
     "permissions": {

@@ -32,12 +32,7 @@ public static class ConfigureAzureResources
                     .Get<AzureOpenAIOptions>();
                 _ = options ?? throw new InvalidOperationException();
                 settings.Endpoint = options.Endpoint;
-                settings.Credential = new DefaultAzureCredential(
-                    new DefaultAzureCredentialOptions()
-                    {
-                        ManagedIdentityClientId = options.ClientId
-                    }
-                );
+                settings.Credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions());
             }
         );
     }
@@ -54,12 +49,7 @@ public static class ConfigureAzureResources
                 _ = options ?? throw new InvalidOperationException();
                 settings.ServiceUri = options.Endpoint;
                 settings.BlobContainerName = options.ContainerName;
-                settings.Credential = new DefaultAzureCredential(
-                    new DefaultAzureCredentialOptions()
-                    {
-                        ManagedIdentityClientId = options.ClientId
-                    }
-                );
+                settings.Credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions());
             }
         );
     }

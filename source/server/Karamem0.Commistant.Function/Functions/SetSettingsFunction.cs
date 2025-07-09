@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,12 @@ public class SetSettingsFunction(
         try
         {
             this.logger.FunctionExecuting();
+            var (authenticationStatus, authenticationResponse) = await requestData.HttpContext.AuthenticateAzureFunctionAsync();
+            if (authenticationStatus is false)
+            {
+                this.logger.FunctionUnauthorized();
+                return authenticationResponse ?? new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            }
             var responseBody = this.mapper.Map<SetSettingsResponse>(requestBody);
             var blobName = HttpUtility.UrlEncode($"{requestBody.ChannelId}/conversations/{requestBody.MeetingId}");
             var blobContent = await this.blobsService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
@@ -63,7 +70,7 @@ public class SetSettingsFunction(
                 requestBody.MeetingId,
                 cancellationToken
             );
-            var userId = requestData.GetUserId();
+            var userId = requestData.HttpContext.User.GetObjectId();
             if (meetingInfo.Organizer?.AadObjectId != userId)
             {
                 throw new InvalidOperationException();
@@ -99,6 +106,18 @@ public class SetSettingsFunction(
         {
             this.logger.FunctionExecuted();
         }
+    }
+
+    public class AutoMapperProfile : Profile
+    {
+
+        public AutoMapperProfile()
+        {
+            _ = this.CreateMap<SetSettingsRequest, SetSettingsResponse>();
+            _ = this.CreateMap<SetSettingsRequest, CommandSettings>();
+            _ = this.CreateMap<CommandSettings, SetSettingsResponse>();
+        }
+
     }
 
 }

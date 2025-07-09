@@ -7,10 +7,12 @@
 //
 
 using AdaptiveCards;
+using AutoMapper;
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Karamem0.Commistant.Templates;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
@@ -26,7 +28,7 @@ namespace Karamem0.Commistant.Commands;
 public class MeetingStartCommand(
     IBotConnectorService botConnectorService,
     IDateTimeService dateTimeService,
-    IQRCodeService qrCodeService,
+    IMapper mapper,
     ILogger<MeetingStartCommand> logger
 ) : Command()
 {
@@ -35,7 +37,7 @@ public class MeetingStartCommand(
 
     private readonly IDateTimeService dateTimeService = dateTimeService;
 
-    private readonly IQRCodeService qrCodeService = qrCodeService;
+    private readonly IMapper mapper = mapper;
 
     private readonly ILogger logger = logger;
 
@@ -79,46 +81,13 @@ public class MeetingStartCommand(
                 message: commandSettings.MeetingStartMessage,
                 url: commandSettings.MeetingStartUrl
             );
-            var card = new AdaptiveCard("1.3");
-            if (string.IsNullOrEmpty(commandSettings.MeetingStartMessage) is false)
-            {
-                card.Body.Add(
-                    new AdaptiveTextBlock()
-                    {
-                        Text = commandSettings.MeetingStartMessage,
-                        Wrap = true
-                    }
-                );
-            }
-            if (Uri.TryCreate(
-                    commandSettings.MeetingStartUrl,
-                    UriKind.Absolute,
-                    out var url
-                ))
-            {
-                var bytes = await this.qrCodeService.CreateAsync(url.ToString(), cancellationToken);
-                var base64 = Convert.ToBase64String(bytes);
-                card.Body.Add(
-                    new AdaptiveImage()
-                    {
-                        AltText = url.ToString(),
-                        Size = AdaptiveImageSize.Stretch,
-                        Url = new Uri($"data:image/png;base64,{base64}")
-                    }
-                );
-                card.Actions.Add(
-                    new AdaptiveOpenUrlAction()
-                    {
-                        Title = "URL を開く",
-                        Url = url,
-                    }
-                );
-            }
+            var notifyCardData = this.mapper.Map<MeetingStartNotifyCardData>(commandSettings);
+            var notifyCard = MeetingStartNotifyCard.Create(notifyCardData);
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,
-                    Content = card
+                    Content = notifyCard
                 }
             );
             activity.From = conversationReference.Bot;
@@ -139,6 +108,34 @@ public class MeetingStartCommand(
             );
         }
         commandSettings.MeetingStartSended = true;
+    }
+
+    public class AutoMapperProfile : Profile
+    {
+
+        public AutoMapperProfile(IQRCodeService qrCodeService)
+        {
+            _ = this
+                .CreateMap<CommandSettings, MeetingStartNotifyCardData>()
+                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.MeetingStartSchedule))
+                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingStartMessage ?? ""))
+                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingStartUrl ?? ""))
+                .AfterMap(async (s, d) =>
+                    {
+                        if (Uri.TryCreate(
+                                s.MeetingStartUrl,
+                                UriKind.Absolute,
+                                out var url
+                            ))
+                        {
+                            var bytes = await qrCodeService.CreateAsync(url.ToString());
+                            var base64 = Convert.ToBase64String(bytes);
+                            d.QrCode = base64;
+                        }
+                    }
+                );
+        }
+
     }
 
 }
