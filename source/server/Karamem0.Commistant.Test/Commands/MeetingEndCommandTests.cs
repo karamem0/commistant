@@ -6,10 +6,10 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
-using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -60,13 +60,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(
@@ -120,13 +115,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(
@@ -180,13 +170,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
@@ -240,13 +225,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
@@ -300,13 +280,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
@@ -360,13 +335,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var target = new MeetingEndCommand(
@@ -420,13 +390,8 @@ public class MeetingEndCommandTests
         _ = qrCodeService
             .CreateAsync("https://www.example.com/")
             .Returns(BinaryData.Empty);
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingEndCommand.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingEndCommand.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingEndCommand>>();
         // Execute
         var command = new MeetingEndCommand(

@@ -7,12 +7,13 @@
 //
 
 using AdaptiveCards;
-using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Templates;
 using Karamem0.Commistant.Validators;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -118,22 +119,19 @@ public class ResetDialog(
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
     }
 
-    public class AutoMapperProfile : Profile
+    public class MapperConfiguration : IRegister
     {
 
-        public AutoMapperProfile()
+        public void Register(TypeAdapterConfig config)
         {
-            _ = this
-                .CreateMap<ResetResponse, ResetViewCardData>()
-                .ForMember(
-                    d => d.Value,
-                    o => o.MapFrom((s, d) => s.Button switch
-                        {
-                            Constants.YesButton => "はい",
-                            Constants.NoButton => "いいえ",
-                            _ => ""
-                        }
-                    )
+            _ = config
+                .NewConfig<ResetResponse, ResetViewCardData>()
+                .AfterMapping((s, d) => d.Value = s.Button switch
+                    {
+                        Constants.YesButton => "はい",
+                        Constants.NoButton => "いいえ",
+                        _ => ""
+                    }
                 );
         }
 

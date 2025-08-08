@@ -6,8 +6,11 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Options;
 using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +33,14 @@ public static class ConfigureServices
         _ = services.Configure<AzureStorageBlobsOptions>(configuration.GetSection("AzureStorageBlobs"));
         _ = services.Configure<AzureOpenAIOptions>(configuration.GetSection("AzureOpenAI"));
         _ = services.Configure<BotFrameworkOptions>(configuration.GetSection("BotFramework"));
+        return services;
+    }
+
+    public static IServiceCollection AddMapper(this IServiceCollection services)
+    {
+        _ = TypeAdapterConfig.GlobalSettings.Scan(typeof(MapperConfiguration).Assembly);
+        _ = services.AddSingleton(TypeAdapterConfig.GlobalSettings);
+        _ = services.AddSingleton<IMapper, ServiceMapper>();
         return services;
     }
 
