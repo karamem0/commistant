@@ -6,12 +6,14 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
 using Azure.Storage.Blobs;
 using Karamem0.Commistant.Adapters;
 using Karamem0.Commistant.Bots;
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Mappings;
+using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Azure.Blobs;
 using Microsoft.Bot.Builder.Dialogs;
@@ -30,30 +32,6 @@ namespace Karamem0.Commistant;
 
 public static class ConfigureServices
 {
-
-    public static IServiceCollection AddAutoMapperProfiles(this IServiceCollection services)
-    {
-        _ = services.AddScoped<AutoMapperProfile>();
-        _ = services.AddScoped<MeetingEndDialog.AutoMapperProfile>();
-        _ = services.AddScoped<MeetingRunDialog.AutoMapperProfile>();
-        _ = services.AddScoped<MeetingStartDialog.AutoMapperProfile>();
-        _ = services.AddScoped<ResetDialog.AutoMapperProfile>();
-        _ = services.AddScoped((provider) =>
-            {
-                var mapperConfig = new MapperConfiguration(config =>
-                    {
-                        config.AddProfile(provider.GetService<AutoMapperProfile>());
-                        config.AddProfile(provider.GetService<MeetingEndDialog.AutoMapperProfile>());
-                        config.AddProfile(provider.GetService<MeetingRunDialog.AutoMapperProfile>());
-                        config.AddProfile(provider.GetService<MeetingStartDialog.AutoMapperProfile>());
-                        config.AddProfile(provider.GetService<ResetDialog.AutoMapperProfile>());
-                    }
-                );
-                return mapperConfig.CreateMapper();
-            }
-        );
-        return services;
-    }
 
     public static IServiceCollection AddBots(this IServiceCollection services, IConfiguration configuration)
     {
@@ -93,6 +71,23 @@ public static class ConfigureServices
             .Add(provider.GetService<MeetingRunDialog>())
             .Add(provider.GetService<ResetDialog>())
         );
+        return services;
+    }
+
+    public static IServiceCollection AddMapper(this IServiceCollection services)
+    {
+        _ = services.AddSingleton(provider =>
+        {
+            TypeAdapterConfig.GlobalSettings.Apply([
+                new MapperConfiguration(),
+                new MeetingEndDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                new MeetingRunDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                new MeetingStartDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                new ResetDialog.MapperConfiguration()
+            ]);
+            return TypeAdapterConfig.GlobalSettings;
+        });
+        _ = services.AddSingleton<IMapper, ServiceMapper>();
         return services;
     }
 

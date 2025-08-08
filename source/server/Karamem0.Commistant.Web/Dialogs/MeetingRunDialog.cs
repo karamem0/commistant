@@ -7,13 +7,14 @@
 //
 
 using AdaptiveCards;
-using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Templates;
 using Karamem0.Commistant.Validators;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -134,49 +135,47 @@ public class MeetingRunDialog(
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
     }
 
-    public class AutoMapperProfile : Profile
+    public class MapperConfiguration(IQRCodeService qrCodeService) : IRegister
     {
 
-        public AutoMapperProfile(IQRCodeService qrCodeService)
+        private readonly IQRCodeService qrCodeService = qrCodeService;
+
+        public void Register(TypeAdapterConfig config)
         {
-            _ = this
-                .CreateMap<CommandSettings, MeetingRunEditCardData>()
-                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.MeetingRunSchedule))
-                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingRunMessage ?? ""))
-                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingRunUrl ?? ""));
-            _ = this
-                .CreateMap<CommandSettings, MeetingRunViewCardData>()
-                .ForMember(
-                    d => d.Schedule,
-                    o => o.MapFrom((s, d) => s.MeetingRunSchedule switch
+            _ = config
+                .NewConfig<CommandSettings, MeetingRunEditCardData>()
+                .Map(d => d.Schedule, s => s.MeetingRunSchedule)
+                .Map(d => d.Message, s => s.MeetingRunMessage ?? "")
+                .Map(d => d.Url, s => s.MeetingRunUrl ?? "");
+            _ = config
+                .NewConfig<CommandSettings, MeetingRunViewCardData>()
+                .Map(d => d.Message, s => s.MeetingRunMessage ?? "")
+                .Map(d => d.Url, s => s.MeetingRunUrl ?? "")
+                .Map(d => d.QrCode, s => "")
+                .AfterMapping(async (s, d) =>
+                    {
+                        d.Schedule = s.MeetingRunSchedule switch
                         {
                             -1 => "なし",
                             _ => $"{s.MeetingRunSchedule} 分ごと"
-                        }
-                    )
-                )
-                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingRunMessage ?? ""))
-                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingRunUrl ?? ""))
-                .ForMember(d => d.QrCode, o => o.MapFrom(s => ""))
-                .AfterMap(async (s, d) =>
-                    {
+                        };
                         if (Uri.TryCreate(
                                 s.MeetingRunUrl,
                                 UriKind.Absolute,
                                 out var url
                             ))
                         {
-                            var bytes = await qrCodeService.CreateAsync(url.ToString());
+                            var bytes = await this.qrCodeService.CreateAsync(url.ToString());
                             var base64 = Convert.ToBase64String(bytes);
                             d.QrCode = base64;
                         }
                     }
                 );
-            _ = this
-                .CreateMap<MeetingRunResponse, CommandSettings>()
-                .ForMember(d => d.MeetingRunSchedule, o => o.MapFrom(s => s.Schedule))
-                .ForMember(d => d.MeetingRunMessage, o => o.MapFrom(s => s.Message))
-                .ForMember(d => d.MeetingRunUrl, o => o.MapFrom(s => s.Url));
+            _ = config
+                .NewConfig<MeetingRunResponse, CommandSettings>()
+                .Map(d => d.MeetingRunSchedule, s => s.Schedule)
+                .Map(d => d.MeetingRunMessage, s => s.Message)
+                .Map(d => d.MeetingRunUrl, s => s.Url);
         }
 
     }

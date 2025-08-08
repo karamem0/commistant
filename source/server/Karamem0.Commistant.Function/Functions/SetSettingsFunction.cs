@@ -6,11 +6,12 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -108,14 +109,14 @@ public class SetSettingsFunction(
         }
     }
 
-    public class AutoMapperProfile : Profile
+    public class MapperConfiguration : IRegister
     {
 
-        public AutoMapperProfile()
+        public void Register(TypeAdapterConfig config)
         {
-            _ = this.CreateMap<SetSettingsRequest, SetSettingsResponse>();
-            _ = this.CreateMap<SetSettingsRequest, CommandSettings>();
-            _ = this.CreateMap<CommandSettings, SetSettingsResponse>();
+            _ = config.NewConfig<SetSettingsRequest, SetSettingsResponse>();
+            _ = config.NewConfig<SetSettingsRequest, CommandSettings>();
+            _ = config.NewConfig<CommandSettings, SetSettingsResponse>();
         }
 
     }

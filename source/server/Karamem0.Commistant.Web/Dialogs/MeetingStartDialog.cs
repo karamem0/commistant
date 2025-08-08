@@ -7,13 +7,14 @@
 //
 
 using AdaptiveCards;
-using AutoMapper;
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Templates;
 using Karamem0.Commistant.Validators;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -134,50 +135,48 @@ public class MeetingStartDialog(
         return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
     }
 
-    public class AutoMapperProfile : Profile
+    public class MapperConfiguration(IQRCodeService qrCodeService) : IRegister
     {
 
-        public AutoMapperProfile(IQRCodeService qrCodeService)
+        private readonly IQRCodeService qrCodeService = qrCodeService;
+
+        public void Register(TypeAdapterConfig config)
         {
-            _ = this
-                .CreateMap<CommandSettings, MeetingStartEditCardData>()
-                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.MeetingStartSchedule))
-                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingStartMessage ?? ""))
-                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingStartUrl ?? ""));
-            _ = this
-                .CreateMap<CommandSettings, MeetingStartViewCardData>()
-                .ForMember(
-                    d => d.Schedule,
-                    o => o.MapFrom((s, d) => s.MeetingStartSchedule switch
+            _ = config
+                .NewConfig<CommandSettings, MeetingStartEditCardData>()
+                .Map(d => d.Schedule, s => s.MeetingStartSchedule)
+                .Map(d => d.Message, s => s.MeetingStartMessage ?? "")
+                .Map(d => d.Url, s => s.MeetingStartUrl ?? "");
+            _ = config
+                .NewConfig<CommandSettings, MeetingStartViewCardData>()
+                .Map(d => d.Message, s => s.MeetingStartMessage ?? "")
+                .Map(d => d.Url, s => s.MeetingStartUrl ?? "")
+                .Map(d => d.QrCode, s => "")
+                .AfterMapping(async (s, d) =>
+                    {
+                        d.Schedule = s.MeetingStartSchedule switch
                         {
                             -1 => "なし",
                             0 => "予定時刻",
                             _ => $"{s.MeetingStartSchedule} 分後"
-                        }
-                    )
-                )
-                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingStartMessage ?? ""))
-                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingStartUrl ?? ""))
-                .ForMember(d => d.QrCode, o => o.MapFrom(s => ""))
-                .AfterMap(async (s, d) =>
-                    {
+                        };
                         if (Uri.TryCreate(
                                 s.MeetingStartUrl,
                                 UriKind.Absolute,
                                 out var url
                             ))
                         {
-                            var bytes = await qrCodeService.CreateAsync(url.ToString());
+                            var bytes = await this.qrCodeService.CreateAsync(url.ToString());
                             var base64 = Convert.ToBase64String(bytes);
                             d.QrCode = base64;
                         }
                     }
                 );
-            _ = this
-                .CreateMap<MeetingStartResponse, CommandSettings>()
-                .ForMember(d => d.MeetingStartSchedule, o => o.MapFrom(s => s.Schedule))
-                .ForMember(d => d.MeetingStartMessage, o => o.MapFrom(s => s.Message))
-                .ForMember(d => d.MeetingStartUrl, o => o.MapFrom(s => s.Url));
+            _ = config
+                .NewConfig<MeetingStartResponse, CommandSettings>()
+                .Map(d => d.MeetingStartSchedule, s => s.Schedule)
+                .Map(d => d.MeetingStartMessage, s => s.Message)
+                .Map(d => d.MeetingStartUrl, s => s.Url);
         }
 
     }

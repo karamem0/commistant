@@ -6,9 +6,10 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
 using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Testing;
@@ -35,13 +36,9 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile<ResetDialog.AutoMapperProfile>();
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new ResetDialog.MapperConfiguration());
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
@@ -111,13 +108,9 @@ public class ResetDialogTests
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile<ResetDialog.AutoMapperProfile>();
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new ResetDialog.MapperConfiguration());
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<ResetDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()

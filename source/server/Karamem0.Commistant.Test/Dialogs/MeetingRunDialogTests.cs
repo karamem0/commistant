@@ -6,10 +6,11 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
 using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Testing;
@@ -37,13 +38,9 @@ public class MeetingRunDialogTests
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingRunDialog.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingRunDialog.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingRunDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
@@ -116,13 +113,9 @@ public class MeetingRunDialogTests
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
         var qrCodeService = Substitute.For<IQRCodeService>();
-        var mapperConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<AutoMapperProfile>();
-                config.AddProfile(new MeetingRunDialog.AutoMapperProfile(qrCodeService));
-            }
-        );
-        var mapper = mapperConfig.CreateMapper();
+        TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new MeetingRunDialog.MapperConfiguration(qrCodeService));
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<MeetingRunDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()

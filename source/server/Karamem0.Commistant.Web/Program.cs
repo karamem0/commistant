@@ -31,7 +31,7 @@ _ = services
     .AddNewtonsoftJson();
 _ = services.AddApplicationInsightsTelemetry();
 _ = services.ConfigureOptions(configuration);
-_ = services.AddAutoMapperProfiles();
+_ = services.AddMapper();
 _ = services.AddServices(configuration);
 _ = services.AddBots(configuration);
 _ = services.AddDialogs();

@@ -6,9 +6,10 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AutoMapper;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -63,25 +64,8 @@ public class GetSettingsFunctionTests
                     }
                 }
             );
-        var mapper = Substitute.For<IMapper>();
-        _ = mapper
-            .Map<GetSettingsResponse>(Arg.Any<GetSettingsRequest>())
-            .Returns(
-                new GetSettingsResponse()
-                {
-                    ChannelId = "19:1234567890",
-                    MeetingId = "1234567890"
-                }
-            );
-        _ = mapper
-            .Map(Arg.Any<CommandSettings>(), Arg.Any<GetSettingsResponse>())
-            .Returns(
-                new GetSettingsResponse()
-                {
-                    ChannelId = "19:1234567890",
-                    MeetingId = "1234567890"
-                }
-            );
+        TypeAdapterConfig.GlobalSettings.Apply(new GetSettingsFunction.MapperConfiguration());
+        var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
         var logger = Substitute.For<ILogger<GetSettingsFunction>>();
         // Execute
         var authenticationService = Substitute.For<IAuthenticationService>();

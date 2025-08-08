@@ -28,8 +28,7 @@ var storageAccountResourceGroup = builder.AddParameter("AzureStorageAccountResou
 var storageAccount = builder
     .AddAzureStorage("storage")
     .AsExisting(storageAccountName, storageAccountResourceGroup);
-var storageBlobs = storageAccount.AddBlobs("blobs");
-var storageContainer = storageBlobs.AddBlobContainer("container", "azure-bot-states");
+var storageContainer = storageAccount.AddBlobContainer("container", "azure-bot-states");
 
 var functionApp = builder
     .AddAzureFunctionsProject<Projects.Karamem0_Commistant_Function>("function-app")

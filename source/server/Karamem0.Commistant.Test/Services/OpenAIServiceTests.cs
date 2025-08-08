@@ -6,6 +6,8 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+#pragma warning disable OPENAI001
+
 using Karamem0.Commistant.Models;
 using NSubstitute;
 using NUnit.Framework;
@@ -88,3 +90,5 @@ public class OpenAIServiceTests
     }
 
 }
+
+#pragma warning restore OPENAI001

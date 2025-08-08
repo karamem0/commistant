@@ -7,7 +7,6 @@
 //
 
 using Karamem0.Commistant;
-using Karamem0.Commistant.Functions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -46,7 +45,7 @@ _ = services.AddApplicationInsightsTelemetryWorkerService();
 _ = services.ConfigureFunctionsApplicationInsights();
 _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftIdentity");
 _ = services.ConfigureOptions(configuration);
-_ = services.AddAutoMapperProfiles();
+_ = services.AddMapper();
 _ = services.AddServices(configuration);
 _ = services.AddCommands();
 

@@ -7,12 +7,13 @@
 //
 
 using AdaptiveCards;
-using AutoMapper;
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Templates;
+using Mapster;
+using MapsterMapper;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
@@ -110,18 +111,20 @@ public class MeetingEndCommand(
         commandSettings.MeetingEndSended = true;
     }
 
-    public class AutoMapperProfile : Profile
+    public class MapperConfiguration(IQRCodeService qrCodeService) : IRegister
     {
 
-        public AutoMapperProfile(IQRCodeService qrCodeService)
+        private readonly IQRCodeService qrCodeService = qrCodeService;
+
+        public void Register(TypeAdapterConfig config)
         {
-            _ = this
-                .CreateMap<CommandSettings, MeetingEndNotifyCardData>()
-                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.MeetingEndSchedule))
-                .ForMember(d => d.Message, o => o.MapFrom(s => s.MeetingEndMessage ?? ""))
-                .ForMember(d => d.Url, o => o.MapFrom(s => s.MeetingEndUrl ?? ""))
-                .ForMember(d => d.QrCode, o => o.MapFrom(s => ""))
-                .AfterMap(async (s, d) =>
+            _ = config
+                .NewConfig<CommandSettings, MeetingEndNotifyCardData>()
+                .Map(d => d.Schedule, s => s.MeetingEndSchedule)
+                .Map(d => d.Message, s => s.MeetingEndMessage ?? "")
+                .Map(d => d.Url, s => s.MeetingEndUrl ?? "")
+                .Map(d => d.QrCode, s => "")
+                .AfterMapping(async (s, d) =>
                     {
                         if (Uri.TryCreate(
                                 s.MeetingEndUrl,
@@ -129,7 +132,7 @@ public class MeetingEndCommand(
                                 out var url
                             ))
                         {
-                            var bytes = await qrCodeService.CreateAsync(url.ToString());
+                            var bytes = await this.qrCodeService.CreateAsync(url.ToString());
                             var base64 = Convert.ToBase64String(bytes);
                             d.QrCode = base64;
                         }
