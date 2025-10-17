@@ -21,4 +21,10 @@ public record BotFrameworkOptions
 
     public required string MicrosoftAppPassword { get; set; }
 
+    public required string MicrosoftAppScope { get; set; }
+
+    public required string MicrosoftAppTenantId { get; set; }
+
+    public required string MicrosoftAppType { get; set; }
+
 }

@@ -77,16 +77,19 @@ public static class ConfigureServices
     public static IServiceCollection AddMapper(this IServiceCollection services)
     {
         _ = services.AddSingleton(provider =>
-        {
-            TypeAdapterConfig.GlobalSettings.Apply([
-                new MapperConfiguration(),
-                new MeetingEndDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
-                new MeetingRunDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
-                new MeetingStartDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
-                new ResetDialog.MapperConfiguration()
-            ]);
-            return TypeAdapterConfig.GlobalSettings;
-        });
+            {
+                TypeAdapterConfig.GlobalSettings.Apply(
+                    [
+                        new MapperConfiguration(),
+                        new MeetingEndDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                        new MeetingRunDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                        new MeetingStartDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
+                        new ResetDialog.MapperConfiguration()
+                    ]
+                );
+                return TypeAdapterConfig.GlobalSettings;
+            }
+        );
         _ = services.AddSingleton<IMapper, ServiceMapper>();
         return services;
     }
