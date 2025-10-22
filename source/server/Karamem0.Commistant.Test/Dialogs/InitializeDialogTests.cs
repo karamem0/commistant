@@ -19,27 +19,22 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs.Tests;
 
 [Category("Karamem0.Commistant.Dialogs")]
-public class ResetDialogTests
+public class InitializeDialogTests
 {
 
     [Test()]
-    public async Task ResetDialog_Success_WhenYes()
+    public async Task InitializeDialog_Success_WhenYes()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
         TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
-        TypeAdapterConfig.GlobalSettings.Apply(new ResetDialog.MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new InitializeDialog.MapperConfiguration());
         var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
-        var logger = Substitute.For<ILogger<ResetDialog>>();
+        var logger = Substitute.For<ILogger<InitializeDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -66,7 +61,7 @@ public class ResetDialogTests
                                 cancellationToken
                             );
                             return await stepContext.BeginDialogAsync(
-                                nameof(ResetDialog),
+                                nameof(InitializeDialog),
                                 null,
                                 cancellationToken
                             );
@@ -76,7 +71,7 @@ public class ResetDialogTests
             )
         );
         _ = dialog.AddDialog(
-            new ResetDialog(
+            new InitializeDialog(
                 conversationState,
                 mapper,
                 logger
@@ -104,14 +99,14 @@ public class ResetDialogTests
     }
 
     [Test()]
-    public async Task ResetDialog_Success_WhenNo()
+    public async Task InitializeDialog_Success_WhenNo()
     {
         // Setup
         var conversationState = new ConversationState(new MemoryStorage());
         TypeAdapterConfig.GlobalSettings.Apply(new MapperConfiguration());
-        TypeAdapterConfig.GlobalSettings.Apply(new ResetDialog.MapperConfiguration());
+        TypeAdapterConfig.GlobalSettings.Apply(new InitializeDialog.MapperConfiguration());
         var mapper = new Mapper(TypeAdapterConfig.GlobalSettings);
-        var logger = Substitute.For<ILogger<ResetDialog>>();
+        var logger = Substitute.For<ILogger<InitializeDialog>>();
         var value = JObject.FromObject(
             new Dictionary<string, object>()
             {
@@ -138,7 +133,7 @@ public class ResetDialogTests
                                 cancellationToken
                             );
                             return await stepContext.BeginDialogAsync(
-                                nameof(ResetDialog),
+                                nameof(InitializeDialog),
                                 null,
                                 cancellationToken
                             );
@@ -148,7 +143,7 @@ public class ResetDialogTests
             )
         );
         _ = dialog.AddDialog(
-            new ResetDialog(
+            new InitializeDialog(
                 conversationState,
                 mapper,
                 logger

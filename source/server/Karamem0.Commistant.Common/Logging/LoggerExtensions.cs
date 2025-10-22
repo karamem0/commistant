@@ -7,12 +7,7 @@
 //
 
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Logging;
 
@@ -352,20 +347,20 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, Exception?> settingsResetting = LoggerMessage.Define<string?, string?>(
+    private static readonly Action<ILogger, string?, string?, Exception?> settingsInitializing = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
         new EventId(1013),
         "[{MemberName}] 設定を初期化します。ConversationId: {ConversationId}"
     );
 
-    public static void SettingsResetting(
+    public static void SettingsInitializing(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
         Exception? exception = null
     )
     {
-        settingsResetting.Invoke(
+        settingsInitializing.Invoke(
             logger,
             memberName,
             conversationId,
@@ -373,20 +368,20 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, Exception?> settingsReseted = LoggerMessage.Define<string?, string?>(
+    private static readonly Action<ILogger, string?, string?, Exception?> settingsInitialized = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
         new EventId(1014),
         "[{MemberName}] 設定を初期化しました。ConversationId: {ConversationId}"
     );
 
-    public static void SettingsReseted(
+    public static void SettingsInitialized(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
         Exception? exception = null
     )
     {
-        settingsReseted.Invoke(
+        settingsInitialized.Invoke(
             logger,
             memberName,
             conversationId,
@@ -415,41 +410,20 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, Exception?> membersAddedExecuting = LoggerMessage.Define<string?, string?>(
-        LogLevel.Information,
-        new EventId(1016),
-        "[{MemberName}] メンバーを追加しています。ConversationId: {ConversationId}"
-    );
-
-    public static void MembersAddedExecuting(
-        this ILogger logger,
-        [CallerMemberName()] string? memberName = null,
-        string? conversationId = null,
-        Exception? exception = null
-    )
-    {
-        membersAddedExecuting.Invoke(
-            logger,
-            memberName,
-            conversationId,
-            exception
-        );
-    }
-
-    private static readonly Action<ILogger, string?, string?, Exception?> membersAddedExecuted = LoggerMessage.Define<string?, string?>(
+    private static readonly Action<ILogger, string?, string?, Exception?> membersAdded = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
         new EventId(1017),
-        "[{MemberName}] メンバーを追加しました。ConversationId: {ConversationId}"
+        "[{MemberName}] メンバーが追加されました。ConversationId: {ConversationId}"
     );
 
-    public static void MembersAddedExecuted(
+    public static void MembersAdded(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
         Exception? exception = null
     )
     {
-        membersAddedExecuted.Invoke(
+        membersAdded.Invoke(
             logger,
             memberName,
             conversationId,
@@ -457,41 +431,20 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, Exception?> membersRemovedExecuting = LoggerMessage.Define<string?, string?>(
-        LogLevel.Information,
-        new EventId(1018),
-        "[{MemberName}] メンバーを削除しています。ConversationId: {ConversationId}"
-    );
-
-    public static void MembersRemovedExecuting(
-        this ILogger logger,
-        [CallerMemberName()] string? memberName = null,
-        string? conversationId = null,
-        Exception? exception = null
-    )
-    {
-        membersRemovedExecuting.Invoke(
-            logger,
-            memberName,
-            conversationId,
-            exception
-        );
-    }
-
-    private static readonly Action<ILogger, string?, string?, Exception?> membersRemovedExecuted = LoggerMessage.Define<string?, string?>(
+    private static readonly Action<ILogger, string?, string?, Exception?> membersRemoved = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
         new EventId(1019),
-        "[{MemberName}] メンバーを削除しました。ConversationId: {ConversationId}"
+        "[{MemberName}] メンバーが削除されました。ConversationId: {ConversationId}"
     );
 
-    public static void MembersRemovedExecuted(
+    public static void MembersRemoved(
         this ILogger logger,
         [CallerMemberName()] string? memberName = null,
         string? conversationId = null,
         Exception? exception = null
     )
     {
-        membersRemovedExecuted.Invoke(
+        membersRemoved.Invoke(
             logger,
             memberName,
             conversationId,

@@ -10,12 +10,7 @@ using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Templates;
 using Newtonsoft.Json;
 using OpenAI.Chat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Services;
 
@@ -54,9 +49,9 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
                     MeetingRunFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
-                    "Reset",
-                    "Reset all settings.",
-                    ResetFunctionTool.Create()
+                    "Initialize",
+                    "Initialize all settings.",
+                    InitializeFunctionTool.Create()
                 ),
             }
         };

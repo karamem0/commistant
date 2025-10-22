@@ -12,14 +12,9 @@ using Karamem0.Commistant.Models;
 using NSubstitute;
 using NUnit.Framework;
 using OpenAI.Chat;
-using System;
 using System.ClientModel;
 using System.ClientModel.Primitives;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Services.Tests;
 

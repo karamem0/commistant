@@ -6,17 +6,11 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Karamem0.Commistant.Models;
 
-public record ResetViewCardData
+public record InitializeResponse
 {
 
-    public required string Value { get; set; }
+    public required string Button { get; set; }
 
 }

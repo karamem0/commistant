@@ -9,18 +9,13 @@
 using AdaptiveCards;
 using AdaptiveCards.Templating;
 using Karamem0.Commistant.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Templates;
 
-public static class ResetEditCard
+public static class InitializeCard
 {
 
-    public static AdaptiveCard Create(ResetEditCardData rootData)
+    public static AdaptiveCard Create(InitializeCardData rootData)
     {
         var template = new AdaptiveCardTemplate(
             """

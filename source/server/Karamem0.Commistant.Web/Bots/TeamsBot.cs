@@ -16,18 +16,14 @@ using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Bots;
 
 public class TeamsBot(
     ConversationState conversationState,
     DialogSet dialogSet,
+    IMeetingService meetingService,
     IOpenAIService openAIService,
     ILogger<TeamsBot> logger
 ) : TeamsActivityHandler
@@ -36,6 +32,8 @@ public class TeamsBot(
     private readonly ConversationState conversationState = conversationState;
 
     private readonly DialogSet dialogSet = dialogSet;
+
+    private readonly IMeetingService meetingService = meetingService;
 
     private readonly IOpenAIService openAIService = openAIService;
 
@@ -71,7 +69,7 @@ public class TeamsBot(
         CancellationToken cancellationToken = default
     )
     {
-        this.logger.MembersAddedExecuting(conversationId: turnContext.Activity.Conversation.Id);
+        this.logger.MembersAdded(conversationId: turnContext.Activity.Conversation.Id);
         foreach (var member in membersAdded)
         {
             if (member.Id == turnContext.Activity.Recipient.Id)
@@ -91,7 +89,6 @@ public class TeamsBot(
                 );
             }
         }
-        this.logger.MembersAddedExecuted(conversationId: turnContext.Activity.Conversation.Id);
         await base.OnMembersAddedAsync(
             membersAdded,
             turnContext,
@@ -105,7 +102,7 @@ public class TeamsBot(
         CancellationToken cancellationToken = default
     )
     {
-        this.logger.MembersRemovedExecuting(conversationId: turnContext.Activity.Conversation.Id);
+        this.logger.MembersRemoved(conversationId: turnContext.Activity.Conversation.Id);
         foreach (var member in membersRemoved)
         {
             if (member.Id == turnContext.Activity.Recipient.Id)
@@ -113,7 +110,6 @@ public class TeamsBot(
                 await this.conversationState.DeleteAsync(turnContext, cancellationToken);
             }
         }
-        this.logger.MembersRemovedExecuted(conversationId: turnContext.Activity.Conversation.Id);
         await base.OnMembersRemovedAsync(
             membersRemoved,
             turnContext,
@@ -123,14 +119,14 @@ public class TeamsBot(
 
     protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken = default)
     {
-        var participant = await TeamsInfo.GetMeetingParticipantAsync(
+        var participant = await this.meetingService.GetMeetingParticipantAsync(
             turnContext,
             participantId: turnContext.Activity.Recipient.AadObjectId,
             cancellationToken: cancellationToken
         );
         if (participant.Meeting.Role != "Organizer")
         {
-            _ = await turnContext.SendActivityAsync("開催者のみがコマンドを実行できます。", cancellationToken: cancellationToken);
+            _ = await turnContext.SendActivityAsync(Messages.UserIsNotOrganizer, cancellationToken: cancellationToken);
             return;
         }
         var dialogContext = await this.dialogSet.CreateContextAsync(turnContext, cancellationToken);
@@ -151,12 +147,12 @@ public class TeamsBot(
         );
         if (commandSettings.MeetingRunning is true)
         {
-            _ = await turnContext.SendActivityAsync("会議の実行中は設定を変更できません。", cancellationToken: cancellationToken);
+            _ = await turnContext.SendActivityAsync(Messages.SettingsCannotUpdateWhenMeetingRunning, cancellationToken: cancellationToken);
             return;
         }
         if (dialogContext.ActiveDialog is not null)
         {
-            _ = await turnContext.SendActivityAsync("新しいコマンドを開始する前に中断されたコマンドを完了させてください。", cancellationToken: cancellationToken);
+            _ = await turnContext.SendActivityAsync(Messages.InterruptedCommandPending, cancellationToken: cancellationToken);
             return;
         }
         var arguments = await this.openAIService.GetCommandOptionsAsync(command, cancellationToken);
@@ -177,12 +173,12 @@ public class TeamsBot(
                 arguments,
                 cancellationToken: cancellationToken
             ),
-            Constants.ResetCommand => await dialogContext.BeginDialogAsync(nameof(ResetDialog), cancellationToken: cancellationToken),
+            Constants.InitializeCommand => await dialogContext.BeginDialogAsync(nameof(InitializeDialog), cancellationToken: cancellationToken),
             _ => null,
         };
         if (result is null)
         {
-            _ = await turnContext.SendActivityAsync("認識できないコマンドです。", cancellationToken: cancellationToken);
+            _ = await turnContext.SendActivityAsync(Messages.CommandIsNotRecognized, cancellationToken: cancellationToken);
         }
     }
 
@@ -199,7 +195,7 @@ public class TeamsBot(
             () => new(),
             cancellationToken
         );
-        var meetingInfo = await TeamsInfo.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
+        var meetingInfo = await this.meetingService.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
         commandSettings.MeetingRunning = true;
         commandSettings.MeetingStartSended = false;
         commandSettings.MeetingEndSended = false;

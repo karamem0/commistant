@@ -6,12 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant;
 
@@ -24,7 +19,7 @@ public static class Constants
 
     public const string MeetingRunCommand = "会議中";
 
-    public const string ResetCommand = "初期化";
+    public const string InitializeCommand = "初期化";
 
     public const string SubmitButton = "Submit";
 

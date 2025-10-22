@@ -7,7 +7,6 @@
 //
 
 using AdaptiveCards;
-using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
@@ -20,13 +19,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs;
 
@@ -112,12 +105,12 @@ public class MeetingEndDialog(
         {
             _ = this.mapper.Map(response, commandSettings);
             this.logger.SettingsUpdated(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendSettingsUpdatedAsync(cancellationToken);
+            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsUpdated, cancellationToken: cancellationToken);
         }
         if (response.Button == Constants.CancelButton)
         {
             this.logger.SettingsCancelled(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
+            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsCancelled, cancellationToken: cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {

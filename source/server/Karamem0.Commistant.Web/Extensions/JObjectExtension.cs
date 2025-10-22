@@ -7,15 +7,10 @@
 //
 
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Extensions;
 
-public static class JObjectExtensions
+public static class JObjectExtension
 {
 
     public static T? Value<T>(

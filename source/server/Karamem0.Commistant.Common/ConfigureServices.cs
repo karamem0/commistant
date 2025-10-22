@@ -14,11 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Rest;
 using OpenAI;
 using QRCoder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant;
 
@@ -59,6 +54,7 @@ public static class ConfigureServices
         _ = services.AddScoped<IBotConnectorFactory, BotConnectorFactory>();
         _ = services.AddScoped<IBotConnectorService, BotConnectorService>();
         _ = services.AddScoped<IDateTimeService, DateTimeService>();
+        _ = services.AddScoped<IMeetingService, MeetingService>();
         _ = services.AddScoped<IQRCodeService, QRCodeService>();
         _ = services.AddScoped<IOpenAIService, OpenAIService>();
         return services;

@@ -7,7 +7,6 @@
 //
 
 using AdaptiveCards;
-using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Templates;
@@ -19,19 +18,14 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant.Dialogs;
 
-public class ResetDialog(
+public class InitializeDialog(
     ConversationState conversationState,
     IMapper mapper,
-    ILogger<ResetDialog> logger
+    ILogger<InitializeDialog> logger
 ) : ComponentDialog
 {
 
@@ -58,8 +52,8 @@ public class ResetDialog(
 
     private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
-        var editCardData = new ResetEditCardData();
-        var editCard = ResetEditCard.Create(editCardData);
+        var editCardData = new InitializeCardData();
+        var editCard = InitializeCard.Create(editCardData);
         var activity = MessageFactory.Attachment(
             new Attachment()
             {
@@ -67,7 +61,7 @@ public class ResetDialog(
                 Content = editCard
             }
         );
-        this.logger.SettingsResetting(conversationId: stepContext.Context.Activity.Id);
+        this.logger.SettingsInitializing(conversationId: stepContext.Context.Activity.Id);
         return await stepContext.PromptAsync(
             nameof(this.OnBeforeAsync),
             new PromptOptions()
@@ -81,7 +75,7 @@ public class ResetDialog(
     private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var value = (JObject)stepContext.Context.Activity.Value;
-        var response = value.ToObject<ResetResponse>();
+        var response = value.ToObject<InitializeResponse>();
         if (response is null)
         {
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
@@ -94,18 +88,18 @@ public class ResetDialog(
                 new(),
                 cancellationToken
             );
-            this.logger.SettingsReseted(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendSettingsResetedAsync(cancellationToken);
+            this.logger.SettingsInitialized(conversationId: stepContext.Context.Activity.Id);
+            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsInitialized, cancellationToken: cancellationToken);
         }
         if (response.Button == Constants.NoButton)
         {
             this.logger.SettingsCancelled(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendSettingsCancelledAsync(cancellationToken);
+            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsCancelled, cancellationToken: cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
-            var viewCardData = this.mapper.Map<ResetViewCardData>(response);
-            var viewCard = ResetViewCard.Create(viewCardData);
+            var viewCardData = this.mapper.Map<InitializeViewCardData>(response);
+            var viewCard = InitializeViewCard.Create(viewCardData);
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {
@@ -125,7 +119,7 @@ public class ResetDialog(
         public void Register(TypeAdapterConfig config)
         {
             _ = config
-                .NewConfig<ResetResponse, ResetViewCardData>()
+                .NewConfig<InitializeResponse, InitializeViewCardData>()
                 .AfterMapping((s, d) => d.Value = s.Button switch
                     {
                         Constants.YesButton => "はい",

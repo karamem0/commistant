@@ -21,12 +21,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Karamem0.Commistant;
 
@@ -60,7 +55,7 @@ public static class ConfigureServices
         _ = services.AddScoped<MeetingStartDialog>();
         _ = services.AddScoped<MeetingEndDialog>();
         _ = services.AddScoped<MeetingRunDialog>();
-        _ = services.AddScoped<ResetDialog>();
+        _ = services.AddScoped<InitializeDialog>();
         _ = services.AddScoped(provider => new DialogSet(
                 provider
                     .GetRequiredService<ConversationState>()
@@ -69,7 +64,7 @@ public static class ConfigureServices
             .Add(provider.GetService<MeetingStartDialog>())
             .Add(provider.GetService<MeetingEndDialog>())
             .Add(provider.GetService<MeetingRunDialog>())
-            .Add(provider.GetService<ResetDialog>())
+            .Add(provider.GetService<InitializeDialog>())
         );
         return services;
     }
@@ -84,7 +79,7 @@ public static class ConfigureServices
                         new MeetingEndDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
                         new MeetingRunDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
                         new MeetingStartDialog.MapperConfiguration(provider.GetRequiredService<IQRCodeService>()),
-                        new ResetDialog.MapperConfiguration()
+                        new InitializeDialog.MapperConfiguration()
                     ]
                 );
                 return TypeAdapterConfig.GlobalSettings;
