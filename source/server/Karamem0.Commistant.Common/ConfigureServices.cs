@@ -51,10 +51,7 @@ public static class ConfigureServices
                     .GetSection("BotFramework")
                     .Get<BotFrameworkOptions>();
                 _ = options ?? throw new InvalidOperationException();
-                return  new ManagedIdentityAppCredentials(
-                    options.MicrosoftAppId,
-                    "https://api.botframework.com/.default"
-                );
+                return new ManagedIdentityAppCredentials(options.MicrosoftAppId, "https://api.botframework.com/.default");
             }
         );
         _ = services.AddSingleton<QRCodeGenerator>();

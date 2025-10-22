@@ -58,3 +58,4 @@ jobs:
           AZURE_WEB_APP_DOMAIN_NAME: ${{vars.AZURE_WEB_APP_DOMAIN_NAME}}
           BUILD_VERSION: ${{vars.BUILD_VERSION}}
           MICROSOFT_APP_ID: ${{vars.MICROSOFT_APP_ID}}
+          MICROSOFT_BOT_ID: ${{vars.MICROSOFT_BOT_ID}}

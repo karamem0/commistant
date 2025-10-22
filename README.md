@@ -18,6 +18,134 @@ Commistant は会議の開始時、終了時、または会議中に定型のメ
 
 新型コロナウイルスの流行によりコミュニティ イベントはオンライン開催することが主流になりました。開催者は参加者に対して定型のメッセージを送ることがありますが、定期的にメッセージを送ることは開催者の負担となります。Commistant を使うことで、会議中に slido などの Q&A サービスに誘導することや、会議の最初や最後にアンケートの URL を送ることなどが簡単に実現できるようになります。
 
+## インストール方法
+
+### Microsoft Entra ID アプリケーションの登録
+
+1. [Azure ポータル](https://portal.azure.com) に移動します。
+
+2. **≡** - **Microsoft Entra ID** をクリックします。
+
+3. **アプリの登録** - **新規登録** をクリックします。
+
+4. 情報を入力して **登録** をクリックします。
+
+    |項目|値|
+    |-|-|
+    |名前|Commistant|
+    |サポートされているアカウントの種類|シングル テナント|
+
+5. **証明書とシークレット** をクリックしてシークレットを追加します。
+
+6. **API の公開** をクリックしてスコープとクライアント アプリケーションを追加します。
+
+    **スコープ**
+
+    |項目|値|
+    |-|-|
+    |アプリケーション ID URL|api://**Azure Web アプリ のドメイン名**/**アプリケーション ID**|
+    |スコープ名|user_impersonation|
+    |同意できるユーザー|管理者とユーザー|
+    |管理者の同意の表示名|Commistant へのアクセス|
+    |管理者の同意の説明|サインインしたユーザーの代わりに Commistant にアクセスすることをアプリケーションに許可します。|
+    |ユーザーの同意の表示名|Commistant へのアクセス|
+    |ユーザーの同意の説明|サインインしたユーザーの代わりに Commistant にアクセスすることをアプリケーションに許可します。|
+    |状態|有効|
+
+    **クライアント アプリケーション**
+
+    |アプリケーション|スコープ|
+    |-|-|
+    |1fec8e78-bce4-4aaf-ab1b-5451cc387264|user_impersonation|
+    |5e3ce6c0-2b1f-4285-8d4b-75ee78787346|user_impersonation|
+
+### Azure リソースの作成
+
+1. Azure CLI でリソースをデプロイします。
+
+```
+az deployment group create --template-file ./bicep/main.bicep --resource-group <リソース グループ名> --parameters name=<アプリケーション名> microsoftAppId=<アプリケーション ID> microsoftAppPassword=<アプリケーション シークレット> microsoftAppTenantId=<テナント ID>
+```
+
+### アプリケーションのビルド
+
+#### Web アプリ
+
+1. `source/client` フォルダーに移動します。
+
+2. `.env` ファイルを編集します。
+
+    |プレースホルダー|置換|
+    |-|-|
+    |`{{VITE_FUNCTION_APP_URL}}`|**関数アプリのドメイン名**|
+    |`{{VITE_TELEMETRY_CONNECTION_STRING}}`|**Application Insights の接続文字列**|
+
+3. `source/server/Karamem0.Commistant.Web` フォルダーに移動します。
+
+4. アプリケーションをビルドします。
+
+```
+dotnet publish --configuration Release
+```
+
+5. `publish` フォルダーの中身を圧縮します。
+
+```
+Compress-Archive -Path ./bin/Release/net8.0/publish/* -DestinationPath ../../build.zip
+```
+
+6. Azure CLI で ZIP ファイルをアップロードします。
+
+```
+az webapp deploy --name <Web アプリの名前> --resource-group <リソース グループ名> --src-path <ZIP ファイルのパス>
+```
+
+#### 関数アプリ
+
+1. `source/server/Karamem0.Commistant.Function` フォルダーに移動します。
+
+2. アプリケーションをビルドします。
+
+```
+dotnet publish --configuration Release
+```
+
+2. `publish` フォルダーの中身を圧縮します。
+
+```
+Compress-Archive -Path ./bin/Release/net8.0/publish/* -DestinationPath ../../build.zip
+```
+
+3. Azure CLI で ZIP ファイルをアップロードします。
+
+```
+az webapp deploy --name <関数アプリの名前> --resource-group <リソース グループ名> --src-path <ZIP ファイルのパス>
+```
+
+### マニフェストのアップロード
+
+1. `manifest` フォルダーに移動します。
+
+2. `manifest.json` ファイルを編集します。
+
+    |プレースホルダー|置換|
+    |-|-|
+    |`{{AZURE_WEB_APP_DOMAIN_NAME}}`|**Web アプリのドメイン名**|
+    |`{{MICROSOFT_APP_ID}}`|**アプリケーション ID**|
+    |`{{MICROSOFT_BOT_ID}}`|**ボット ID**|
+
+3. `manifest` フォルダーの中身を圧縮します。
+
+```
+Compress-Archive -Path ./* -DestinationPath ../manifest.zip
+```
+
+4. [Microsoft Teams 管理センター](https://admin.teams.microsoft.com/) に移動します。
+
+5. **Teams のアプリ** - **アプリを管理** をクリックします。
+
+6. **アップロード** をクリックして `manifest.zip` を選択します。
+
 ## 使用方法
 
 ### コマンドによる設定

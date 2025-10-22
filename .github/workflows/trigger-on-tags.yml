@@ -9,26 +9,11 @@ permissions:
   contents: write
 
 jobs:
-  build-manifest:
-    name: Build manifest
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repos
-        uses: actions/checkout@v4
-      - name: Build manifest
-        uses: ./.github/actions/build-manifest
-        env:
-          AZURE_WEB_APP_DOMAIN_NAME: ${{vars.AZURE_WEB_APP_DOMAIN_NAME}}
-          BUILD_VERSION: ${{vars.BUILD_VERSION}}
-          MICROSOFT_APP_ID: ${{vars.MICROSOFT_APP_ID}}
   deploy-to-github-release:
     name: Deploy to GitHub Release
     runs-on: ubuntu-latest
-    needs: build-manifest
     steps:
       - name: Checkout repos
         uses: actions/checkout@v4
       - name: Deploy to GitHub Release
         uses: ./.github/actions/deploy-to-github-release
-        env:
-          BUILD_VERSION: ${{vars.BUILD_VERSION}}

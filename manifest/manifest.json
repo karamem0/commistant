@@ -37,7 +37,7 @@
   ],
   "bots": [
     {
-      "botId": "{{MICROSOFT_APP_ID}}",
+      "botId": "{{MICROSOFT_BOT_ID}}",
       "scopes": [
         "groupChat"
       ],
