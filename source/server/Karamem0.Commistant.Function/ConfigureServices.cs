@@ -22,10 +22,10 @@ public static class ConfigureServices
 
     public static IServiceCollection AddCommands(this IServiceCollection services)
     {
-        _ = services.AddSingleton<MeetingStartCommand>();
-        _ = services.AddSingleton<MeetingEndCommand>();
-        _ = services.AddSingleton<MeetingRunCommand>();
-        _ = services.AddSingleton((provider) => new CommandSet()
+        _ = services.AddScoped<MeetingStartCommand>();
+        _ = services.AddScoped<MeetingEndCommand>();
+        _ = services.AddScoped<MeetingRunCommand>();
+        _ = services.AddScoped((provider) => new CommandSet()
             .Add(provider.GetService<MeetingStartCommand>())
             .Add(provider.GetService<MeetingEndCommand>())
             .Add(provider.GetService<MeetingRunCommand>())
@@ -35,7 +35,7 @@ public static class ConfigureServices
 
     public static IServiceCollection AddMapper(this IServiceCollection services)
     {
-        _ = services.AddSingleton(provier =>
+        _ = services.AddScoped(provier =>
             {
                 TypeAdapterConfig.GlobalSettings.Apply(
                     [
@@ -50,7 +50,7 @@ public static class ConfigureServices
                 return TypeAdapterConfig.GlobalSettings;
             }
         );
-        _ = services.AddSingleton<IMapper, ServiceMapper>();
+        _ = services.AddScoped<IMapper, ServiceMapper>();
         return services;
     }
 

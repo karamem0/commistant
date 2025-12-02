@@ -34,7 +34,7 @@
       "type": "func",
       "command": "host start",
       "options": {
-        "cwd": "${workspaceFolder}/Karamem0.Commistant.Function/bin/Debug/net8.0"
+        "cwd": "${workspaceFolder}/Karamem0.Commistant.Function/bin/Debug/net10.0"
       },
       "isBackground": true,
       "dependsOn": "build",

@@ -71,7 +71,7 @@ public static class ConfigureServices
 
     public static IServiceCollection AddMapper(this IServiceCollection services)
     {
-        _ = services.AddSingleton(provider =>
+        _ = services.AddScoped(provider =>
             {
                 TypeAdapterConfig.GlobalSettings.Apply(
                     [
@@ -85,7 +85,7 @@ public static class ConfigureServices
                 return TypeAdapterConfig.GlobalSettings;
             }
         );
-        _ = services.AddSingleton<IMapper, ServiceMapper>();
+        _ = services.AddScoped<IMapper, ServiceMapper>();
         return services;
     }
 
