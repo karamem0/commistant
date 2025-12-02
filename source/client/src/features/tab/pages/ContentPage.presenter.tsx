@@ -17,7 +17,6 @@ import {
 } from '@fluentui/react-components';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { CommandSettingsFormState } from '../../../types/Form';
 import { EventHandler } from '../../../types/Event';
 import ScheduleDropdown from '../components/ScheduleDropdown';
@@ -60,19 +59,15 @@ function ContentPage(props: Readonly<ContentPageProps>) {
 
   return (
     <React.Fragment>
-      <HelmetProvider>
-        <Helmet>
-          <meta
-            content={intl.formatMessage(messages.AppCreator)}
-            name="author" />
-          <meta
-            content={intl.formatMessage(messages.AppDescription)}
-            name="description" />
-          <title>
-            {intl.formatMessage(messages.AppTitle)}
-          </title>
-        </Helmet>
-      </HelmetProvider>
+      <meta
+        content={intl.formatMessage(messages.AppCreator)}
+        name="author" />
+      <meta
+        content={intl.formatMessage(messages.AppDescription)}
+        name="description" />
+      <title>
+        {intl.formatMessage(messages.AppTitle)}
+      </title>
       {
         value ? (
           <div

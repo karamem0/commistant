@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>Karamem0.Commistant.Test</PackageId>
     <Version>0.0.0</Version>
@@ -20,19 +20,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AltCover" Version="9.0.1" />
+    <PackageReference Include="AltCover" Version="9.0.102" />
     <PackageReference Include="Microsoft.Bot.Builder.Testing" Version="4.23.0" />
     <PackageReference Include="Microsoft.Bot.Schema" Version="4.23.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="NSubstitute" Version="5.3.0" />
     <PackageReference Include="NUnit" Version="4.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.2.0" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.10.0">
+    <PackageReference Include="NUnit.Analyzers" Version="4.11.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NunitXml.TestLogger" Version="7.0.2" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.3" />
   </ItemGroup>
 
   <ItemGroup>
