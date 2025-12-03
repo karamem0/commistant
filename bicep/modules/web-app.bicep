@@ -13,9 +13,6 @@ param userAssignedIdentityResourceId string
 @description('The client ID of the User Assigned Identity to associate with the Web App.')
 param userAssignedIdentityClientId string
 
-@description('The tenant ID of the User Assigned Identity to associate with the Web App.')
-param userAssignedIdentityTenantId string = tenant().tenantId
-
 @description('The endpoint of the OpenAI Service to associate with the Web App.')
 param openAIServiceEndpoint string
 
@@ -27,6 +24,16 @@ param storageBlobsEndpoint string
 
 @description('The container name of the Storage Blobs to associate with the Web App.')
 param storageBlobsContainerName string
+
+@description('The Microsoft App ID for the bot authentication.')
+param microsoftAppId string
+
+@description('The Microsoft App Password for the bot authentication.')
+@secure()
+param microsoftAppPassword string
+
+@description('The Microsoft App Tenant ID for the bot authentication.')
+param microsoftAppTenantId string
 
 resource webApp 'Microsoft.Web/sites@2024-11-01' = {
   name: name
@@ -68,11 +75,15 @@ resource webApp 'Microsoft.Web/sites@2024-11-01' = {
         }
         {
           name: 'BotFramework__MicrosoftAppId'
-          value: userAssignedIdentityClientId
+          value: microsoftAppId
+        }
+        {
+          name: 'BotFramework__MicrosoftAppPassword'
+          value: microsoftAppPassword
         }
         {
           name: 'BotFramework__MicrosoftAppTenantId'
-          value: userAssignedIdentityTenantId
+          value: microsoftAppTenantId
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'

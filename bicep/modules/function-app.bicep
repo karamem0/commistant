@@ -22,14 +22,14 @@ param storageBlobsEndpoint string
 @description('The container name of the Storage Blobs to associate with the Function App.')
 param storageBlobsContainerName string
 
-@description('The Microsoft App ID for Teams SSO.')
+@description('The Microsoft App ID for the bot authentication.')
 param microsoftAppId string
 
-@description('The Microsoft App Password for Teams SSO.')
+@description('The Microsoft App Password for the bot authentication.')
 @secure()
 param microsoftAppPassword string
 
-@description('The Microsoft App Tenant ID for Teams SSO.')
+@description('The Microsoft App Tenant ID for the bot authentication.')
 param microsoftAppTenantId string
 
 resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
@@ -80,7 +80,15 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
         }
         {
           name: 'BotFramework__MicrosoftAppId'
-          value: userAssignedIdentityClientId
+          value: microsoftAppId
+        }
+        {
+          name: 'BotFramework__MicrosoftAppPassword'
+          value: microsoftAppPassword
+        }
+        {
+          name: 'BotFramework__MicrosoftAppTenantId'
+          value: microsoftAppTenantId
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'

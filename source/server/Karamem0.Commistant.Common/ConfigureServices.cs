@@ -46,7 +46,11 @@ public static class ConfigureServices
                     .GetSection("BotFramework")
                     .Get<BotFrameworkOptions>();
                 _ = options ?? throw new InvalidOperationException();
-                return new MicrosoftAppCredentials(options.MicrosoftAppId, options.MicrosoftAppPassword);
+                var credentials = new MicrosoftAppCredentials(options.MicrosoftAppId, options.MicrosoftAppPassword)
+                {
+                    ChannelAuthTenant = options.MicrosoftAppTenantId
+                };
+                return credentials;
             }
         );
         _ = services.AddSingleton<QRCodeGenerator>();

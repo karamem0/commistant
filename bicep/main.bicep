@@ -56,6 +56,9 @@ module webApp './modules/web-app.bicep' = {
     openAIServiceDeploymentName: openAIService.outputs.openAIServiceDeploymentName
     storageBlobsContainerName: storageAccount.outputs.storageBlobsContainerName
     storageBlobsEndpoint: storageAccount.outputs.storageBlobsEndpoint
+    microsoftAppId: microsoftAppId
+    microsoftAppPassword: microsoftAppPassword
+    microsoftAppTenantId: microsoftAppTenantId
   }
 }
 
@@ -81,8 +84,7 @@ module botService './modules/bot-service.bicep' = {
     name: 'bot-${name}'
     displayName: displayName
     endpoint: 'https://${webApp.outputs.webAppHostName}/api/messages'
-    msaAppType: 'UserAssignedMSI'
-    msaAppId: userAssignedIdentity.outputs.userAssignedIdentityClientId
-    msaAppMSIResourceId: userAssignedIdentity.outputs.userAssignedIdentityResourceId
+    msaAppId: microsoftAppId
+    msaAppTenantId: microsoftAppTenantId
   }
 }

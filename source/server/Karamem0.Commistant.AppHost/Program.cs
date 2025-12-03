@@ -18,11 +18,13 @@ var openAI = builder
     .AddAzureOpenAI("openai")
     .AsExisting(openAIName, openAIResourceGroup);
 
-var storageAccountName = builder.AddParameter("AzureStorageAccountName");
-var storageAccountResourceGroup = builder.AddParameter("AzureStorageAccountResourceGroup");
 var storageAccount = builder
     .AddAzureStorage("storage")
-    .AsExisting(storageAccountName, storageAccountResourceGroup);
+    .RunAsEmulator(azurite => azurite
+        .WithBlobPort(10000)
+        .WithQueuePort(10001)
+        .WithTablePort(10002)
+    );
 var storageContainer = storageAccount.AddBlobContainer("container", "azure-bot-states");
 
 var functionApp = builder
