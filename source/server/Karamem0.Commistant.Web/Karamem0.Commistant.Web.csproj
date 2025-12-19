@@ -21,12 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.23.0" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.23.0" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.23.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="10.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" />
   </ItemGroup>
 
   <ItemGroup>

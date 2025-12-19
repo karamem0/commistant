@@ -1,0 +1,50 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="AdaptiveCards" Version="3.1.0" />
+    <PackageVersion Include="AdaptiveCards.Templating" Version="2.0.5" />
+    <PackageVersion Include="AltCover" Version="9.0.102" />
+    <PackageVersion Include="Aspire.AppHost.Sdk" Version="9.3.1" />
+    <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="13.1.0-preview.1.25616.3" />
+    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CognitiveServices" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Functions" Version="13.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.1.0" />
+    <PackageVersion Include="Azure.AI.OpenAI" Version="2.8.0-beta.1" />
+    <PackageVersion Include="Azure.Identity" Version="1.17.1" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
+    <PackageVersion Include="Mapster" Version="7.4.0" />
+    <PackageVersion Include="Mapster.DependencyInjection" Version="1.0.1" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.WorkerService" Version="2.23.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker" Version="2.51.0" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.50.0" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.3.0" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="2.1.0" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.1" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.7" />
+    <PackageVersion Include="Microsoft.Bot.Builder.Azure.Blobs" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Bot.Builder.Dialogs" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Bot.Builder.Testing" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Bot.Connector" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Bot.Schema" Version="4.23.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.AzureAppServices" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Identity.Web" Version="4.2.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.15.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="NUnit" Version="4.4.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.11.2" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="6.0.0" />
+    <PackageVersion Include="NunitXml.TestLogger" Version="7.1.0" />
+    <PackageVersion Include="QRCoder" Version="1.7.0" />
+  </ItemGroup>
+
+</Project>

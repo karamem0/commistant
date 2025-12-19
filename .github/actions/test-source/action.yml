@@ -15,6 +15,7 @@ runs:
         dotnet test `
           Karamem0.Commistant.Test/Karamem0.Commistant.Test.csproj `
           -p:AltCover=true `
+          -p:AltCoverLocalSource=true `
           -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
       working-directory: source/server
     - name: Test results

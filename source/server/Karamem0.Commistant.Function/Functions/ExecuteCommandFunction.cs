@@ -38,7 +38,7 @@ public class ExecuteCommandFunction(
     {
         try
         {
-            this.logger.FunctionExecuting();
+            this.logger.MethodExecuting();
             await foreach (var blobName in this.blobsService.GetBlobNamesAsync(cancellationToken))
             {
                 var blobContent = await this.blobsService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
@@ -75,7 +75,7 @@ public class ExecuteCommandFunction(
         }
         finally
         {
-            this.logger.FunctionExecuted();
+            this.logger.MethodExecuted();
         }
     }
 #pragma warning restore IDE0060

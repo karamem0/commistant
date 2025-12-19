@@ -2,22 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch AppHost",
+      "name": "Launch Server",
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/Karamem0.Commistant.AppHost/Karamem0.Commistant.AppHost.csproj"
-    },
-    {
-      "name": "Launch Function",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:azureFunctions.pickProcess}"
-    },
-    {
-      "name": "Launch Web",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj"
     }
   ]
 }

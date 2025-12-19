@@ -48,11 +48,11 @@ public class SetSettingsFunction(
     {
         try
         {
-            this.logger.FunctionExecuting();
+            this.logger.MethodExecuting();
             var (authenticationStatus, authenticationResponse) = await requestData.HttpContext.AuthenticateAzureFunctionAsync();
             if (authenticationStatus is false)
             {
-                this.logger.FunctionUnauthorized();
+                this.logger.AuthorizationFailed();
                 return authenticationResponse ?? new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
             var responseBody = this.mapper.Map<SetSettingsResponse>(requestBody);
@@ -90,7 +90,7 @@ public class SetSettingsFunction(
         }
         catch (InvalidOperationException ex)
         {
-            this.logger.FunctionFailed(exception: ex);
+            this.logger.MethodFailed(exception: ex);
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
         catch (Exception ex)
@@ -100,7 +100,7 @@ public class SetSettingsFunction(
         }
         finally
         {
-            this.logger.FunctionExecuted();
+            this.logger.MethodExecuted();
         }
     }
 
