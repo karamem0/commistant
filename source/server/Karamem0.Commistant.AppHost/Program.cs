@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -29,13 +29,13 @@ var storageAccountResourceGroup = builder.AddParameter("AzureStorageAccountResou
 var storageAccount = builder
     .AddAzureStorage("storage")
     .AsExisting(storageAccountName, storageAccountResourceGroup);
-var storageContainer = storageAccount.AddBlobContainer("container", "azure-bot-states");
+var storageContainer = storageAccount.AddBlobContainer("azure-bot-states", "azure-bot-states");
 
 var openAIDeploymentName = builder.AddParameter("AzureOpenAIDeploymentName");
 
-var botFrameworkMicrosoftAppId = builder.AddParameter("BotFrameworkMicrosoftAppId");
-var botFrameworkMicrosoftAppPassword = builder.AddParameter("BotFrameworkMicrosoftAppPassword", secret: true);
-var botFrameworkMicrosoftAppTenantId = builder.AddParameter("BotFrameworkMicrosoftAppTenantId");
+var microsoft365AgentId = builder.AddParameter("Microsoft365AgentId");
+var microsoft365AgentPassword = builder.AddParameter("Microsoft365AgentPassword", secret: true);
+var microsoft365AgentTenantId = builder.AddParameter("Microsoft365AgentTenantId");
 
 var microsoftIdentityClientId = builder.AddParameter("MicrosoftIdentityClientId");
 var microsoftIdentityClientSecret = builder.AddParameter("MicrosoftIdentityClientSecret");
@@ -48,12 +48,16 @@ _ = builder
     .WithHostStorage(azurite)
     .WithEnvironment("AzureStorageBlobs:Endpoint", storageAccount.Resource.BlobEndpoint)
     .WithEnvironment("AzureStorageBlobs:ContainerName", storageContainer.Resource.Name)
-    .WithEnvironment("BotFramework:MicrosoftAppId", botFrameworkMicrosoftAppId)
-    .WithEnvironment("BotFramework:MicrosoftAppPassword", botFrameworkMicrosoftAppPassword)
-    .WithEnvironment("BotFramework:MicrosoftAppTenantId", botFrameworkMicrosoftAppTenantId)
+    .WithEnvironment("Connections:ServiceConnection:Settings:ClientId", microsoft365AgentId)
+    .WithEnvironment("Connections:ServiceConnection:Settings:ClientSecret", microsoft365AgentPassword)
+    .WithEnvironment("Connections:ServiceConnection:Settings:TenantId", microsoft365AgentTenantId)
+    .WithEnvironment("ConnectorClient:ClientId", microsoft365AgentId)
+    .WithEnvironment("ConnectorClient:TenantId", microsoft365AgentTenantId)
     .WithEnvironment("MicrosoftIdentity:ClientId", microsoftIdentityClientId)
     .WithEnvironment("MicrosoftIdentity:ClientSecret", microsoftIdentityClientSecret)
-    .WithEnvironment("MicrosoftIdentity:TenantId", microsoftIdentityTenantId);
+    .WithEnvironment("MicrosoftIdentity:TenantId", microsoftIdentityTenantId)
+    .WithEnvironment("TokenValidation:Audiences:0", microsoft365AgentId)
+    .WithEnvironment("TokenValidation:TenantId", microsoft365AgentTenantId);
 
 _ = builder
     .AddProject<Projects.Karamem0_Commistant_Web>("web-app")
@@ -63,9 +67,11 @@ _ = builder
     .WithEnvironment("AzureOpenAI:DeploymentName", openAIDeploymentName)
     .WithEnvironment("AzureStorageBlobs:Endpoint", storageAccount.Resource.BlobEndpoint)
     .WithEnvironment("AzureStorageBlobs:ContainerName", storageContainer.Resource.BlobContainerName)
-    .WithEnvironment("BotFramework:MicrosoftAppId", botFrameworkMicrosoftAppId)
-    .WithEnvironment("BotFramework:MicrosoftAppPassword", botFrameworkMicrosoftAppPassword)
-    .WithEnvironment("BotFramework:MicrosoftAppTenantId", botFrameworkMicrosoftAppTenantId);
+    .WithEnvironment("Connections:ServiceConnection:Settings:ClientId", microsoft365AgentId)
+    .WithEnvironment("Connections:ServiceConnection:Settings:ClientSecret", microsoft365AgentPassword)
+    .WithEnvironment("Connections:ServiceConnection:Settings:TenantId", microsoft365AgentTenantId)
+    .WithEnvironment("TokenValidation:Audiences:0", microsoft365AgentId)
+    .WithEnvironment("TokenValidation:TenantId", microsoft365AgentTenantId);
 
 var app = builder.Build();
 

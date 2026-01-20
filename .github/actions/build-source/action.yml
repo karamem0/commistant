@@ -17,7 +17,7 @@ runs:
       shell: pwsh
       run: |
         $content = Get-Content -Path ${{env.FILE_PATH}}
-        $content = $content -Replace "{{MICROSOFT_APP_ID}}", "${{env.MICROSOFT_APP_ID}}"
+        $content = $content -Replace "{{MICROSOFT_365_AGENT_ID}}", "${{env.MICROSOFT_365_AGENT_ID}}"
         Out-File -FilePath ${{env.FILE_PATH}} -InputObject $content -Encoding UTF8
       env:
         FILE_PATH: source/client/public/.well-known/microsoft-identity-association.json

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -12,8 +12,8 @@ using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Microsoft.Agents.Core.Models;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 
@@ -46,22 +46,23 @@ public class ExecuteCommandFunction(
                 {
                     continue;
                 }
-                var property = blobContent.Data.GetValueOrDefault<CommandSettings>(nameof(CommandSettings));
-                if (property is null)
+                var commandSettings = blobContent.Data.GetValueOrDefault<CommandSettings>(nameof(CommandSettings));
+                if (commandSettings is null)
                 {
                     continue;
                 }
-                var reference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
-                if (reference is null)
+                var conversationReference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
+                if (conversationReference is null)
                 {
                     continue;
                 }
-                var commandContext = this.commandSet.CreateContext(property, reference);
+                var commandContext = this.commandSet.CreateContext(commandSettings, conversationReference);
                 await Task.WhenAll(
-                    commandContext.ExecuteCommandAsync(nameof(MeetingStartCommand), cancellationToken),
-                    commandContext.ExecuteCommandAsync(nameof(MeetingEndCommand), cancellationToken),
-                    commandContext.ExecuteCommandAsync(nameof(MeetingRunCommand), cancellationToken)
+                    commandContext.ExecuteCommandAsync(nameof(MeetingStartedCommand), cancellationToken),
+                    commandContext.ExecuteCommandAsync(nameof(MeetingEndingCommand), cancellationToken),
+                    commandContext.ExecuteCommandAsync(nameof(MeetingInProgressCommand), cancellationToken)
                 );
+                blobContent.Data[nameof(CommandSettings)] = commandSettings;
                 await this.blobsService.SetObjectAsync(
                     blobName,
                     blobContent,

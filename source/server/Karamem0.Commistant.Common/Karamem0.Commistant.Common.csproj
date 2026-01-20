@@ -8,7 +8,7 @@
     <Authors>karamem0</Authors>
     <Company>karamem0</Company>
     <Product>Commistant</Product>
-    <Copyright>Copyright (c) 2022-2025 karamem0</Copyright>
+    <Copyright>Copyright (c) 2022-2026 karamem0</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -19,7 +19,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AdaptiveCards" />
     <PackageReference Include="AdaptiveCards.Templating" />
     <PackageReference Include="Aspire.Azure.AI.OpenAI" />
     <PackageReference Include="Aspire.Azure.Storage.Blobs" />
@@ -28,8 +27,10 @@
     <PackageReference Include="Azure.Storage.Blobs" />
     <PackageReference Include="Mapster" />
     <PackageReference Include="Mapster.DependencyInjection" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" />
+    <PackageReference Include="Microsoft.Agents.Authentication.Msal" />
+    <PackageReference Include="Microsoft.Agents.Builder.Dialogs" />
+    <PackageReference Include="Microsoft.Agents.Extensions.Teams" />
+    <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" />
     <PackageReference Include="QRCoder" />
   </ItemGroup>

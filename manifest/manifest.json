@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.22/MicrosoftTeams.schema.json",
   "manifestVersion": "1.22",
   "version": "{{APP_VERSION}}",
-  "id": "{{MICROSOFT_APP_ID}}",
+  "id": "{{MICROSOFT_TEAMS_APP_ID}}",
   "name": {
     "short": "Commistant",
     "full": "Commistant"
@@ -37,7 +37,7 @@
   ],
   "bots": [
     {
-      "botId": "{{MICROSOFT_BOT_ID}}",
+      "botId": "{{MICROSOFT_365_AGENT_ID}}",
       "scopes": [
         "groupChat"
       ],
@@ -77,8 +77,8 @@
     "token.botframework.com"
   ],
   "webApplicationInfo": {
-    "id": "{{MICROSOFT_APP_ID}}",
-    "resource": "api://{{AZURE_WEB_APP_DOMAIN_NAME}}/{{MICROSOFT_APP_ID}}"
+    "id": "{{MICROSOFT_365_AGENT_ID}}",
+    "resource": "api://{{AZURE_WEB_APP_DOMAIN_NAME}}/{{MICROSOFT_365_AGENT_ID}}"
   },
   "authorization": {
     "permissions": {

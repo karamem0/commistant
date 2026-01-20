@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -11,6 +11,7 @@ using Azure.Storage.Blobs.Models;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Serialization;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using System.Web;
 
@@ -60,7 +61,7 @@ public class BlobsService(BlobContainerClient blobContainerClient) : IBlobsServi
         if (exists.Value)
         {
             var download = await client.DownloadContentAsync(cancellationToken);
-            content.Data = JsonSerializer.Deserialize<T>(download.Value.Content.ToString());
+            content.Data = JsonConverter.Deserialize<T>(download.Value.Content.ToString());
             content.ETag = download.Value.Details.ETag;
         }
         return content;

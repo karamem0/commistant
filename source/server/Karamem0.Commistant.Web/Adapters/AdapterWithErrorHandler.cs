@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -7,8 +7,9 @@
 //
 
 using Karamem0.Commistant.Logging;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Agents.Builder;
+using Microsoft.Agents.Hosting.AspNetCore;
+using Microsoft.Agents.Hosting.AspNetCore.BackgroundQueue;
 using Microsoft.Extensions.Logging;
 
 namespace Karamem0.Commistant.Adapters;
@@ -16,13 +17,21 @@ namespace Karamem0.Commistant.Adapters;
 public class AdapterWithErrorHandler : CloudAdapter
 {
 
-    public AdapterWithErrorHandler(BotFrameworkAuthentication auth, ILogger<AdapterWithErrorHandler> logger)
-        : base(auth, logger)
+    public AdapterWithErrorHandler(
+        IChannelServiceClientFactory factory,
+        IActivityTaskQueue activityTaskQueue,
+        ILogger<AdapterWithErrorHandler> logger
+    )
+        : base(
+            factory,
+            activityTaskQueue,
+            logger
+        )
     {
         this.OnTurnError = async (turnContext, exception) =>
         {
             logger.UnhandledErrorOccurred(exception: exception);
-            _ = await turnContext.SendActivityAsync("予期しない問題が発生しました。");
+            _ = await turnContext.SendActivityAsync($"予期しない問題が発生しました: {exception.Message}");
         };
     }
 

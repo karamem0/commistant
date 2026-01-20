@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -14,57 +14,38 @@ namespace Karamem0.Commistant.Logging;
 public static class LoggerExtensions
 {
 
-    private static readonly Action<ILogger, string?, Exception?> unhandledErrorOccurred = LoggerMessage.Define<string?>(
-        LogLevel.Critical,
-        new EventId(1),
-        "[{MethodName}] 予期しない問題が発生しました。"
+    private static readonly Action<ILogger, string?, Exception?> methodExecuting = LoggerMessage.Define<string?>(
+        LogLevel.Information,
+        new EventId(2001),
+        "[{MethodName}] メソッドを実行しています。"
     );
 
-    public static void UnhandledErrorOccurred(
+    public static void MethodExecuting(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         Exception? exception = null
     )
     {
-        unhandledErrorOccurred.Invoke(
+        methodExecuting.Invoke(
             logger,
             methodName,
             exception
         );
     }
 
-    private static readonly Action<ILogger, string?, Exception?> methodFailed = LoggerMessage.Define<string?>(
-        LogLevel.Error,
-        new EventId(101),
-        "[{MethodName}] メソッドの実行に失敗しました。"
+    private static readonly Action<ILogger, string?, Exception?> methodExecuted = LoggerMessage.Define<string?>(
+        LogLevel.Information,
+        new EventId(2002),
+        "[{MethodName}] メソッドを実行しました。"
     );
 
-    public static void MethodFailed(
+    public static void MethodExecuted(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         Exception? exception = null
     )
     {
-        methodFailed.Invoke(
-            logger,
-            methodName,
-            exception
-        );
-    }
-
-    private static readonly Action<ILogger, string?, Exception?> authorizationFailed = LoggerMessage.Define<string?>(
-        LogLevel.Error,
-        new EventId(102),
-        "[{MethodName}] 認証に失敗しました。"
-    );
-
-    public static void AuthorizationFailed(
-        this ILogger logger,
-        [CallerMemberName()] string? methodName = null,
-        Exception? exception = null
-    )
-    {
-        authorizationFailed.Invoke(
+        methodExecuted.Invoke(
             logger,
             methodName,
             exception
@@ -73,7 +54,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, string?, Exception?> meetingStarted = LoggerMessage.Define<string?, string?, string?>(
         LogLevel.Information,
-        new EventId(1001),
+        new EventId(2101),
         "[{MethodName}] 会議を開始しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
     );
 
@@ -96,7 +77,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, string?, Exception?> meetingEnded = LoggerMessage.Define<string?, string?, string?>(
         LogLevel.Information,
-        new EventId(1002),
+        new EventId(2102),
         "[{MethodName}] 会議を終了しました。ConversationId: {ConversationId}, MeetingId: {MeetingId}"
     );
 
@@ -117,51 +98,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, Exception?> methodExecuting = LoggerMessage.Define<string?>(
-        LogLevel.Information,
-        new EventId(1003),
-        "[{MethodName}] メソッドを実行しています。"
-    );
-
-    public static void MethodExecuting(
-        this ILogger logger,
-        [CallerMemberName()] string? methodName = null,
-        Exception? exception = null
-    )
-    {
-        methodExecuting.Invoke(
-            logger,
-            methodName,
-            exception
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartedMessageNotifying =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2103),
+            "[{MethodName}] 会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
         );
-    }
 
-    private static readonly Action<ILogger, string?, Exception?> methodExecuted = LoggerMessage.Define<string?>(
-        LogLevel.Information,
-        new EventId(1004),
-        "[{MethodName}] メソッドを実行しました。"
-    );
-
-    public static void MethodExecuted(
-        this ILogger logger,
-        [CallerMemberName()] string? methodName = null,
-        Exception? exception = null
-    )
-    {
-        methodExecuted.Invoke(
-            logger,
-            methodName,
-            exception
-        );
-    }
-
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1005),
-        "[{MethodName}] 会議開始メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
-
-    public static void MeetingStartMessageNotifying(
+    public static void MeetingStartedMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -170,7 +114,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingStartMessageNotifying.Invoke(
+        meetingStartedMessageNotifying.Invoke(
             logger,
             methodName,
             conversationId,
@@ -180,13 +124,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1006),
-        "[{MethodName}] 会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingStartedMessageNotified =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2104),
+            "[{MethodName}] 会議開始メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+        );
 
-    public static void MeetingStartMessageNotified(
+    public static void MeetingStartedMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -195,7 +140,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingStartMessageNotified.Invoke(
+        meetingStartedMessageNotified.Invoke(
             logger,
             methodName,
             conversationId,
@@ -205,13 +150,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1007),
-        "[{MethodName}] 会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndingMessageNotifying =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2105),
+            "[{MethodName}] 会議終了メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+        );
 
-    public static void MeetingEndMessageNotifying(
+    public static void MeetingEndingMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -220,7 +166,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingEndMessageNotifying.Invoke(
+        meetingEndingMessageNotifying.Invoke(
             logger,
             methodName,
             conversationId,
@@ -230,13 +176,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1008),
-        "[{MethodName}] 会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingEndingMessageNotified =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2106),
+            "[{MethodName}] 会議終了メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+        );
 
-    public static void MeetingEndMessageNotified(
+    public static void MeetingEndingMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -245,7 +192,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingEndMessageNotified.Invoke(
+        meetingEndingMessageNotified.Invoke(
             logger,
             methodName,
             conversationId,
@@ -255,13 +202,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingRunMessageNotifying = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1009),
-        "[{MethodName}] 会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingInProgressMessageNotifying =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2107),
+            "[{MethodName}] 会議中メッセージを送信します。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+        );
 
-    public static void MeetingRunMessageNotifying(
+    public static void MeetingInProgressMessageNotifying(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -270,7 +218,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingRunMessageNotifying.Invoke(
+        meetingInProgressMessageNotifying.Invoke(
             logger,
             methodName,
             conversationId,
@@ -280,13 +228,14 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingRunMessageNotified = LoggerMessage.Define<string?, string?, string?, string?>(
-        LogLevel.Information,
-        new EventId(1010),
-        "[{MethodName}] 会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
-    );
+    private static readonly Action<ILogger, string?, string?, string?, string?, Exception?> meetingInProgressMessageNotified =
+        LoggerMessage.Define<string?, string?, string?, string?>(
+            LogLevel.Information,
+            new EventId(2108),
+            "[{MethodName}] 会議中メッセージを送信しました。ConversationId: {ConversationId}, Message: {Message}, Url {Url}"
+        );
 
-    public static void MeetingRunMessageNotified(
+    public static void MeetingInProgressMessageNotified(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
@@ -295,7 +244,7 @@ public static class LoggerExtensions
         Exception? exception = null
     )
     {
-        meetingRunMessageNotified.Invoke(
+        meetingInProgressMessageNotified.Invoke(
             logger,
             methodName,
             conversationId,
@@ -307,7 +256,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, Exception?> settingsUpdating = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1011),
+        new EventId(2109),
         "[{MethodName}] 設定を変更します。ConversationId: {ConversationId}"
     );
 
@@ -328,7 +277,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, Exception?> settingsUpdated = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1012),
+        new EventId(2110),
         "[{MethodName}] 設定を変更しました。ConversationId: {ConversationId}"
     );
 
@@ -347,9 +296,30 @@ public static class LoggerExtensions
         );
     }
 
+    private static readonly Action<ILogger, string?, string?, Exception?> settingsUpdateCancelled = LoggerMessage.Define<string?, string?>(
+        LogLevel.Information,
+        new EventId(2111),
+        "[{MethodName}] 設定の変更をキャンセルしました。設定は変更されていません。ConversationId: {ConversationId}"
+    );
+
+    public static void SettingsUpdateCancelled(
+        this ILogger logger,
+        [CallerMemberName()] string? methodName = null,
+        string? conversationId = null,
+        Exception? exception = null
+    )
+    {
+        settingsUpdateCancelled.Invoke(
+            logger,
+            methodName,
+            conversationId,
+            exception
+        );
+    }
+
     private static readonly Action<ILogger, string?, string?, Exception?> settingsInitializing = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1013),
+        new EventId(2112),
         "[{MethodName}] 設定を初期化します。ConversationId: {ConversationId}"
     );
 
@@ -370,7 +340,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, Exception?> settingsInitialized = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1014),
+        new EventId(2113),
         "[{MethodName}] 設定を初期化しました。ConversationId: {ConversationId}"
     );
 
@@ -389,20 +359,20 @@ public static class LoggerExtensions
         );
     }
 
-    private static readonly Action<ILogger, string?, string?, Exception?> settingsCancelled = LoggerMessage.Define<string?, string?>(
+    private static readonly Action<ILogger, string?, string?, Exception?> settingsInitializeCancelled = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1015),
-        "[{MethodName}] キャンセルしました。設定は変更されていません。ConversationId: {ConversationId}"
+        new EventId(2114),
+        "[{MethodName}] 設定の初期化をキャンセルしました。設定は変更されていません。ConversationId: {ConversationId}"
     );
 
-    public static void SettingsCancelled(
+    public static void SettingsInitializeCancelled(
         this ILogger logger,
         [CallerMemberName()] string? methodName = null,
         string? conversationId = null,
         Exception? exception = null
     )
     {
-        settingsCancelled.Invoke(
+        settingsInitializeCancelled.Invoke(
             logger,
             methodName,
             conversationId,
@@ -412,7 +382,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, Exception?> membersAdded = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1017),
+        new EventId(2115),
         "[{MethodName}] メンバーが追加されました。ConversationId: {ConversationId}"
     );
 
@@ -433,7 +403,7 @@ public static class LoggerExtensions
 
     private static readonly Action<ILogger, string?, string?, Exception?> membersRemoved = LoggerMessage.Define<string?, string?>(
         LogLevel.Information,
-        new EventId(1019),
+        new EventId(2116),
         "[{MethodName}] メンバーが削除されました。ConversationId: {ConversationId}"
     );
 
@@ -448,6 +418,84 @@ public static class LoggerExtensions
             logger,
             methodName,
             conversationId,
+            exception
+        );
+    }
+
+    private static readonly Action<ILogger, string?, string?, Exception?> messageReceived = LoggerMessage.Define<string?, string?>(
+        LogLevel.Information,
+        new EventId(2117),
+        "[{MethodName}] メッセージを受信しました。ConversationId: {ConversationId}"
+    );
+
+    public static void MessageReceived(
+        this ILogger logger,
+        [CallerMemberName()] string? methodName = null,
+        string? conversationId = null,
+        Exception? exception = null
+    )
+    {
+        messageReceived.Invoke(
+            logger,
+            methodName,
+            conversationId,
+            exception
+        );
+    }
+
+    private static readonly Action<ILogger, string?, Exception?> methodFailed = LoggerMessage.Define<string?>(
+        LogLevel.Error,
+        new EventId(4001),
+        "[{MethodName}] メソッドの実行に失敗しました。"
+    );
+
+    public static void MethodFailed(
+        this ILogger logger,
+        [CallerMemberName()] string? methodName = null,
+        Exception? exception = null
+    )
+    {
+        methodFailed.Invoke(
+            logger,
+            methodName,
+            exception
+        );
+    }
+
+    private static readonly Action<ILogger, string?, Exception?> authorizationFailed = LoggerMessage.Define<string?>(
+        LogLevel.Error,
+        new EventId(4002),
+        "[{MethodName}] 認証に失敗しました。"
+    );
+
+    public static void AuthorizationFailed(
+        this ILogger logger,
+        [CallerMemberName()] string? methodName = null,
+        Exception? exception = null
+    )
+    {
+        authorizationFailed.Invoke(
+            logger,
+            methodName,
+            exception
+        );
+    }
+
+    private static readonly Action<ILogger, string?, Exception?> unhandledErrorOccurred = LoggerMessage.Define<string?>(
+        LogLevel.Critical,
+        new EventId(5001),
+        "[{MethodName}] 予期しない問題が発生しました。"
+    );
+
+    public static void UnhandledErrorOccurred(
+        this ILogger logger,
+        [CallerMemberName()] string? methodName = null,
+        Exception? exception = null
+    )
+    {
+        unhandledErrorOccurred.Invoke(
+            logger,
+            methodName,
             exception
         );
     }

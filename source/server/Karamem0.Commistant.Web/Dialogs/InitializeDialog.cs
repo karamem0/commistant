@@ -1,23 +1,25 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AdaptiveCards;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Serialization;
 using Karamem0.Commistant.Templates;
+using Karamem0.Commistant.Types;
 using Karamem0.Commistant.Validators;
 using Mapster;
 using MapsterMapper;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Schema;
+using Microsoft.Agents.Builder.Dialogs;
+using Microsoft.Agents.Builder.Dialogs.Prompts;
+using Microsoft.Agents.Builder.State;
+using Microsoft.Agents.Core.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 using System.Threading;
 
 namespace Karamem0.Commistant.Dialogs;
@@ -53,11 +55,11 @@ public class InitializeDialog(
     private async Task<DialogTurnResult> OnBeforeAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
         var editCardData = new InitializeCardData();
-        var editCard = InitializeCard.Create(editCardData);
+        var editCard = InitializeEditCard.Create(editCardData);
         var activity = MessageFactory.Attachment(
             new Attachment()
             {
-                ContentType = AdaptiveCard.ContentType,
+                ContentType = "application/vnd.microsoft.card.adaptive",
                 Content = editCard
             }
         );
@@ -66,7 +68,7 @@ public class InitializeDialog(
             nameof(this.OnBeforeAsync),
             new PromptOptions()
             {
-                Prompt = (Activity)activity
+                Prompt = activity
             },
             cancellationToken
         );
@@ -74,27 +76,22 @@ public class InitializeDialog(
 
     private async Task<DialogTurnResult> OnAfterAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken = default)
     {
-        var value = (JObject)stepContext.Context.Activity.Value;
-        var response = value.ToObject<InitializeResponse>();
+        var value = (JsonElement)stepContext.Context.Activity.Value;
+        var response = JsonConverter.Deserialize<InitializeResponse>(value);
         if (response is null)
         {
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
-        if (response.Button == Constants.YesButton)
+        if (response.Button == ButtonTypes.Yes)
         {
-            var commandSettingsAccessor = this.conversationState.CreateProperty<CommandSettings>(nameof(CommandSettings));
-            await commandSettingsAccessor.SetAsync(
-                stepContext.Context,
-                new(),
-                cancellationToken
-            );
+            this.conversationState.SetValue<CommandSettings>(nameof(CommandSettings), new());
             this.logger.SettingsInitialized(conversationId: stepContext.Context.Activity.Id);
             _ = await stepContext.Context.SendActivityAsync(Messages.SettingsInitialized, cancellationToken: cancellationToken);
         }
-        if (response.Button == Constants.NoButton)
+        if (response.Button == ButtonTypes.No)
         {
-            this.logger.SettingsCancelled(conversationId: stepContext.Context.Activity.Id);
-            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsCancelled, cancellationToken: cancellationToken);
+            this.logger.SettingsInitializeCancelled(conversationId: stepContext.Context.Activity.Id);
+            _ = await stepContext.Context.SendActivityAsync(Messages.SettingsInitializeCancelled, cancellationToken: cancellationToken);
         }
         if (stepContext.Context.Activity.ReplyToId is not null)
         {
@@ -103,7 +100,7 @@ public class InitializeDialog(
             var activity = MessageFactory.Attachment(
                 new Attachment()
                 {
-                    ContentType = AdaptiveCard.ContentType,
+                    ContentType = "application/vnd.microsoft.card.adaptive",
                     Content = viewCard
                 }
             );
@@ -122,8 +119,8 @@ public class InitializeDialog(
                 .NewConfig<InitializeResponse, InitializeViewCardData>()
                 .AfterMapping((s, d) => d.Value = s.Button switch
                     {
-                        Constants.YesButton => "はい",
-                        Constants.NoButton => "いいえ",
+                        ButtonTypes.Yes => "はい",
+                        ButtonTypes.No => "いいえ",
                         _ => ""
                     }
                 );

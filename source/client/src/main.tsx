@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -44,7 +44,7 @@ root.render(
             (inTeams) => (
               <IntlProvider>
                 <ThemeProvider>
-                  <ErrorBoundary fallbackRender={(props) => <Error500Page {...props} />}>
+                  <ErrorBoundary fallbackRender={(props) => <Error500Page error={props.error as Error} />}>
                     <Routes>
                       {
                         inTeams ? (

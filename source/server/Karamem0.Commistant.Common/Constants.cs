@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -13,26 +13,10 @@ namespace Karamem0.Commistant;
 public static class Constants
 {
 
-    public const string MeetingStartCommand = "会議開始後";
+    public static readonly ReadOnlyCollection<int> MeetingStartedSchedules = Array.AsReadOnly([0, 5, 10, 15]);
 
-    public const string MeetingEndCommand = "会議終了前";
+    public static readonly ReadOnlyCollection<int> MeetingEndingSchedules = Array.AsReadOnly([0, 5, 10, 15]);
 
-    public const string MeetingRunCommand = "会議中";
-
-    public const string InitializeCommand = "初期化";
-
-    public const string SubmitButton = "Submit";
-
-    public const string CancelButton = "Cancel";
-
-    public const string YesButton = "Yes";
-
-    public const string NoButton = "No";
-
-    public static readonly ReadOnlyCollection<int> MeetingStartSchedules = Array.AsReadOnly([0, 5, 10, 15]);
-
-    public static readonly ReadOnlyCollection<int> MeetingEndSchedules = Array.AsReadOnly([0, 5, 10, 15]);
-
-    public static readonly ReadOnlyCollection<int> MeetingRunSchedules = Array.AsReadOnly([5, 10, 15, 30, 60]);
+    public static readonly ReadOnlyCollection<int> MeetingInProgressSchedules = Array.AsReadOnly([5, 10, 15, 30, 60]);
 
 }

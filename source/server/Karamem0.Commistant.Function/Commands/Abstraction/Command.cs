@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -7,7 +7,7 @@
 //
 
 using Karamem0.Commistant.Models;
-using Microsoft.Bot.Schema;
+using Microsoft.Agents.Core.Models;
 using System.Threading;
 
 namespace Karamem0.Commistant.Commands.Abstraction;
@@ -25,10 +25,6 @@ public interface ICommand
 
 public abstract class Command : ICommand
 {
-
-    protected Command()
-    {
-    }
 
     public abstract Task ExecuteAsync(
         CommandSettings property,

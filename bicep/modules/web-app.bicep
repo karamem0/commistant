@@ -7,6 +7,9 @@ param location string = resourceGroup().location
 @description('The resource ID of the App Service Plan to associate with the Web App.')
 param appServicePlanResourceId string
 
+@description('The connection string of the Application Insights to associate with the Web App.')
+param appInsightsConnectionString string
+
 @description('The resource ID of the User Assigned Identity to associate with the Web App.')
 param userAssignedIdentityResourceId string
 
@@ -25,15 +28,15 @@ param storageBlobsEndpoint string
 @description('The container name of the Storage Blobs to associate with the Web App.')
 param storageBlobsContainerName string
 
-@description('The Microsoft App ID for the bot authentication.')
-param microsoftAppId string
+@description('The Microsoft 365 Agent ID for the bot authentication.')
+param microsoft365AgentId string
 
-@description('The Microsoft App Password for the bot authentication.')
+@description('The Microsoft 365 Agent Password for the bot authentication.')
 @secure()
-param microsoftAppPassword string
+param microsoft365AgentPassword string
 
-@description('The Microsoft App Tenant ID for the bot authentication.')
-param microsoftAppTenantId string
+@description('The Microsoft 365 Agent Tenant ID for the bot authentication.')
+param microsoft365AgentTenantId string
 
 resource webApp 'Microsoft.Web/sites@2024-11-01' = {
   name: name
@@ -53,6 +56,10 @@ resource webApp 'Microsoft.Web/sites@2024-11-01' = {
       ftpsState: 'Disabled'
       http20Enabled: true
       appSettings: [
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: appInsightsConnectionString
+        }
         {
           name: 'AZURE_CLIENT_ID'
           value: userAssignedIdentityClientId
@@ -74,16 +81,28 @@ resource webApp 'Microsoft.Web/sites@2024-11-01' = {
           value: storageBlobsEndpoint
         }
         {
-          name: 'BotFramework__MicrosoftAppId'
-          value: microsoftAppId
+          name: 'Connections__ServiceConnection__Settings__AuthType'
+          value: 'ClientSecret'
         }
         {
-          name: 'BotFramework__MicrosoftAppPassword'
-          value: microsoftAppPassword
+          name: 'Connections__ServiceConnection__Settings__ClientId'
+          value: microsoft365AgentId
         }
         {
-          name: 'BotFramework__MicrosoftAppTenantId'
-          value: microsoftAppTenantId
+          name: 'Connections__ServiceConnection__Settings__ClientSecret'
+          value: microsoft365AgentPassword
+        }
+        {
+          name: 'Connections__ServiceConnection__Settings__TenantId'
+          value: microsoft365AgentTenantId
+        }
+        {
+          name: 'TokenValidation__Audiences__0'
+          value: microsoft365AgentId
+        }
+        {
+          name: 'TokenValidation__TenantId'
+          value: microsoft365AgentTenantId
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'

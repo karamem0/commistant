@@ -16,11 +16,11 @@ param endpoint string
 @description('The type of Microsoft App used for the bot authentication.')
 param msaAppType string = 'SingleTenant'
 
-@description('The Microsoft App ID or User Assigned Managed Identity for the bot authentication.')
-param msaAppId string
+@description('The Microsoft 365 Agent ID or User Assigned Managed Identity for the bot authentication.')
+param microsoft365AgentId string
 
-@description('The Microsoft App Tenant ID for the bot authentication.')
-param msaAppTenantId string = tenant().tenantId
+@description('The Microsoft 365 Agent Tenant ID for the bot authentication.')
+param microsoft365AgentTenantId string = tenant().tenantId
 
 resource botService 'Microsoft.BotService/botServices@2022-09-15' = {
   name: name
@@ -33,8 +33,8 @@ resource botService 'Microsoft.BotService/botServices@2022-09-15' = {
     displayName: displayName
     endpoint: endpoint
     msaAppType: msaAppType
-    msaAppId: msaAppId
-    msaAppTenantId: msaAppTenantId
+    msaAppId: microsoft365AgentId
+    msaAppTenantId: microsoft365AgentTenantId
   }
 }
 

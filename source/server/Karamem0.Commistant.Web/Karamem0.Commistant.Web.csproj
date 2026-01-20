@@ -8,7 +8,7 @@
     <Authors>karamem0</Authors>
     <Company>karamem0</Company>
     <Product>Commistant</Product>
-    <Copyright>Copyright (c) 2022-2025 karamem0</Copyright>
+    <Copyright>Copyright (c) 2022-2026 karamem0</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/karamem0/commistant</PackageProjectUrl>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -22,11 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-    <PackageReference Include="Microsoft.Bot.Builder.Azure.Blobs" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" />
+    <PackageReference Include="Microsoft.Agents.Storage.Blobs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -9,13 +9,14 @@
 using Karamem0.Commistant.Extensions;
 using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Serialization;
 using Karamem0.Commistant.Services;
 using Mapster;
 using MapsterMapper;
+using Microsoft.Agents.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using System.Threading;
@@ -25,7 +26,7 @@ namespace Karamem0.Commistant.Functions;
 
 public class SetSettingsFunction(
     IBlobsService blobsService,
-    IBotConnectorService botConnectorService,
+    IConnectorClientService connectorClientService,
     IMapper mapper,
     ILogger<SetSettingsFunction> logger
 )
@@ -33,7 +34,7 @@ public class SetSettingsFunction(
 
     private readonly IBlobsService blobsService = blobsService;
 
-    private readonly IBotConnectorService botConnectorService = botConnectorService;
+    private readonly IConnectorClientService connectorClientService = connectorClientService;
 
     private readonly IMapper mapper = mapper;
 
@@ -58,18 +59,18 @@ public class SetSettingsFunction(
             var responseBody = this.mapper.Map<SetSettingsResponse>(requestBody);
             var blobName = HttpUtility.UrlEncode($"{requestBody.ChannelId}/conversations/{requestBody.MeetingId}");
             var blobContent = await this.blobsService.GetObjectAsync<Dictionary<string, object?>>(blobName, cancellationToken);
-            _ = blobContent.Data ?? throw new InvalidOperationException();
+            _ = blobContent.Data ?? throw new InvalidOperationException("Data を null にはできません");
             var conversationReference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
-            _ = conversationReference?.ServiceUrl ?? throw new InvalidOperationException();
-            var meetingInfo = await this.botConnectorService.GetMeetingInfoAsync(
-                new Uri(conversationReference.ServiceUrl),
+            _ = conversationReference?.ServiceUrl ?? throw new InvalidOperationException("ServiceUrl を null にはできません");
+            var meetingInfo = await this.connectorClientService.GetMeetingInfoAsync(
+                conversationReference.ServiceUrl,
                 requestBody.MeetingId,
                 cancellationToken
             );
             var userId = requestData.HttpContext.User.GetObjectId();
             if (meetingInfo.Organizer?.AadObjectId != userId)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("ユーザーは会議の開催者ではありません");
             }
             var commandSettings = blobContent.Data.GetValueOrDefault<CommandSettings>(nameof(CommandSettings));
             if (commandSettings is null)
@@ -91,12 +92,30 @@ public class SetSettingsFunction(
         catch (InvalidOperationException ex)
         {
             this.logger.MethodFailed(exception: ex);
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return new ContentResult()
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Content = JsonConverter.Serialize(
+                    new ErrorResponse()
+                    {
+                        Error = ex.Message
+                    }
+                )
+            };
         }
         catch (Exception ex)
         {
             this.logger.UnhandledErrorOccurred(exception: ex);
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return new ContentResult()
+            {
+                StatusCode = StatusCodes.Status500InternalServerError,
+                Content = JsonConverter.Serialize(
+                    new ErrorResponse()
+                    {
+                        Error = ex.Message
+                    }
+                )
+            };
         }
         finally
         {

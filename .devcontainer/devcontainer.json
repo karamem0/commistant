@@ -10,7 +10,7 @@
     },
     "ghcr.io/devcontainers/features/git-lfs:1": {},
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "22.21.1"
+      "version": "22.22.0"
     },
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {}
   },
@@ -22,8 +22,10 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
         "github.vscode-github-actions",
+        "ms-azuretools.vscode-azurefunctions",
         "ms-azuretools.vscode-bicep",
         "ms-dotnettools.csdevkit",
         "redhat.vscode-yaml",

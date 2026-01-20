@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -42,7 +42,7 @@ public class OpenAIServiceTests
             [
                 ChatToolCall.CreateFunctionToolCall(
                     "ab3d750e-8b79-4987-b40c-422a0ec98d02",
-                    "MeetingStart",
+                    "MeetingStarted",
                     BinaryData.FromObjectAsJson(options)
                 )
             ]

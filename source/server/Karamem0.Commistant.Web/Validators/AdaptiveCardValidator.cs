@@ -1,12 +1,12 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Agents.Builder.Dialogs.Prompts;
 using System.Threading;
 
 namespace Karamem0.Commistant.Validators;

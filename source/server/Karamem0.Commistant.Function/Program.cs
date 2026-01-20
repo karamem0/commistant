@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -41,6 +41,7 @@ _ = services.ConfigureFunctionsApplicationInsights();
 _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftIdentity");
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
+_ = services.AddConnectorClient();
 _ = services.AddServices(configuration);
 _ = services.AddCommands();
 

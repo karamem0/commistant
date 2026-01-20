@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -11,29 +11,29 @@ namespace Karamem0.Commistant.Models;
 public record CommandSettings
 {
 
-    public bool MeetingStartSended { get; set; }
+    public bool MeetingStartedSended { get; set; }
 
-    public int MeetingStartSchedule { get; set; } = -1;
+    public int MeetingStartedSchedule { get; set; } = -1;
 
-    public string? MeetingStartMessage { get; set; }
+    public string? MeetingStartedMessage { get; set; }
 
-    public string? MeetingStartUrl { get; set; }
+    public string? MeetingStartedUrl { get; set; }
 
-    public bool MeetingEndSended { get; set; }
+    public bool MeetingEndingSended { get; set; }
 
-    public int MeetingEndSchedule { get; set; } = -1;
+    public int MeetingEndingSchedule { get; set; } = -1;
 
-    public string? MeetingEndMessage { get; set; }
+    public string? MeetingEndingMessage { get; set; }
 
-    public string? MeetingEndUrl { get; set; }
+    public string? MeetingEndingUrl { get; set; }
 
-    public bool MeetingRunning { get; set; }
+    public bool MeetingInProgress { get; set; }
 
-    public int MeetingRunSchedule { get; set; } = -1;
+    public int MeetingInProgressSchedule { get; set; } = -1;
 
-    public string? MeetingRunMessage { get; set; }
+    public string? MeetingInProgressMessage { get; set; }
 
-    public string? MeetingRunUrl { get; set; }
+    public string? MeetingInProgressUrl { get; set; }
 
     public DateTime? ScheduledEndTime { get; set; }
 

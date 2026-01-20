@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -65,7 +65,15 @@ public class BlobsServiceTests
             .Returns(Response.FromValue(true, Substitute.For<Response>()));
         _ = blobClient
             .DownloadContentAsync(default)
-            .Returns(Response.FromValue(BlobsModelFactory.BlobDownloadResult(content: BinaryData.FromObjectAsJson("value1"), details: BlobsModelFactory.BlobDownloadDetails(eTag: new ETag())), Substitute.For<Response>()));
+            .Returns(
+                Response.FromValue(
+                    BlobsModelFactory.BlobDownloadResult(
+                        content: BinaryData.FromObjectAsJson("value1"),
+                        details: BlobsModelFactory.BlobDownloadDetails(eTag: new ETag())
+                    ),
+                    Substitute.For<Response>()
+                )
+            );
         var blobContainerClient = Substitute.For<BlobContainerClient>();
         _ = blobContainerClient
             .GetBlobClient(Arg.Any<string>())

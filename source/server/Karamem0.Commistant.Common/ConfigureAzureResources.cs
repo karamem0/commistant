@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -25,7 +25,7 @@ public static class ConfigureAzureResources
                 var options = configuration
                     .GetSection("AzureOpenAI")
                     .Get<AzureOpenAIOptions>();
-                _ = options ?? throw new InvalidOperationException();
+                _ = options ?? throw new InvalidOperationException($"{nameof(AzureOpenAIOptions)} を null にはできません");
                 settings.Endpoint = options.Endpoint;
                 settings.Credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions());
             }
@@ -35,13 +35,13 @@ public static class ConfigureAzureResources
     public static void AddAzureBlobContainerClient(this IHostApplicationBuilder builder, IConfiguration configuration)
     {
         builder.AddAzureBlobContainerClient(
-            "container",
+            "azure-bot-states",
             configureSettings: settings =>
             {
                 var options = configuration
                     .GetSection("AzureStorageBlobs")
                     .Get<AzureStorageBlobsOptions>();
-                _ = options ?? throw new InvalidOperationException();
+                _ = options ?? throw new InvalidOperationException($"{nameof(AzureStorageBlobsOptions)} を null にはできません");
                 settings.ServiceUri = options.Endpoint;
                 settings.BlobContainerName = options.ContainerName;
                 settings.Credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions());

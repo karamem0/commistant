@@ -31,7 +31,7 @@ jobs:
         env:
           AZURE_FUNCTION_APP_DOMAIN_NAME: ${{vars.AZURE_FUNCTION_APP_DOMAIN_NAME}}
           BUILD_VERSION: ${{vars.BUILD_VERSION}}
-          MICROSOFT_APP_ID: ${{vars.MICROSOFT_APP_ID}}
+          MICROSOFT_365_AGENT_ID: ${{vars.MICROSOFT_365_AGENT_ID}}
           TELEMETRY_CONNECTION_STRING: ${{vars.TELEMETRY_CONNECTION_STRING}}
   deploy-to-azure:
     name: Deploy to Azure
@@ -57,5 +57,5 @@ jobs:
         env:
           AZURE_WEB_APP_DOMAIN_NAME: ${{vars.AZURE_WEB_APP_DOMAIN_NAME}}
           BUILD_VERSION: ${{vars.BUILD_VERSION}}
-          MICROSOFT_APP_ID: ${{vars.MICROSOFT_APP_ID}}
-          MICROSOFT_BOT_ID: ${{vars.MICROSOFT_BOT_ID}}
+          MICROSOFT_TEAMS_APP_ID: ${{vars.MICROSOFT_TEAMS_APP_ID}}
+          MICROSOFT_365_AGENT_ID: ${{vars.MICROSOFT_365_AGENT_ID}}

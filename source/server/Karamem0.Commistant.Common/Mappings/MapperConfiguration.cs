@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -7,6 +7,7 @@
 //
 
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Types;
 using Mapster;
 
 namespace Karamem0.Commistant.Mappings;
@@ -22,54 +23,54 @@ public class MapperConfiguration : IRegister
                 {
                     switch (s.Type)
                     {
-                        case Constants.MeetingStartCommand:
-                            if (s.Value.Enabled is true)
+                        case CommandTypes.MeetingStarted:
+                            if (s.Value?.Enabled is true)
                             {
-                                if (Constants.MeetingStartSchedules.Any(_ => _ == s.Value.Schedule))
+                                if (Constants.MeetingStartedSchedules.Any(_ => _ == s.Value.Schedule))
                                 {
-                                    d.MeetingStartSchedule = s.Value.Schedule;
+                                    d.MeetingStartedSchedule = s.Value.Schedule;
                                 }
                                 if (s.Value.Message?.Length > 0)
                                 {
-                                    d.MeetingStartMessage = s.Value.Message;
+                                    d.MeetingStartedMessage = s.Value.Message;
                                 }
                                 if (s.Value.Url?.Length > 0)
                                 {
-                                    d.MeetingStartUrl = s.Value.Url;
+                                    d.MeetingStartedUrl = s.Value.Url;
                                 }
                             }
                             break;
-                        case Constants.MeetingEndCommand:
-                            if (s.Value.Enabled is true)
+                        case CommandTypes.MeetingEnding:
+                            if (s.Value?.Enabled is true)
                             {
-                                if (Constants.MeetingEndSchedules.Any(_ => _ == s.Value.Schedule))
+                                if (Constants.MeetingEndingSchedules.Any(_ => _ == s.Value.Schedule))
                                 {
-                                    d.MeetingEndSchedule = s.Value.Schedule;
+                                    d.MeetingEndingSchedule = s.Value.Schedule;
                                 }
                                 if (s.Value.Message?.Length > 0)
                                 {
-                                    d.MeetingEndMessage = s.Value.Message;
+                                    d.MeetingEndingMessage = s.Value.Message;
                                 }
                                 if (s.Value.Url?.Length > 0)
                                 {
-                                    d.MeetingEndUrl = s.Value.Url;
+                                    d.MeetingEndingUrl = s.Value.Url;
                                 }
                             }
                             break;
-                        case Constants.MeetingRunCommand:
-                            if (s.Value.Enabled is true)
+                        case CommandTypes.MeetingInProgress:
+                            if (s.Value?.Enabled is true)
                             {
-                                if (Constants.MeetingRunSchedules.Any(_ => _ == s.Value.Schedule))
+                                if (Constants.MeetingInProgressSchedules.Any(_ => _ == s.Value.Schedule))
                                 {
-                                    d.MeetingRunSchedule = s.Value.Schedule;
+                                    d.MeetingInProgressSchedule = s.Value.Schedule;
                                 }
                                 if (s.Value.Message?.Length > 0)
                                 {
-                                    d.MeetingRunMessage = s.Value.Message;
+                                    d.MeetingInProgressMessage = s.Value.Message;
                                 }
                                 if (s.Value.Url?.Length > 0)
                                 {
-                                    d.MeetingRunUrl = s.Value.Url;
+                                    d.MeetingInProgressUrl = s.Value.Url;
                                 }
                             }
                             break;

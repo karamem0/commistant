@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -9,8 +9,8 @@
 using Karamem0.Commistant.Commands.Abstraction;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
+using Microsoft.Agents.Core.Models;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;

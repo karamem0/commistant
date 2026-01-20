@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -10,11 +10,11 @@ using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Services;
 using Mapster;
 using MapsterMapper;
+using Microsoft.Agents.Core.Models;
+using Microsoft.Agents.Extensions.Teams.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Schema;
-using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -47,9 +47,9 @@ public class SetSettingsFunctionTests
                     }
                 }
             );
-        var botConnectorService = Substitute.For<IBotConnectorService>();
-        _ = botConnectorService
-            .GetMeetingInfoAsync(Arg.Any<Uri>(), Arg.Any<string>())
+        var connectorClientService = Substitute.For<IConnectorClientService>();
+        _ = connectorClientService
+            .GetMeetingInfoAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(
                 new MeetingInfo()
                 {
@@ -95,7 +95,7 @@ public class SetSettingsFunctionTests
         };
         var target = new SetSettingsFunction(
             blobsService,
-            botConnectorService,
+            connectorClientService,
             mapper,
             logger
         );

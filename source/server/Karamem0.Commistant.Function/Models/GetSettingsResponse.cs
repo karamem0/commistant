@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -22,31 +22,31 @@ public record GetSettingsResponse
     [JsonPropertyName("meetingId")]
     public required string MeetingId { get; set; }
 
-    [JsonPropertyName("meetingStartSchedule")]
-    public int MeetingStartSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingStartedSchedule")]
+    public int MeetingStartedSchedule { get; set; } = -1;
 
-    [JsonPropertyName("meetingStartMessage")]
-    public string? MeetingStartMessage { get; set; }
+    [JsonPropertyName("meetingStartedMessage")]
+    public string? MeetingStartedMessage { get; set; }
 
-    [JsonPropertyName("meetingStartUrl")]
-    public string? MeetingStartUrl { get; set; }
+    [JsonPropertyName("meetingStartedUrl")]
+    public string? MeetingStartedUrl { get; set; }
 
-    [JsonPropertyName("meetingEndSchedule")]
-    public int MeetingEndSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingEndingSchedule")]
+    public int MeetingEndingSchedule { get; set; } = -1;
 
-    [JsonPropertyName("meetingEndMessage")]
-    public string? MeetingEndMessage { get; set; }
+    [JsonPropertyName("meetingEndingMessage")]
+    public string? MeetingEndingMessage { get; set; }
 
-    [JsonPropertyName("meetingEndUrl")]
-    public string? MeetingEndUrl { get; set; }
+    [JsonPropertyName("meetingEndingUrl")]
+    public string? MeetingEndingUrl { get; set; }
 
-    [JsonPropertyName("meetingRunSchedule")]
-    public int MeetingRunSchedule { get; set; } = -1;
+    [JsonPropertyName("meetingInProgressSchedule")]
+    public int MeetingInProgressSchedule { get; set; } = -1;
 
-    [JsonPropertyName("meetingRunMessage")]
-    public string? MeetingRunMessage { get; set; }
+    [JsonPropertyName("meetingInProgressMessage")]
+    public string? MeetingInProgressMessage { get; set; }
 
-    [JsonPropertyName("meetingRunUrl")]
-    public string? MeetingRunUrl { get; set; }
+    [JsonPropertyName("meetingInProgressUrl")]
+    public string? MeetingInProgressUrl { get; set; }
 
 }

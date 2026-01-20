@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -21,27 +21,27 @@ export const mapper = createMapper({
 });
 
 PojosMetadataMap.create<CommandSettings>('CommandSettings', {
-  meetingStartSchedule: Number,
-  meetingStartMessage: String,
-  meetingStartUrl: String,
-  meetingEndSchedule: Number,
-  meetingEndMessage: String,
-  meetingEndUrl: String,
-  meetingRunSchedule: Number,
-  meetingRunMessage: String,
-  meetingRunUrl: String
+  meetingStartedSchedule: Number,
+  meetingStartedMessage: String,
+  meetingStartedUrl: String,
+  meetingEndingSchedule: Number,
+  meetingEndingMessage: String,
+  meetingEndingUrl: String,
+  meetingInProgressSchedule: Number,
+  meetingInProgressMessage: String,
+  meetingInProgressUrl: String
 });
 
 PojosMetadataMap.create<CommandSettingsFormState>('CommandSettingsFormState', {
-  meetingStartSchedule: String,
-  meetingStartMessage: String,
-  meetingStartUrl: String,
-  meetingEndSchedule: String,
-  meetingEndMessage: String,
-  meetingEndUrl: String,
-  meetingRunSchedule: String,
-  meetingRunMessage: String,
-  meetingRunUrl: String
+  meetingStartedSchedule: String,
+  meetingStartedMessage: String,
+  meetingStartedUrl: String,
+  meetingEndingSchedule: String,
+  meetingEndingMessage: String,
+  meetingEndingUrl: String,
+  meetingInProgressSchedule: String,
+  meetingInProgressMessage: String,
+  meetingInProgressUrl: String
 });
 
 createMap<CommandSettings, CommandSettingsFormState>(
@@ -49,14 +49,14 @@ createMap<CommandSettings, CommandSettingsFormState>(
   'CommandSettings',
   'CommandSettingsFormState',
   forMember(
-    (target) => target.meetingStartSchedule,
-    mapFrom((source) => String(source.meetingStartSchedule))),
+    (target) => target.meetingStartedSchedule,
+    mapFrom((source) => String(source.meetingStartedSchedule))),
   forMember(
-    (target) => target.meetingEndSchedule,
-    mapFrom((source) => String(source.meetingEndSchedule))),
+    (target) => target.meetingEndingSchedule,
+    mapFrom((source) => String(source.meetingEndingSchedule))),
   forMember(
-    (target) => target.meetingRunSchedule,
-    mapFrom((source) => String(source.meetingRunSchedule)))
+    (target) => target.meetingInProgressSchedule,
+    mapFrom((source) => String(source.meetingInProgressSchedule)))
 );
 
 createMap<CommandSettingsFormState, CommandSettings>(
@@ -64,12 +64,12 @@ createMap<CommandSettingsFormState, CommandSettings>(
   'CommandSettingsFormState',
   'CommandSettings',
   forMember(
-    (target) => target.meetingStartSchedule,
-    mapFrom((source) => Number(source.meetingStartSchedule))),
+    (target) => target.meetingStartedSchedule,
+    mapFrom((source) => Number(source.meetingStartedSchedule))),
   forMember(
-    (target) => target.meetingEndSchedule,
-    mapFrom((source) => Number(source.meetingEndSchedule))),
+    (target) => target.meetingEndingSchedule,
+    mapFrom((source) => Number(source.meetingEndingSchedule))),
   forMember(
-    (target) => target.meetingRunSchedule,
-    mapFrom((source) => Number(source.meetingRunSchedule)))
+    (target) => target.meetingInProgressSchedule,
+    mapFrom((source) => Number(source.meetingInProgressSchedule)))
 );

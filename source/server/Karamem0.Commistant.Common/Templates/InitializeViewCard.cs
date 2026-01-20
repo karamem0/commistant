@@ -1,12 +1,11 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using AdaptiveCards;
 using AdaptiveCards.Templating;
 using Karamem0.Commistant.Models;
 
@@ -15,7 +14,7 @@ namespace Karamem0.Commistant.Templates;
 public static class InitializeViewCard
 {
 
-    public static AdaptiveCard Create(InitializeViewCardData rootData)
+    public static string Create(InitializeViewCardData rootData)
     {
         var template = new AdaptiveCardTemplate(
             """
@@ -36,8 +35,7 @@ public static class InitializeViewCard
               }
             """
         );
-        var card = AdaptiveCard.FromJson(template.Expand(rootData));
-        return card.Card;
+        return template.Expand(rootData);
     }
 
 }

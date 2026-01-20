@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -22,27 +22,27 @@ public static class ConfigureServices
 
     public static IServiceCollection AddCommands(this IServiceCollection services)
     {
-        _ = services.AddScoped<MeetingStartCommand>();
-        _ = services.AddScoped<MeetingEndCommand>();
-        _ = services.AddScoped<MeetingRunCommand>();
-        _ = services.AddScoped((provider) => new CommandSet()
-            .Add(provider.GetService<MeetingStartCommand>())
-            .Add(provider.GetService<MeetingEndCommand>())
-            .Add(provider.GetService<MeetingRunCommand>())
+        _ = services.AddTransient<MeetingStartedCommand>();
+        _ = services.AddTransient<MeetingEndingCommand>();
+        _ = services.AddTransient<MeetingInProgressCommand>();
+        _ = services.AddTransient((provider) => new CommandSet()
+            .Add(provider.GetService<MeetingStartedCommand>())
+            .Add(provider.GetService<MeetingEndingCommand>())
+            .Add(provider.GetService<MeetingInProgressCommand>())
         );
         return services;
     }
 
     public static IServiceCollection AddMapper(this IServiceCollection services)
     {
-        _ = services.AddScoped(provier =>
+        _ = services.AddTransient(provier =>
             {
                 TypeAdapterConfig.GlobalSettings.Apply(
                     [
                         new MapperConfiguration(),
-                        new MeetingEndCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
-                        new MeetingRunCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
-                        new MeetingStartCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
+                        new MeetingEndingCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
+                        new MeetingInProgressCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
+                        new MeetingStartedCommand.MapperConfiguration(provier.GetRequiredService<IQRCodeService>()),
                         new GetSettingsFunction.MapperConfiguration(),
                         new SetSettingsFunction.MapperConfiguration()
                     ]
@@ -50,7 +50,7 @@ public static class ConfigureServices
                 return TypeAdapterConfig.GlobalSettings;
             }
         );
-        _ = services.AddScoped<IMapper, ServiceMapper>();
+        _ = services.AddTransient<IMapper, ServiceMapper>();
         return services;
     }
 

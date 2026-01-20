@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -7,8 +7,8 @@
 //
 
 using Karamem0.Commistant.Models;
+using Karamem0.Commistant.Serialization;
 using Karamem0.Commistant.Templates;
-using Newtonsoft.Json;
 using OpenAI.Chat;
 using System.Threading;
 
@@ -34,19 +34,19 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
             Tools =
             {
                 ChatTool.CreateFunctionTool(
-                    "MeetingStart",
+                    "MeetingStarted",
                     "Update the schedule, text, and URL of messages sent the start of the meeting.",
-                    MeetingStartFunctionTool.Create()
+                    MeetingStartedFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
-                    "MeetingEnd",
+                    "MeetingEnding",
                     "Update the schedule, text, and URL of messages sent the end of the meeting.",
-                    MeetingEndFunctionTool.Create()
+                    MeetingEndingFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
-                    "MeetingRun",
+                    "MeetingInProgress",
                     "Update the schedule, text, and URL of messages sent during the meeting.",
-                    MeetingRunFunctionTool.Create()
+                    MeetingInProgressFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "Initialize",
@@ -58,13 +58,10 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
         var chatCompletion = await this.chatClient.CompleteChatAsync(
             [
                 new SystemChatMessage(
-                    string.Join(
-                        " ",
-                        [
-                            "You are an AI assistant generating JSON.",
-                            "You can only use user input and cannot use your own knowledge."
-                        ]
-                    )
+                    """
+                    You are an AI assistant generating JSON.
+                    You can only use user input and cannot use your own knowledge.
+                    """
                 ),
                 new UserChatMessage(text)
             ],
@@ -73,7 +70,7 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
         );
         if (chatCompletion.Value.FinishReason == ChatFinishReason.ToolCalls)
         {
-            return JsonConvert.DeserializeObject<CommandOptions>(
+            return JsonConverter.Deserialize<CommandOptions>(
                 chatCompletion
                     .Value.ToolCalls.Select(item => item.FunctionArguments)
                     .First()

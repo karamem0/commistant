@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -7,40 +7,61 @@
 //
 
 using Karamem0.Commistant;
+using Microsoft.Agents.Builder;
+using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
+builder.AddAgent(builder.Configuration);
 builder.AddAzureOpenAIClient(configuration);
 builder.AddAzureBlobContainerClient(configuration);
 
 var services = builder.Services;
+
 _ = services.AddHttpClient();
-_ = services
-    .AddControllers()
-    .AddNewtonsoftJson();
 _ = services.AddApplicationInsightsTelemetry();
+_ = services.AddAuthentication(configuration);
+_ = services.AddAuthorization();
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
-_ = services.AddServices(configuration);
-_ = services.AddBots(configuration);
+_ = services.AddRoutes();
 _ = services.AddDialogs();
+_ = services.AddServices(configuration);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     _ = app.UseDeveloperExceptionPage();
 }
-_ = app.UseDefaultFiles();
+_ = app.UseHttpsRedirection();
+_ = app.UseHsts();
 _ = app.UseStaticFiles();
-_ = app.UseWebSockets();
-_ = app.UseRouting();
-_ = app.MapControllers();
-_ = app.MapFallbackToFile("index.html");
+_ = app.MapFallbackToFile("/index.html");
+
+_ = app
+    .MapPost(
+        "/api/messages",
+        async (
+            HttpRequest request,
+            HttpResponse response,
+            IAgentHttpAdapter adapter,
+            IAgent agent,
+            CancellationToken cancellationToken
+        ) => await adapter.ProcessAsync(
+            request,
+            response,
+            agent,
+            cancellationToken
+        )
+    )
+    .RequireAuthorization();
 
 await app.RunAsync();

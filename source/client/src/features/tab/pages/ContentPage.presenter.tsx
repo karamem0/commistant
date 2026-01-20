@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022-2025 karamem0
+// Copyright (c) 2022-2026 karamem0
 //
 // This software is released under the MIT License.
 //
@@ -100,12 +100,12 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                 `}>
                 <div>
                   <Subtitle2>
-                    <FormattedMessage {...messages.MeetingStart} />
+                    <FormattedMessage {...messages.MeetingStarted} />
                   </Subtitle2>
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingStartSchedule}
-                    name="meetingStartSchedule"
+                    defaultValue={value.meetingStartedSchedule}
+                    name="meetingStartedSchedule"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
@@ -125,35 +125,35 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingStartMessage}
-                    name="meetingStartMessage"
+                    defaultValue={value.meetingStartedMessage}
+                    name="meetingStartedMessage"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Message)}>
                         <Textarea
                           {...field}
-                          disabled={disabled || watch.meetingStartSchedule === '-1'} />
+                          disabled={disabled || watch.meetingStartedSchedule === '-1'} />
                       </Field>
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingStartUrl}
-                    name="meetingStartUrl"
+                    defaultValue={value.meetingStartedUrl}
+                    name="meetingStartedUrl"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Url)}>
                         <Input
                           {...field}
-                          disabled={disabled || watch.meetingStartSchedule === '-1'} />
+                          disabled={disabled || watch.meetingStartedSchedule === '-1'} />
                       </Field>
                     )} />
                 </div>
                 <div>
                   <Subtitle2>
-                    <FormattedMessage {...messages.MeetingEnd} />
+                    <FormattedMessage {...messages.MeetingEnding} />
                   </Subtitle2>
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingEndSchedule}
-                    name="meetingEndSchedule"
+                    defaultValue={value.meetingEndingSchedule}
+                    name="meetingEndingSchedule"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
@@ -173,35 +173,35 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingEndMessage}
-                    name="meetingEndMessage"
+                    defaultValue={value.meetingEndingMessage}
+                    name="meetingEndingMessage"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Message)}>
                         <Textarea
                           {...field}
-                          disabled={disabled || watch.meetingEndSchedule === '-1'} />
+                          disabled={disabled || watch.meetingEndingSchedule === '-1'} />
                       </Field>
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingEndUrl}
-                    name="meetingEndUrl"
+                    defaultValue={value.meetingEndingUrl}
+                    name="meetingEndingUrl"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Url)}>
                         <Input
                           {...field}
-                          disabled={disabled || watch.meetingEndSchedule === '-1'} />
+                          disabled={disabled || watch.meetingEndingSchedule === '-1'} />
                       </Field>
                     )} />
                 </div>
                 <div>
                   <Subtitle2>
-                    <FormattedMessage {...messages.MeetingRun} />
+                    <FormattedMessage {...messages.MeetingInProgress} />
                   </Subtitle2>
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingRunSchedule}
-                    name="meetingRunSchedule"
+                    defaultValue={value.meetingInProgressSchedule}
+                    name="meetingInProgressSchedule"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
@@ -222,24 +222,24 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingRunMessage}
-                    name="meetingRunMessage"
+                    defaultValue={value.meetingInProgressMessage}
+                    name="meetingInProgressMessage"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Message)}>
                         <Textarea
                           {...field}
-                          disabled={disabled || watch.meetingRunSchedule === '-1'} />
+                          disabled={disabled || watch.meetingInProgressSchedule === '-1'} />
                       </Field>
                     )} />
                   <Controller
                     control={form.control}
-                    defaultValue={value.meetingRunUrl}
-                    name="meetingRunUrl"
+                    defaultValue={value.meetingInProgressUrl}
+                    name="meetingInProgressUrl"
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Url)}>
                         <Input
                           {...field}
-                          disabled={disabled || watch.meetingRunSchedule === '-1'} />
+                          disabled={disabled || watch.meetingInProgressSchedule === '-1'} />
                       </Field>
                     )} />
                 </div>
