@@ -33,7 +33,7 @@ public class MeetingStartedCommand(
 
     private readonly IMapper mapper = mapper;
 
-    private readonly ILogger logger = logger;
+    private readonly ILogger<MeetingStartedCommand> logger = logger;
 
     public override async Task ExecuteAsync(
         CommandSettings commandSettings,

@@ -6,6 +6,7 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Routes.Abstraction;
 using Microsoft.Agents.Builder;
@@ -29,9 +30,17 @@ public class BeforeTurnRouteHandler(ConversationState conversationState, ILogger
         CancellationToken cancellationToken = default
     )
     {
-        this.conversationState.SetValue(nameof(ConversationReference), turnContext.Activity.GetConversationReference());
-        this.conversationState.SetValue(nameof(CommandSettings), this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new()));
-        return true;
+        try
+        {
+            this.logger.MethodExecuting();
+            this.conversationState.SetValue(nameof(ConversationReference), turnContext.Activity.GetConversationReference());
+            this.conversationState.SetValue(nameof(CommandSettings), this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new()));
+            return true;
+        }
+        finally
+        {
+            this.logger.MethodExecuted();
+        }
     }
 
 }

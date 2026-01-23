@@ -39,18 +39,26 @@ public class MeetingStartedRouteHandler(
         CancellationToken cancellationToken = default
     )
     {
-        var value = (JsonElement)turnContext.Activity.Value;
-        var meeting = JsonConverter.Deserialize<MeetingStartEventDetails>(value);
-        _ = meeting ?? throw new InvalidOperationException($"{nameof(MeetingStartEventDetails)} を null にはできません");
-        this.logger.MeetingStarted(conversationId: turnContext.Activity.Conversation.Id, meetingId: meeting.Id);
-        var commandSettings = this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new());
-        var meetingInfo = await this.meetingService.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
-        commandSettings.MeetingInProgress = true;
-        commandSettings.MeetingStartedSended = false;
-        commandSettings.MeetingEndingSended = false;
-        commandSettings.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
-        commandSettings.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
-        this.conversationState.SetValue(nameof(CommandSettings), commandSettings);
+        try
+        {
+            this.logger.MethodExecuting();
+            var value = (JsonElement)turnContext.Activity.Value;
+            var meeting = JsonConverter.Deserialize<MeetingStartEventDetails>(value);
+            _ = meeting ?? throw new InvalidOperationException($"{nameof(MeetingStartEventDetails)} を null にはできません");
+            this.logger.MeetingStarted(conversationId: turnContext.Activity.Conversation.Id, meetingId: meeting.Id);
+            var commandSettings = this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new());
+            var meetingInfo = await this.meetingService.GetMeetingInfoAsync(turnContext, cancellationToken: cancellationToken);
+            commandSettings.MeetingInProgress = true;
+            commandSettings.MeetingStartedSended = false;
+            commandSettings.MeetingEndingSended = false;
+            commandSettings.ScheduledStartTime = meetingInfo.Details.ScheduledStartTime;
+            commandSettings.ScheduledEndTime = meetingInfo.Details.ScheduledEndTime;
+            this.conversationState.SetValue(nameof(CommandSettings), commandSettings);
+        }
+        finally
+        {
+            this.logger.MethodExecuted();
+        }
     }
 
 }

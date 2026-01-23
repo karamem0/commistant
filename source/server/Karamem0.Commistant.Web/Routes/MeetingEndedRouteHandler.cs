@@ -32,17 +32,25 @@ public class MeetingEndedRouteHandler(ConversationState conversationState, ILogg
         CancellationToken cancellationToken = default
     )
     {
-        var value = (JsonElement)turnContext.Activity.Value;
-        var meeting = JsonConverter.Deserialize<MeetingEndEventDetails>(value);
-        _ = meeting ?? throw new InvalidOperationException($"{nameof(MeetingEndEventDetails)} を null にはできません");
-        this.logger.MeetingEnded(conversationId: turnContext.Activity.Conversation.Id, meetingId: meeting.Id);
-        var commandSettings = this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new());
-        commandSettings.MeetingInProgress = false;
-        commandSettings.MeetingStartedSended = false;
-        commandSettings.MeetingEndingSended = false;
-        commandSettings.ScheduledStartTime = null;
-        commandSettings.ScheduledEndTime = null;
-        this.conversationState.SetValue(nameof(CommandSettings), commandSettings);
+        try
+        {
+            this.logger.MethodExecuting();
+            var value = (JsonElement)turnContext.Activity.Value;
+            var meeting = JsonConverter.Deserialize<MeetingEndEventDetails>(value);
+            _ = meeting ?? throw new InvalidOperationException($"{nameof(MeetingEndEventDetails)} を null にはできません");
+            this.logger.MeetingEnded(conversationId: turnContext.Activity.Conversation.Id, meetingId: meeting.Id);
+            var commandSettings = this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new());
+            commandSettings.MeetingInProgress = false;
+            commandSettings.MeetingStartedSended = false;
+            commandSettings.MeetingEndingSended = false;
+            commandSettings.ScheduledStartTime = null;
+            commandSettings.ScheduledEndTime = null;
+            this.conversationState.SetValue(nameof(CommandSettings), commandSettings);
+        }
+        finally
+        {
+            this.logger.MethodExecuted();
+        }
     }
 
 }

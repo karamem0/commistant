@@ -7,6 +7,7 @@
 //
 
 using NUnit.Framework;
+using System.Text.Json;
 
 namespace Karamem0.Commistant.Extensions.Test;
 
@@ -15,7 +16,21 @@ public class DictionaryExtensionTests
 {
 
     [Test()]
-    public void GetValueOrDefault_Success_WhenKeyExists()
+    public void GetValueOrDefault_Success_WhenJsonElement()
+    {
+        // Setup
+        var target = new Dictionary<string, object?>()
+        {
+            ["value"] = JsonElement.Parse("123")
+        };
+        // Execute
+        var actual = DictionaryExtension.GetValueOrDefault<int>(target, "value");
+        // Assert
+        Assert.That(actual, Is.EqualTo(123));
+    }
+
+    [Test()]
+    public void GetValueOrDefault_Success_WhenObject()
     {
         // Setup
         var target = new Dictionary<string, object?>()
@@ -40,6 +55,18 @@ public class DictionaryExtensionTests
         var actual = DictionaryExtension.GetValueOrDefault<int>(target, "dummy");
         // Assert
         Assert.That(actual, Is.Zero);
+    }
+
+    [Test()]
+    public void GetValueOrDefault_Failure_WhenTypeMismatch()
+    {
+        // Setup
+        var target = new Dictionary<string, object?>()
+        {
+            ["value"] = 123
+        };
+        // Execute
+        _ = Assert.Throws<InvalidOperationException>(() => DictionaryExtension.GetValueOrDefault<string>(target, "value"));
     }
 
 }

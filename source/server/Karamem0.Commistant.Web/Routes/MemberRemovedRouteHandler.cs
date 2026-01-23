@@ -28,13 +28,21 @@ public class MemberRemovedRouteHandler(ConversationState conversationState, ILog
         CancellationToken cancellationToken = default
     )
     {
-        this.logger.MembersRemoved(conversationId: turnContext.Activity.Conversation.Id);
-        foreach (var member in turnContext.Activity.MembersRemoved)
+        try
         {
-            if (member.Id == turnContext.Activity.Recipient.Id)
+            this.logger.MethodExecuting();
+            this.logger.MembersRemoved(conversationId: turnContext.Activity.Conversation.Id);
+            foreach (var member in turnContext.Activity.MembersRemoved)
             {
-                await this.conversationState.DeleteStateAsync(turnContext, cancellationToken);
+                if (member.Id == turnContext.Activity.Recipient.Id)
+                {
+                    await this.conversationState.DeleteStateAsync(turnContext, cancellationToken);
+                }
             }
+        }
+        finally
+        {
+            this.logger.MethodExecuted();
         }
     }
 

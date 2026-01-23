@@ -36,7 +36,7 @@ public class MeetingInProgressDialog(
 
     private readonly IMapper mapper = mapper;
 
-    private readonly ILogger logger = logger;
+    private readonly ILogger<MeetingInProgressDialog> logger = logger;
 
     protected override async Task OnInitializeAsync(DialogContext dialogContext)
     {
@@ -49,7 +49,7 @@ public class MeetingInProgressDialog(
                 ]
             )
         );
-        _ = this.AddDialog(new TextPrompt(nameof(this.OnBeforeAsync), AdaptiveCardValidator.Validate));
+        _ = this.AddDialog(new TextPrompt(nameof(TextPrompt), AdaptiveCardValidator.Validate));
         await base.OnInitializeAsync(dialogContext);
     }
 
@@ -75,7 +75,7 @@ public class MeetingInProgressDialog(
         );
         this.logger.SettingsUpdating(conversationId: stepContext.Context.Activity.Id);
         return await stepContext.PromptAsync(
-            nameof(this.OnBeforeAsync),
+            nameof(TextPrompt),
             new PromptOptions()
             {
                 Prompt = activity
@@ -118,7 +118,7 @@ public class MeetingInProgressDialog(
             activity.Id = stepContext.Context.Activity.ReplyToId;
             _ = await stepContext.Context.UpdateActivityAsync(activity, cancellationToken);
         }
-        return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+        return await stepContext.EndDialogAsync(null, cancellationToken);
     }
 
     public class MapperConfiguration(IQRCodeService qrCodeService) : IRegister

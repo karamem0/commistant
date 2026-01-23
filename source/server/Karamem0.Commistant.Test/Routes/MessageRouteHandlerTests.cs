@@ -19,7 +19,7 @@ using NUnit.Framework;
 namespace Karamem0.Commistant.Routes.Tests;
 
 [Category("Karamem0.Commistant.Routes")]
-public class MemberAddedRouteHandlerTests
+public class MessageRouteHandlerTests
 {
 
     [Test()]
@@ -27,7 +27,7 @@ public class MemberAddedRouteHandlerTests
     {
         // Setup
         var dialogService = Substitute.For<IDialogService<MainDialog>>();
-        var logger = Substitute.For<ILogger<MemberAddedRouteHandler>>();
+        var logger = Substitute.For<ILogger<MessageRouteHandler>>();
         var conversationState = new ConversationState(new MemoryStorage());
         var turnContext = Substitute.For<ITurnContext>();
         _ = turnContext.Activity.Returns(
@@ -66,7 +66,7 @@ public class MemberAddedRouteHandlerTests
         _ = turnContext.StackState.Returns(new TurnContextStateCollection());
         // Execute
         await conversationState.LoadAsync(turnContext);
-        var target = new MemberAddedRouteHandler(
+        var target = new MessageRouteHandler(
             conversationState,
             dialogService,
             logger

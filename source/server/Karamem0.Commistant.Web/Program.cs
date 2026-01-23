@@ -32,11 +32,12 @@ _ = services.AddAuthentication(configuration);
 _ = services.AddAuthorization();
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
-_ = services.AddRoutes();
 _ = services.AddDialogs();
+_ = services.AddRoutes();
 _ = services.AddServices(configuration);
 
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
     _ = app.UseDeveloperExceptionPage();

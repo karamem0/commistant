@@ -30,7 +30,6 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
     {
         var chatCompletionsOptions = new ChatCompletionOptions()
         {
-            Temperature = 0.3f,
             Tools =
             {
                 ChatTool.CreateFunctionTool(

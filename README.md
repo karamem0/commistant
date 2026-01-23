@@ -77,7 +77,7 @@ az deployment group create --template-file ./bicep/main.bicep --resource-group <
 
     |プレースホルダー|置換|
     |-|-|
-    |`{{VITE_FUNCTION_APP_URL}}`|**関数アプリのドメイン名**|
+    |`{{AZURE_FUNCTION_APP_DOMAIN_NAME}}`|**関数アプリのドメイン名**|
     |`{{VITE_TELEMETRY_CONNECTION_STRING}}`|**Application Insights の接続文字列**|
 
 3. `source/server/Karamem0.Commistant.Web` フォルダーに移動します。
@@ -91,7 +91,7 @@ dotnet publish --configuration Release
 5. `publish` フォルダーの中身を圧縮します。
 
 ```
-Compress-Archive -Path ./bin/Release/net8.0/publish/* -DestinationPath ../../build.zip
+Compress-Archive -Path ./bin/Release/net10.0/publish/* -DestinationPath ../../build.zip
 ```
 
 6. Azure CLI で ZIP ファイルをアップロードします。
@@ -113,7 +113,7 @@ dotnet publish --configuration Release
 2. `publish` フォルダーの中身を圧縮します。
 
 ```
-Compress-Archive -Path ./bin/Release/net8.0/publish/* -DestinationPath ../../build.zip
+Compress-Archive -Path ./bin/Release/net10.0/publish/* -DestinationPath ../../build.zip
 ```
 
 3. Azure CLI で ZIP ファイルをアップロードします。
@@ -131,8 +131,8 @@ az webapp deploy --name <関数アプリの名前> --resource-group <リソー�
     |プレースホルダー|置換|
     |-|-|
     |`{{AZURE_WEB_APP_DOMAIN_NAME}}`|**Web アプリのドメイン名**|
-    |`{{MICROSOFT_APP_ID}}`|**アプリケーション ID**|
-    |`{{MICROSOFT_BOT_ID}}`|**ボット ID**|
+    |`{{MICROSOFT_TEAMS_APP_ID}}`|**アプリケーション ID**|
+    |`{{MICROSOFT_365_AGENT_ID}}`|**アプリケーション ID**|
 
 3. `manifest` フォルダーの中身を圧縮します。
 

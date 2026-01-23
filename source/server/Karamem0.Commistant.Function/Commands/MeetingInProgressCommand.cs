@@ -33,7 +33,7 @@ public class MeetingInProgressCommand(
 
     private readonly IMapper mapper = mapper;
 
-    private readonly ILogger logger = logger;
+    private readonly ILogger<MeetingInProgressCommand> logger = logger;
 
     public override async Task ExecuteAsync(
         CommandSettings commandSettings,

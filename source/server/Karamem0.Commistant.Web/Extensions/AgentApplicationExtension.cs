@@ -11,7 +11,7 @@ using Microsoft.Agents.Builder.App;
 
 namespace Karamem0.Commistant.Extensions;
 
-public static class AgentApplicationExtensions
+public static class AgentApplicationExtension
 {
 
     public static AgentApplication OnActivity(

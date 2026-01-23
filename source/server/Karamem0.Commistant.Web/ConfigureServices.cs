@@ -104,11 +104,12 @@ public static class ConfigureServices
 
     public static IServiceCollection AddDialogs(this IServiceCollection services)
     {
+        _ = services.AddTransient<MainDialog>();
         _ = services.AddTransient<MeetingStartedDialog>();
         _ = services.AddTransient<MeetingEndingDialog>();
         _ = services.AddTransient<MeetingInProgressDialog>();
         _ = services.AddTransient<InitializeDialog>();
-        _ = services.AddTransient<IDialogSetFactory, DialogSetFactory>();
+        _ = services.AddTransient<IDialogService<MainDialog>, DialogService<MainDialog>>();
         return services;
     }
 

@@ -42,8 +42,8 @@ _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftI
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
 _ = services.AddConnectorClient();
-_ = services.AddServices(configuration);
 _ = services.AddCommands();
+_ = services.AddServices(configuration);
 
 var app = builder.Build();
 
