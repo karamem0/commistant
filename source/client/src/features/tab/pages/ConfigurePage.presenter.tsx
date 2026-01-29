@@ -8,11 +8,11 @@
 
 import React from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Text } from '@fluentui/react-components';
 import { css } from '@emotion/react';
-import messages from '../messages';
+import { Text } from '@fluentui/react-components';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useTheme } from '../../../providers/ThemeProvider';
+import messages from '../messages';
 
 function ConfigurePage() {
 

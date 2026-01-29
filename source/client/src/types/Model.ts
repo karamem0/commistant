@@ -8,13 +8,13 @@
 
 export interface CommandSettings {
   isOrganizer: boolean,
-  meetingStartedSchedule: number,
-  meetingStartedMessage?: string,
-  meetingStartedUrl?: string,
-  meetingEndingSchedule: number,
   meetingEndingMessage?: string,
+  meetingEndingSchedule: number,
   meetingEndingUrl?: string,
-  meetingInProgressSchedule: number,
   meetingInProgressMessage?: string,
-  meetingInProgressUrl?: string
+  meetingInProgressSchedule: number,
+  meetingInProgressUrl?: string,
+  meetingStartedMessage?: string,
+  meetingStartedSchedule: number,
+  meetingStartedUrl?: string
 }

@@ -6,15 +6,16 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-import { defineConfig } from 'eslint/config';
-import globals from 'globals';
-import hooks from 'eslint-plugin-hooks';
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
+import hooks from 'eslint-plugin-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import perfectionist from 'eslint-plugin-perfectionist';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import sonarjs from 'eslint-plugin-sonarjs';
-import stylistic from '@stylistic/eslint-plugin';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
 import ts from 'typescript-eslint';
 
 export default defineConfig(
@@ -31,6 +32,7 @@ export default defineConfig(
       '@stylistic': stylistic,
       'hooks': hooks,
       'jsx-a11y': jsxA11y,
+      'perfectionist': perfectionist,
       'react': react,
       'react-hooks': reactHooks,
       'sonarjs': sonarjs
@@ -46,53 +48,6 @@ export default defineConfig(
     'rules': {
       ...reactHooks.configs.recommended.rules,
       ...sonarjs.configs.recommended.rules,
-      'dot-notation': [
-        'error',
-        {
-          'allowPattern': '^[a-z]+(_[a-z]+)+$'
-        }
-      ],
-      'key-spacing': [
-        'error',
-        {
-          'afterColon': true
-        }
-      ],
-      'linebreak-style': [
-        'error',
-        'unix'
-      ],
-      'no-alert': 'error',
-      'no-console': [
-        'warn',
-        {
-          'allow': [
-            'error'
-          ]
-        }
-      ],
-      'no-unused-vars': 'off',
-      'no-use-before-define': 'off',
-      'no-var': 'error',
-      'sort-imports': [
-        'error',
-        {
-          'allowSeparatedGroups': true
-        }
-      ],
-      'space-before-function-paren': [
-        'error',
-        {
-          'anonymous': 'never',
-          'named': 'never',
-          'asyncArrow': 'always'
-        }
-      ],
-      '@stylistic/arrow-parens': [
-        'error',
-        'always'
-      ],
-      '@stylistic/arrow-spacing': 'error',
       '@stylistic/array-bracket-spacing': [
         'error',
         'always',
@@ -100,6 +55,11 @@ export default defineConfig(
           'arraysInArrays': false
         }
       ],
+      '@stylistic/arrow-parens': [
+        'error',
+        'always'
+      ],
+      '@stylistic/arrow-spacing': 'error',
       '@stylistic/brace-style': [
         'error',
         '1tbs'
@@ -134,14 +94,6 @@ export default defineConfig(
           'maximum': 1
         }
       ],
-      '@stylistic/jsx-sort-props': [
-        'error',
-        {
-          'callbacksLast': true,
-          'multiline': 'last',
-          'reservedFirst': true
-        }
-      ],
       '@stylistic/jsx-tag-spacing': [
         'error',
         {
@@ -167,16 +119,22 @@ export default defineConfig(
       ],
       '@stylistic/operator-linebreak': [
         'error',
-        'after'
+        'after',
+        {
+          'overrides': {
+            '&': 'before',
+            '|': 'before'
+          }
+        }
       ],
       '@stylistic/padded-blocks': 'off',
-      '@stylistic/quotes': [
-        'error',
-        'single'
-      ],
       '@stylistic/quote-props': [
         'error',
         'consistent'
+      ],
+      '@stylistic/quotes': [
+        'error',
+        'single'
       ],
       '@stylistic/semi': [
         'error',
@@ -194,6 +152,12 @@ export default defineConfig(
           'varsIgnorePattern': '^_'
         }
       ],
+      'dot-notation': [
+        'error',
+        {
+          'allowPattern': '^[a-z]+(_[a-z]+)+$'
+        }
+      ],
       'hooks/sort': [
         'error',
         {
@@ -208,6 +172,98 @@ export default defineConfig(
           ]
         }
       ],
+      'key-spacing': [
+        'error',
+        {
+          'afterColon': true
+        }
+      ],
+      'linebreak-style': [
+        'error',
+        'unix'
+      ],
+      'no-alert': 'error',
+      'no-console': [
+        'warn',
+        {
+          'allow': [
+            'error'
+          ]
+        }
+      ],
+      'no-unused-vars': 'off',
+      'no-use-before-define': 'off',
+      'no-var': 'error',
+      'perfectionist/sort-imports': [
+        'error',
+        {
+          'newlinesBetween': 'ignore',
+          'newlinesInside': 'ignore',
+          'partitionByNewLine': true,
+          'type': 'natural'
+        }
+      ],
+      'perfectionist/sort-interfaces': [
+        'error',
+        {
+          'customGroups': [
+            {
+              'elementNamePattern': '^on.+',
+              'groupName': 'callback'
+            }
+          ],
+          'groups': [
+            'unknown',
+            'method',
+            'callback'
+          ],
+          'newlinesBetween': 'ignore',
+          'newlinesInside': 'ignore',
+          'partitionByNewLine': true,
+          'type': 'natural'
+        }
+      ],
+      'perfectionist/sort-jsx-props': [
+        'error',
+        {
+          'customGroups': [
+            {
+              'elementNamePattern': '^on.+',
+              'groupName': 'callback'
+            }
+          ],
+          'groups': [
+            'shorthand-prop',
+            'unknown',
+            'multiline-prop',
+            'callback'
+          ],
+          'newlinesBetween': 'ignore',
+          'newlinesInside': 'ignore',
+          'partitionByNewLine': true,
+          'type': 'natural'
+        }
+      ],
+      'perfectionist/sort-objects': [
+        'error',
+        {
+          'customGroups': [
+            {
+              'elementNamePattern': '^on.+',
+              'groupName': 'callback'
+            }
+          ],
+          'groups': [
+            'unknown',
+            'method',
+            'callback'
+          ],
+          'newlinesBetween': 'ignore',
+          'newlinesInside': 'ignore',
+          'partitionByNewLine': true,
+          'type': 'natural'
+        }
+      ],
       'react/no-unknown-property': [
         'error',
         {
@@ -217,10 +273,19 @@ export default defineConfig(
         }
       ],
       'sonarjs/no-empty-function': 'off',
+      'sonarjs/no-small-switch': 'off',
       'sonarjs/no-unknown-property': 'off',
       'sonarjs/no-unused-expressions': 'off',
       'sonarjs/no-unused-vars': 'off',
-      'sonarjs/prefer-single-boolean-return': 'off'
+      'sonarjs/prefer-single-boolean-return': 'off',
+      'space-before-function-paren': [
+        'error',
+        {
+          'anonymous': 'never',
+          'asyncArrow': 'always',
+          'named': 'never'
+        }
+      ]
     }
   }
 );

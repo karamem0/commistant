@@ -9,6 +9,7 @@
 import React from 'react';
 
 import { EventHandler } from '../../../types/Event';
+
 import Presenter from './ScheduleDropdown.presenter';
 
 interface ScheduleDropdownProps {
@@ -31,9 +32,9 @@ function ScheduleDropdown(props: Readonly<ScheduleDropdownProps>, ref: React.Ref
 
   return (
     <Presenter
-      ref={ref}
       disabled={disabled}
       options={options}
+      ref={ref}
       value={value}
       onBlur={onBlur}
       onChange={onChange} />

@@ -8,9 +8,9 @@
 
 import React from 'react';
 
+import axios from 'axios';
 import { useAsyncFn, useError } from 'react-use';
 import { CommandSettings } from '../types/Model';
-import axios from 'axios';
 
 function getValue(meetingId: string): Promise<CommandSettings> {
   return axios
@@ -32,10 +32,9 @@ export const useGetValue = (): GetValueFunction => {
   const [ state, fetch ] = useAsyncFn(getValue);
 
   React.useEffect(() => {
-    if (!state.error) {
-      return;
+    if (state.error != null) {
+      dispatchError(state.error);
     }
-    dispatchError(state.error);
   }, [
     dispatchError,
     state
@@ -66,10 +65,9 @@ export const useSetValue = (): SetValueFunction => {
   const [ state, fetch ] = useAsyncFn(setValue);
 
   React.useEffect(() => {
-    if (!state.error) {
-      return;
+    if (state.error != null) {
+      dispatchError(state.error);
     }
-    dispatchError(state.error);
   }, [
     dispatchError,
     state

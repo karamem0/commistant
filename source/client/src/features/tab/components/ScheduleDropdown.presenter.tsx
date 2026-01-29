@@ -31,10 +31,10 @@ function ScheduleDropdown(props: Readonly<ScheduleDropdownProps>, ref: React.Ref
 
   return (
     <Dropdown
-      ref={ref}
       defaultSelectedOptions={value ? [ value ] : undefined}
       defaultValue={value && options ? options[value] : undefined}
       disabled={disabled}
+      ref={ref}
       onBlur={onBlur}
       onOptionSelect={(e, data) => onChange?.(e, data.optionValue)}>
       {

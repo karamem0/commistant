@@ -27,15 +27,21 @@ public class AgentApplicationExtensionTests
         var handler = Substitute.For<IRouteHandler>();
         // Execute
         var target = Substitute.For<AgentApplication>(options);
-        _ = AgentApplicationExtension.OnActivity(target, ActivityTypes.Message, handler);
-        // Assert
-        _ = target.Received().OnActivity(
+        _ = AgentApplicationExtension.OnActivity(
+            target,
             ActivityTypes.Message,
-            handler.InvokeAsync,
-            RouteRank.Unspecified,
-            default,
-            default
+            handler
         );
+        // Assert
+        _ = target
+            .Received()
+            .OnActivity(
+                ActivityTypes.Message,
+                handler.InvokeAsync,
+                RouteRank.Unspecified,
+                default,
+                default
+            );
     }
 
     [Test()]
@@ -48,7 +54,9 @@ public class AgentApplicationExtensionTests
         var target = Substitute.For<AgentApplication>(options);
         _ = AgentApplicationExtension.OnBeforeTurn(target, handler);
         // Assert
-        _ = target.Received().OnBeforeTurn(handler.InvokeAsync);
+        _ = target
+            .Received()
+            .OnBeforeTurn(handler.InvokeAsync);
     }
 
     [Test()]
@@ -59,15 +67,21 @@ public class AgentApplicationExtensionTests
         var handler = Substitute.For<IRouteHandler>();
         // Execute
         var target = Substitute.For<AgentApplication>(options);
-        _ = AgentApplicationExtension.OnConversationUpdate(target, ActivityTypes.ConversationUpdate, handler);
-        // Assert
-        _ = target.Received().OnConversationUpdate(
+        _ = AgentApplicationExtension.OnConversationUpdate(
+            target,
             ActivityTypes.ConversationUpdate,
-            handler.InvokeAsync,
-            RouteRank.Unspecified,
-            default,
-            default
+            handler
         );
+        // Assert
+        _ = target
+            .Received()
+            .OnConversationUpdate(
+                ActivityTypes.ConversationUpdate,
+                handler.InvokeAsync,
+                RouteRank.Unspecified,
+                default,
+                default
+            );
     }
 
     [Test()]
@@ -78,15 +92,21 @@ public class AgentApplicationExtensionTests
         var handler = Substitute.For<IRouteHandler>();
         // Execute
         var target = Substitute.For<AgentApplication>(options);
-        _ = AgentApplicationExtension.OnEvent(target, ActivityTypes.Event, handler);
-        // Assert
-        _ = target.Received().OnEvent(
+        _ = AgentApplicationExtension.OnEvent(
+            target,
             ActivityTypes.Event,
-            handler.InvokeAsync,
-            RouteRank.Unspecified,
-            default,
-            default
+            handler
         );
+        // Assert
+        _ = target
+            .Received()
+            .OnEvent(
+                ActivityTypes.Event,
+                handler.InvokeAsync,
+                RouteRank.Unspecified,
+                default,
+                default
+            );
     }
 
 }

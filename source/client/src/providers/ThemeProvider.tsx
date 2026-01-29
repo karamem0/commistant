@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
 import {
   FluentProvider as Provider,
   Theme,
@@ -17,7 +18,6 @@ import {
   teamsLightTheme
 } from '@fluentui/react-components';
 import { app } from '@microsoft/teams-js';
-import { css } from '@emotion/react';
 
 const customThemePalette = {
   10: '#050201',

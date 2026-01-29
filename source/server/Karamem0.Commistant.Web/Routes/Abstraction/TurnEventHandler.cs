@@ -6,8 +6,10 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
+using Karamem0.Commistant.Logging;
 using Microsoft.Agents.Builder;
 using Microsoft.Agents.Builder.State;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 
 namespace Karamem0.Commistant.Routes.Abstraction;
@@ -23,13 +25,36 @@ public interface ITurnEventHandler
 
 }
 
-public abstract class TurnEventHandler : ITurnEventHandler
+public abstract class TurnEventHandler<T>(ILogger<T> logger) : ITurnEventHandler where T : ITurnEventHandler
 {
 
-    public abstract Task<bool> InvokeAsync(
+    private readonly ILogger<T> logger = logger;
+
+    public async Task<bool> InvokeAsync(
         ITurnContext turnContext,
         ITurnState turnState,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken = default
+    )
+    {
+        try
+        {
+            this.logger.MethodExecuting();
+            return await this.InvokeAsyncCore(
+                turnContext,
+                turnState,
+                cancellationToken
+            );
+        }
+        finally
+        {
+            this.logger.MethodExecuted();
+        }
+    }
+
+    protected abstract Task<bool> InvokeAsyncCore(
+        ITurnContext turnContext,
+        ITurnState turnState,
+        CancellationToken cancellationToken = default
     );
 
 }

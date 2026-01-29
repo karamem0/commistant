@@ -7,13 +7,13 @@
 //
 
 export interface CommandSettingsFormState {
-  meetingStartedSchedule: string,
-  meetingStartedMessage: string,
-  meetingStartedUrl: string,
-  meetingEndingSchedule: string,
   meetingEndingMessage: string,
+  meetingEndingSchedule: string,
   meetingEndingUrl: string,
-  meetingInProgressSchedule: string,
   meetingInProgressMessage: string,
-  meetingInProgressUrl: string
+  meetingInProgressSchedule: string,
+  meetingInProgressUrl: string,
+  meetingStartedMessage: string,
+  meetingStartedSchedule: string,
+  meetingStartedUrl: string
 }

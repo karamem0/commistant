@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
 import {
   Button,
   Field,
@@ -17,12 +18,11 @@ import {
 } from '@fluentui/react-components';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { CommandSettingsFormState } from '../../../types/Form';
-import { EventHandler } from '../../../types/Event';
-import ScheduleDropdown from '../components/ScheduleDropdown';
-import { css } from '@emotion/react';
-import messages from '../messages';
 import { useTheme } from '../../../providers/ThemeProvider';
+import { EventHandler } from '../../../types/Event';
+import { CommandSettingsFormState } from '../../../types/Form';
+import ScheduleDropdown from '../components/ScheduleDropdown';
+import messages from '../messages';
 
 interface ContentPageProps {
   disabled?: boolean,
@@ -109,8 +109,8 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
@@ -157,8 +157,8 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
@@ -205,8 +205,8 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
