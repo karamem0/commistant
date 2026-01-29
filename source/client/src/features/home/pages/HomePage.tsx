@@ -8,9 +8,10 @@
 
 import React from 'react';
 
-import Presenter from './HomePage.presenter';
-import messages from '../messages';
 import { useIntl } from 'react-intl';
+import messages from '../messages';
+
+import Presenter from './HomePage.presenter';
 
 function HomePage() {
 

@@ -21,7 +21,7 @@ public class MessageRouteHandler(
     ConversationState conversationState,
     IDialogService<MainDialog> dialogService,
     ILogger<MessageRouteHandler> logger
-) : RouteHandler
+) : RouteHandler<MessageRouteHandler>(logger)
 {
 
     private readonly ConversationState conversationState = conversationState;
@@ -30,26 +30,18 @@ public class MessageRouteHandler(
 
     private readonly ILogger<MessageRouteHandler> logger = logger;
 
-    public override async Task InvokeAsync(
+    protected override async Task InvokeAsyncCore(
         ITurnContext turnContext,
         ITurnState turnState,
         CancellationToken cancellationToken = default
     )
     {
-        try
-        {
-            this.logger.MethodExecuting();
-            this.logger.MessageReceived(conversationId: turnContext.Activity.Conversation.Id);
-            _ = await this.dialogService.RunAsync(
-                turnContext,
-                this.conversationState,
-                cancellationToken
-            );
-        }
-        finally
-        {
-            this.logger.MethodExecuted();
-        }
+        this.logger.MessageReceived(conversationId: turnContext.Activity.Conversation.Id);
+        _ = await this.dialogService.RunAsync(
+            turnContext,
+            this.conversationState,
+            cancellationToken
+        );
     }
 
 }

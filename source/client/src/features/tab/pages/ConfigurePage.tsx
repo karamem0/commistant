@@ -9,9 +9,10 @@
 import React from 'react';
 
 import { app, pages } from '@microsoft/teams-js';
-import Presenter from './ConfigurePage.presenter';
-import messages from '../messages';
 import { useIntl } from 'react-intl';
+import messages from '../messages';
+
+import Presenter from './ConfigurePage.presenter';
 
 function ConfigurePage() {
 
@@ -20,10 +21,10 @@ function ConfigurePage() {
   const handleSave = React.useCallback(async (event: pages.config.SaveEvent) => {
     try {
       await pages.config.setConfig({
-        websiteUrl: window.origin,
         contentUrl: `${window.origin}/tab/content`,
         entityId: '55da67fc-cfa4-481c-a77f-de2c0b6deaed',
-        suggestedDisplayName: intl.formatMessage(messages.AppTitle)
+        suggestedDisplayName: intl.formatMessage(messages.AppTitle),
+        websiteUrl: window.origin
       });
       event.notifySuccess();
     } catch (error) {

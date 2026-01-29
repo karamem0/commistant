@@ -6,42 +6,42 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-import { PojosMetadataMap, pojos } from '@automapper/pojos';
 import {
   createMap,
   createMapper,
   forMember,
   mapFrom
 } from '@automapper/core';
-import { CommandSettings } from '../types/Model';
+import { PojosMetadataMap, pojos } from '@automapper/pojos';
 import { CommandSettingsFormState } from '../types/Form';
+import { CommandSettings } from '../types/Model';
 
 export const mapper = createMapper({
   strategyInitializer: pojos()
 });
 
 PojosMetadataMap.create<CommandSettings>('CommandSettings', {
-  meetingStartedSchedule: Number,
-  meetingStartedMessage: String,
-  meetingStartedUrl: String,
-  meetingEndingSchedule: Number,
   meetingEndingMessage: String,
+  meetingEndingSchedule: Number,
   meetingEndingUrl: String,
-  meetingInProgressSchedule: Number,
   meetingInProgressMessage: String,
-  meetingInProgressUrl: String
+  meetingInProgressSchedule: Number,
+  meetingInProgressUrl: String,
+  meetingStartedMessage: String,
+  meetingStartedSchedule: Number,
+  meetingStartedUrl: String
 });
 
 PojosMetadataMap.create<CommandSettingsFormState>('CommandSettingsFormState', {
-  meetingStartedSchedule: String,
-  meetingStartedMessage: String,
-  meetingStartedUrl: String,
-  meetingEndingSchedule: String,
   meetingEndingMessage: String,
+  meetingEndingSchedule: String,
   meetingEndingUrl: String,
-  meetingInProgressSchedule: String,
   meetingInProgressMessage: String,
-  meetingInProgressUrl: String
+  meetingInProgressSchedule: String,
+  meetingInProgressUrl: String,
+  meetingStartedMessage: String,
+  meetingStartedSchedule: String,
+  meetingStartedUrl: String
 });
 
 createMap<CommandSettings, CommandSettingsFormState>(

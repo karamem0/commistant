@@ -8,6 +8,7 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
 import {
   Button,
   Field,
@@ -17,12 +18,11 @@ import {
 } from '@fluentui/react-components';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { CommandSettingsFormState } from '../../../types/Form';
-import { EventHandler } from '../../../types/Event';
-import ScheduleDropdown from '../components/ScheduleDropdown';
-import { css } from '@emotion/react';
-import messages from '../messages';
 import { useTheme } from '../../../providers/ThemeProvider';
+import { EventHandler } from '../../../types/Event';
+import { CommandSettingsFormState } from '../../../types/Form';
+import ScheduleDropdown from '../components/ScheduleDropdown';
+import messages from '../messages';
 
 interface ContentPageProps {
   disabled?: boolean,
@@ -109,15 +109,15 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
                             '0': intl.formatMessage(messages.InTime),
-                            '5': intl.formatMessage(messages.MinutesAfter, { value: 5 }),
                             '10': intl.formatMessage(messages.MinutesAfter, { value: 10 }),
-                            '15': intl.formatMessage(messages.MinutesAfter, { value: 15 })
+                            '15': intl.formatMessage(messages.MinutesAfter, { value: 15 }),
+                            '5': intl.formatMessage(messages.MinutesAfter, { value: 5 })
                           }}
                           onBlur={field.onBlur}
                           onChange={(_, value) => field.onChange(value || '')} />
@@ -157,15 +157,15 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
                             '0': intl.formatMessage(messages.InTime),
-                            '5': intl.formatMessage(messages.MinutesBefore, { value: 5 }),
                             '10': intl.formatMessage(messages.MinutesBefore, { value: 10 }),
-                            '15': intl.formatMessage(messages.MinutesBefore, { value: 15 })
+                            '15': intl.formatMessage(messages.MinutesBefore, { value: 15 }),
+                            '5': intl.formatMessage(messages.MinutesBefore, { value: 5 })
                           }}
                           onBlur={field.onBlur}
                           onChange={(_, value) => field.onChange(value || '')} />
@@ -205,15 +205,15 @@ function ContentPage(props: Readonly<ContentPageProps>) {
                     render={({ field }) => (
                       <Field label={intl.formatMessage(messages.Schedule)}>
                         <ScheduleDropdown
-                          ref={field.ref}
                           disabled={disabled}
+                          ref={field.ref}
                           value={field.value}
                           options={{
                             '-1': intl.formatMessage(messages.None),
-                            '5': intl.formatMessage(messages.Minutes, { value: 5 }),
                             '10': intl.formatMessage(messages.Minutes, { value: 10 }),
                             '15': intl.formatMessage(messages.Minutes, { value: 15 }),
                             '30': intl.formatMessage(messages.Minutes, { value: 30 }),
+                            '5': intl.formatMessage(messages.Minutes, { value: 5 }),
                             '60': intl.formatMessage(messages.Minutes, { value: 60 })
                           }}
                           onBlur={field.onBlur}

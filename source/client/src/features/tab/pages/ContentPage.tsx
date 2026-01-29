@@ -8,14 +8,15 @@
 
 import React from 'react';
 
-import { useGetValue, useSetValue } from '../../../services/SettingsService';
-import { CommandSettingsFormState } from '../../../types/Form';
-import { Event } from '../../../types/Event';
-import { mapper } from '../../../mappings/AutoMapperProfile';
-import messages from '../messages';
 import { useIntl } from 'react-intl';
-import { useSnackbar } from '../../../common/providers/SnackbarProvider';
+import { useToast } from '../../../common/providers/ToastProvider';
+import { mapper } from '../../../mappings/AutoMapperProfile';
 import { useTeams } from '../../../providers/TeamsProvider';
+import { useGetValue, useSetValue } from '../../../services/SettingsService';
+import { ArgumentNullError, DependencyNullError } from '../../../types/Errot';
+import { Event } from '../../../types/Event';
+import { CommandSettingsFormState } from '../../../types/Form';
+import messages from '../messages';
 
 import Presenter from './ContentPage.presenter';
 
@@ -23,7 +24,7 @@ function ContentPage() {
 
   const intl = useIntl();
   const { context } = useTeams();
-  const { setSnackbar } = useSnackbar();
+  const dispatchToast = useToast();
   const getValue = useGetValue();
   const setValue = useSetValue();
 
@@ -33,14 +34,14 @@ function ContentPage() {
 
   const handleSubmit = React.useCallback((_?: Event, data?: CommandSettingsFormState) => {
     (async () => {
-      if (!data) {
-        throw new Error();
+      if (data == null) {
+        throw new ArgumentNullError('data');
       }
       try {
         setLoading(true);
         const conversationId = context?.chat?.id;
-        if (!conversationId) {
-          throw new Error();
+        if (conversationId == null) {
+          throw new DependencyNullError('conversationId');
         }
         const value = await setValue(
           conversationId,
@@ -54,15 +55,13 @@ function ContentPage() {
           'CommandSettings',
           'CommandSettingsFormState'
         ));
-        setSnackbar({
-          intent: 'success',
-          text: intl.formatMessage(messages.SaveSucceeded)
-        });
-      } catch {
-        setSnackbar({
-          intent: 'error',
-          text: intl.formatMessage(messages.SaveFailed)
-        });
+        dispatchToast(intl.formatMessage(messages.SaveSucceeded), 'success');
+      } catch (error) {
+        if (error instanceof Error) {
+          dispatchToast(intl.formatMessage(messages.SaveFailed), 'error');
+        } else {
+          throw error;
+        }
       } finally {
         setLoading(false);
       }
@@ -70,15 +69,15 @@ function ContentPage() {
   }, [
     context,
     intl,
-    setValue,
-    setSnackbar
+    dispatchToast,
+    setValue
   ]);
 
   React.useEffect(() => {
     (async () => {
       const conversationId = context?.chat?.id;
-      if (!conversationId) {
-        throw new Error();
+      if (conversationId == null) {
+        throw new DependencyNullError('conversationId');
       }
       const value = await getValue(conversationId);
       setDisabled(!value.isOrganizer);

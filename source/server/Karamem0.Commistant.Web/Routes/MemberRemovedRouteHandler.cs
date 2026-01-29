@@ -15,34 +15,27 @@ using System.Threading;
 
 namespace Karamem0.Commistant.Routes;
 
-public class MemberRemovedRouteHandler(ConversationState conversationState, ILogger<MemberRemovedRouteHandler> logger) : RouteHandler
+public class MemberRemovedRouteHandler(ConversationState conversationState, ILogger<MemberRemovedRouteHandler> logger)
+    : RouteHandler<MemberRemovedRouteHandler>(logger)
 {
 
     private readonly ConversationState conversationState = conversationState;
 
     private readonly ILogger<MemberRemovedRouteHandler> logger = logger;
 
-    public override async Task InvokeAsync(
+    protected override async Task InvokeAsyncCore(
         ITurnContext turnContext,
         ITurnState turnState,
         CancellationToken cancellationToken = default
     )
     {
-        try
+        this.logger.MembersRemoved(conversationId: turnContext.Activity.Conversation.Id);
+        foreach (var member in turnContext.Activity.MembersRemoved)
         {
-            this.logger.MethodExecuting();
-            this.logger.MembersRemoved(conversationId: turnContext.Activity.Conversation.Id);
-            foreach (var member in turnContext.Activity.MembersRemoved)
+            if (member.Id == turnContext.Activity.Recipient.Id)
             {
-                if (member.Id == turnContext.Activity.Recipient.Id)
-                {
-                    await this.conversationState.DeleteStateAsync(turnContext, cancellationToken);
-                }
+                await this.conversationState.DeleteStateAsync(turnContext, cancellationToken);
             }
-        }
-        finally
-        {
-            this.logger.MethodExecuted();
         }
     }
 

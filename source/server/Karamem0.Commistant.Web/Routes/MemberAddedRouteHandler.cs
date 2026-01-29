@@ -21,7 +21,7 @@ public class MemberAddedRouteHandler(
     ConversationState conversationState,
     IDialogService<MainDialog> dialogService,
     ILogger<MemberAddedRouteHandler> logger
-) : RouteHandler
+) : RouteHandler<MemberAddedRouteHandler>(logger)
 {
 
     private readonly ConversationState conversationState = conversationState;
@@ -30,41 +30,33 @@ public class MemberAddedRouteHandler(
 
     private readonly ILogger<MemberAddedRouteHandler> logger = logger;
 
-    public override async Task InvokeAsync(
+    protected override async Task InvokeAsyncCore(
         ITurnContext turnContext,
         ITurnState turnState,
         CancellationToken cancellationToken = default
     )
     {
-        try
+        this.logger.MembersAdded(conversationId: turnContext.Activity.Conversation.Id);
+        foreach (var member in turnContext.Activity.MembersAdded)
         {
-            this.logger.MethodExecuting();
-            this.logger.MembersAdded(conversationId: turnContext.Activity.Conversation.Id);
-            foreach (var member in turnContext.Activity.MembersAdded)
+            if (member.Id == turnContext.Activity.Recipient.Id)
             {
-                if (member.Id == turnContext.Activity.Recipient.Id)
-                {
-                    _ = await turnContext.SendActivityAsync(
-                        """
-                        <b>Commistant にようこそ！</b>
-                        <br/>
-                        Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。
-                        会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。
-                        通知にはテキストおよび QR コードつきの URL を添付することができます。
-                        """,
-                        cancellationToken: cancellationToken
-                    );
-                }
-                _ = await this.dialogService.RunAsync(
-                    turnContext,
-                    this.conversationState,
-                    cancellationToken
+                _ = await turnContext.SendActivityAsync(
+                    """
+                    <b>Commistant にようこそ！</b>
+                    <br/>
+                    Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。
+                    会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。
+                    通知にはテキストおよび QR コードつきの URL を添付することができます。
+                    """,
+                    cancellationToken: cancellationToken
                 );
             }
-        }
-        finally
-        {
-            this.logger.MethodExecuted();
+            _ = await this.dialogService.RunAsync(
+                turnContext,
+                this.conversationState,
+                cancellationToken
+            );
         }
     }
 

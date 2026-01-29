@@ -6,7 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Karamem0.Commistant.Logging;
 using Karamem0.Commistant.Models;
 using Karamem0.Commistant.Routes.Abstraction;
 using Microsoft.Agents.Builder;
@@ -17,30 +16,21 @@ using System.Threading;
 
 namespace Karamem0.Commistant.Routes;
 
-public class BeforeTurnRouteHandler(ConversationState conversationState, ILogger<BeforeTurnRouteHandler> logger) : TurnEventHandler
+public class BeforeTurnRouteHandler(ConversationState conversationState, ILogger<BeforeTurnRouteHandler> logger)
+    : TurnEventHandler<BeforeTurnRouteHandler>(logger)
 {
 
     private readonly ConversationState conversationState = conversationState;
 
-    private readonly ILogger<BeforeTurnRouteHandler> logger = logger;
-
-    public override async Task<bool> InvokeAsync(
+    protected override async Task<bool> InvokeAsyncCore(
         ITurnContext turnContext,
         ITurnState turnState,
         CancellationToken cancellationToken = default
     )
     {
-        try
-        {
-            this.logger.MethodExecuting();
-            this.conversationState.SetValue(nameof(ConversationReference), turnContext.Activity.GetConversationReference());
-            this.conversationState.SetValue(nameof(CommandSettings), this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new()));
-            return true;
-        }
-        finally
-        {
-            this.logger.MethodExecuted();
-        }
+        this.conversationState.SetValue(nameof(ConversationReference), turnContext.Activity.GetConversationReference());
+        this.conversationState.SetValue(nameof(CommandSettings), this.conversationState.GetValue<CommandSettings>(nameof(CommandSettings), () => new()));
+        return await Task.FromResult(true);
     }
 
 }
