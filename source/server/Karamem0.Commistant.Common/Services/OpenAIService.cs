@@ -34,32 +34,37 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
             {
                 ChatTool.CreateFunctionTool(
                     "MeetingStarted",
-                    "Update the schedule, text, and URL of messages sent the start of the meeting.",
+                    "会議が開始した後に通知するスケジュール、テキスト、および URL を設定します。",
                     MeetingStartedFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "MeetingEnding",
-                    "Update the schedule, text, and URL of messages sent the end of the meeting.",
+                    "会議が終了する前に通知するスケジュール、テキスト、および URL を設定します。",
                     MeetingEndingFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "MeetingInProgress",
-                    "Update the schedule, text, and URL of messages sent during the meeting.",
+                    "会議中に通知するスケジュール、テキスト、および URL を設定します。",
                     MeetingInProgressFunctionTool.Create()
                 ),
                 ChatTool.CreateFunctionTool(
                     "Initialize",
-                    "Initialize all settings.",
+                    "この会議のすべての設定を初期化します。",
                     InitializeFunctionTool.Create()
                 ),
+                ChatTool.CreateFunctionTool(
+                    "Help",
+                    "ヘルプ情報を表示します。",
+                    HelpFunctionTool.Create()
+                )
             }
         };
         var chatCompletion = await this.chatClient.CompleteChatAsync(
             [
                 new SystemChatMessage(
                     """
-                    You are an AI assistant generating JSON.
-                    You can only use user input and cannot use your own knowledge.
+                    あなたはユーザーからの入力から JSON を生成する AI アシスタントです。
+                    ユーザーの入力のみを使用し自分の知識を使用してはいけません。
                     """
                 ),
                 new UserChatMessage(text)

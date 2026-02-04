@@ -72,7 +72,7 @@ public class MainDialog(
             participantId: stepContext.Context.Activity.Recipient.AadObjectId,
             cancellationToken: cancellationToken
         );
-        if (participant.Meeting.Role != "Organizer")
+        if (participant.Meeting.Role != MeetingRoleTypes.Organizer)
         {
             _ = await stepContext.Context.SendActivityAsync(Messages.UserIsNotOrganizer, cancellationToken: cancellationToken);
             _ = await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
@@ -115,6 +115,27 @@ public class MainDialog(
                 return await stepContext.BeginDialogAsync(
                     nameof(InitializeDialog),
                     arguments,
+                    cancellationToken
+                );
+            case CommandTypes.Help:
+                _ = await stepContext.Context.SendActivityAsync(
+                    """
+                    Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。
+                    会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。
+                    通知にはテキストおよび QR コードつきの URL を添付することができます。
+                    <br/>
+                    利用可能なコマンド一覧:
+                    - <b>会議開始後</b>: 会議が開始した後に通知する内容を設定します。
+                    - <b>会議終了前</b>: 会議が終了する前に通知する内容を設定します。
+                    - <b>会議中</b>: 会議中に通知する内容を設定します。
+                    - <b>初期化</b>: この会議のすべての設定を初期状態に戻します。
+                    - <b>ヘルプ</b>: ヘルプ情報を表示します。
+                    """,
+                    cancellationToken: cancellationToken);
+                _ = await stepContext.EndDialogAsync(null, cancellationToken);
+                return await stepContext.BeginDialogAsync(
+                    nameof(WaterfallDialog),
+                    null,
                     cancellationToken
                 );
             default:

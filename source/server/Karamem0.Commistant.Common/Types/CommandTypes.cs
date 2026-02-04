@@ -19,4 +19,6 @@ public static class CommandTypes
 
     public const string Initialize = "初期化";
 
+    public const string Help = "ヘルプ";
+
 }
