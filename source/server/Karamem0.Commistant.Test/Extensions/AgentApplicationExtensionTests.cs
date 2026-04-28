@@ -39,8 +39,8 @@ public class AgentApplicationExtensionTests
                 ActivityTypes.Message,
                 handler.InvokeAsync,
                 RouteRank.Unspecified,
-                default,
-                default
+                default!,
+                default!
             );
     }
 
@@ -79,8 +79,8 @@ public class AgentApplicationExtensionTests
                 ActivityTypes.ConversationUpdate,
                 handler.InvokeAsync,
                 RouteRank.Unspecified,
-                default,
-                default
+                default!,
+                default!
             );
     }
 
@@ -104,8 +104,8 @@ public class AgentApplicationExtensionTests
                 ActivityTypes.Event,
                 handler.InvokeAsync,
                 RouteRank.Unspecified,
-                default,
-                default
+                default!,
+                default!
             );
     }
 
