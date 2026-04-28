@@ -131,7 +131,8 @@ public class MainDialog(
                     - <b>初期化</b>: この会議のすべての設定を初期状態に戻します。
                     - <b>ヘルプ</b>: ヘルプ情報を表示します。
                     """,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
                 _ = await stepContext.EndDialogAsync(null, cancellationToken);
                 return await stepContext.BeginDialogAsync(
                     nameof(WaterfallDialog),
