@@ -8,36 +8,37 @@
 
 import fs from 'fs';
 
-import { defineConfig } from 'vite';
+import babel from '@rolldown/plugin-babel';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   'build': {
     'outDir': 'build',
+    'rollupOptions': {
+      onLog(logLevel, rolldownLog, defaultHandler) {
+        if (rolldownLog.code !== 'INVALID_ANNOTATION') {
+          defaultHandler(logLevel, rolldownLog);
+        }
+      }
+    },
     'sourcemap': true
   },
-  'optimizeDeps': {
-    'esbuildOptions': {
-      'define': {
-        'global': 'globalThis'
-      }
-    }
-  },
   'plugins': [
-    react({
-      'jsxImportSource': '@emotion/react',
-      'babel': {
-        'plugins': [
-          '@emotion',
-          [
-            'formatjs',
-            {
-              'ast': true,
-              'idInterpolationPattern': '[sha512:contenthash:base64:6]'
-            }
-          ]
+    babel({
+      'plugins': [
+        '@emotion',
+        [
+          'formatjs',
+          {
+            'ast': true,
+            'idInterpolationPattern': '[sha512:contenthash:base64:6]'
+          }
         ]
-      }
+      ]
+    }),
+    react({
+      'jsxImportSource': '@emotion/react'
     })
   ],
   'server': {
