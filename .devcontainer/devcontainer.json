@@ -3,14 +3,14 @@
   "image": "mcr.microsoft.com/devcontainers/base:noble",
   "features": {
     "ghcr.io/devcontainers/features/azure-cli:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:3.0.1": {},
     "ghcr.io/devcontainers/features/dotnet:2": {
       "version": "10.0",
       "workloads": "aspire"
     },
     "ghcr.io/devcontainers/features/git-lfs:1": {},
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "22.22.1"
+    "ghcr.io/devcontainers/features/node:2.0.0": {
+      "version": "22.22.3"
     },
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {}
   },

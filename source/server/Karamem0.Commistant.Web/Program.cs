@@ -7,16 +7,14 @@
 //
 
 #pragma warning disable IDE0053
+#pragma warning disable IDE0075
 
 using Karamem0.Commistant;
-using Microsoft.Agents.Builder;
 using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -43,10 +41,6 @@ _ = services.AddRoutes();
 _ = services.AddServices(configuration);
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    _ = app.UseDeveloperExceptionPage();
-}
 _ = app.UseHttpsRedirection();
 _ = app.UseHsts();
 _ = app.UseStaticFiles();
@@ -66,24 +60,9 @@ _ = app.Use(async (context, next) =>
         await next();
     }
 );
-_ = app
-    .MapPost(
-        "/api/messages",
-        async (
-            HttpRequest request,
-            HttpResponse response,
-            IAgentHttpAdapter adapter,
-            IAgent agent,
-            CancellationToken cancellationToken
-        ) => await adapter.ProcessAsync(
-            request,
-            response,
-            agent,
-            cancellationToken
-        )
-    )
-    .RequireAuthorization();
+_ = app.MapAgentEndpoints(app.Environment.IsDevelopment() ? false : true);
 
 await app.RunAsync();
 
 #pragma warning restore IDE0053
+#pragma warning restore IDE0075
