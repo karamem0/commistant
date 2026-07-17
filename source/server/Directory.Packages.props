@@ -24,8 +24,8 @@
     <PackageVersion Include="Microsoft.Agents.Extensions.Teams" Version="1.5.184" />
     <PackageVersion Include="Microsoft.Agents.Hosting.AspNetCore" Version="1.5.184" />
     <PackageVersion Include="Microsoft.Agents.Storage.Blobs" Version="1.5.184" />
-    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.2" />
-    <PackageVersion Include="Microsoft.ApplicationInsights.WorkerService" Version="3.1.2" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+    <PackageVersion Include="Microsoft.ApplicationInsights.WorkerService" Version="2.23.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker" Version="2.52.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.51.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.3.0" />

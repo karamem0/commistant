@@ -1,5 +1,14 @@
 # Changelog
 
+## [v5.1.5] - 2026-07-17
+
+- Dependency updates
+- Internal updates
+  - `.gitignore`
+  - `dependabot.yml`
+  - `tsconfig.json`
+- Bug fixes
+
 ## [v5.1.4] - 2026-07-07
 
 - Dependency updates

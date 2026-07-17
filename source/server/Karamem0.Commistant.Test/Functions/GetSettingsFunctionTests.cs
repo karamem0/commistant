@@ -105,7 +105,11 @@ public class GetSettingsFunctionTests
             default
         ) as OkObjectResult;
         // Assert
-        Assert.That(actual?.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(actual?.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
+            Assert.That(((GetSettingsResponse?)actual?.Value)?.IsOrganizer, Is.True);
+        }
     }
 
 }

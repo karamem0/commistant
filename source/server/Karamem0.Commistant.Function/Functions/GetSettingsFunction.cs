@@ -73,7 +73,8 @@ public class GetSettingsFunction(
                 responseBody.IsOrganizer = true;
             }
             var commandSettings = blobContent.Data.GetValueOrDefault<CommandSettings>(nameof(CommandSettings));
-            return new OkObjectResult(this.mapper.Map(commandSettings, responseBody));
+            _ = this.mapper.Map(commandSettings, responseBody);
+            return new OkObjectResult(responseBody);
         }
         catch (InvalidOperationException ex)
         {
