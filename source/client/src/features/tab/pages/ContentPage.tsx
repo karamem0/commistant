@@ -8,12 +8,12 @@
 
 import React from 'react';
 
+import { app } from '@microsoft/teams-js';
 import { useIntl } from 'react-intl';
 import { useToast } from '../../../common/providers/ToastProvider';
 import { mapper } from '../../../mappings/AutoMapperProfile';
-import { useTeams } from '../../../providers/TeamsProvider';
 import { useGetValue, useSetValue } from '../../../services/SettingsService';
-import { ArgumentNullError, DependencyNullError } from '../../../types/Errot';
+import { ArgumentNullError, DependencyNullError } from '../../../types/Error';
 import { Event } from '../../../types/Event';
 import { CommandSettingsFormState } from '../../../types/Form';
 import messages from '../messages';
@@ -23,7 +23,6 @@ import Presenter from './ContentPage.presenter';
 function ContentPage() {
 
   const intl = useIntl();
-  const { context } = useTeams();
   const dispatchToast = useToast();
   const getValue = useGetValue();
   const setValue = useSetValue();
@@ -39,6 +38,7 @@ function ContentPage() {
       }
       try {
         setLoading(true);
+        const context = await app.getContext();
         const conversationId = context?.chat?.id;
         if (conversationId == null) {
           throw new DependencyNullError('conversationId');
@@ -67,7 +67,6 @@ function ContentPage() {
       }
     })();
   }, [
-    context,
     intl,
     dispatchToast,
     setValue
@@ -75,6 +74,7 @@ function ContentPage() {
 
   React.useEffect(() => {
     (async () => {
+      const context = await app.getContext();
       const conversationId = context?.chat?.id;
       if (conversationId == null) {
         throw new DependencyNullError('conversationId');
@@ -88,7 +88,6 @@ function ContentPage() {
       ));
     })();
   }, [
-    context,
     getValue
   ]);
 

@@ -27,7 +27,6 @@ import HomePage from './features/home/pages/HomePage';
 import ConfigurePage from './features/tab/pages/ConfigurePage';
 import ContentPage from './features/tab/pages/ContentPage';
 import IntlProvider from './providers/IntlProvider';
-import TeamsProvider from './providers/TeamsProvider';
 import TelemetryProvider from './providers/TelemetryProvider';
 import ThemeProvider from './providers/ThemeProvider';
 
@@ -50,11 +49,9 @@ root.render(
                         inTeams ? (
                           <Route
                             element={(
-                              <TeamsProvider>
-                                <ToastProvider>
-                                  <Outlet />
-                                </ToastProvider>
-                              </TeamsProvider>
+                              <ToastProvider>
+                                <Outlet />
+                              </ToastProvider>
                             )}>
                             <Route
                               path="/tab/configure"

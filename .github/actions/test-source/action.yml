@@ -23,7 +23,7 @@ runs:
           -- NUnit.TestOutputXml=${{github.workspace}}/source/server/test
       working-directory: source/server
     - name: Test results
-      uses: enricomi/publish-unit-test-result-action/linux@3a74b2957438d0b6e2e61d67b05318aa25c9e6c6
+      uses: enricomi/publish-unit-test-result-action/linux@d0a4676d0e0b938bc201470d88276b7c74c712b3
       if: always()
       with:
         files: source/server/test/*.xml

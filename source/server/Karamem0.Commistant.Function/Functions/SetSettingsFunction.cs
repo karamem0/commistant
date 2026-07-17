@@ -87,7 +87,8 @@ public class SetSettingsFunction(
                 blobContent,
                 cancellationToken
             );
-            return new OkObjectResult(this.mapper.Map(commandSettings, responseBody));
+            _ = this.mapper.Map(commandSettings, responseBody);
+            return new OkObjectResult(responseBody);
         }
         catch (InvalidOperationException ex)
         {

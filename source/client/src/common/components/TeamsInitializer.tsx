@@ -8,7 +8,8 @@
 
 import React from 'react';
 
-import { app } from '@microsoft/teams-js';
+import { app, authentication } from '@microsoft/teams-js';
+import axios from 'axios';
 
 import Presenter from './TeamsInitializer.presenter';
 
@@ -28,6 +29,13 @@ function TeamsInitializer(props: Readonly<TeamsInitializerProps>) {
       try {
         setLoading(true);
         await app.initialize();
+        await authentication.getAuthToken();
+        axios.interceptors.request.use(async (request) => {
+          const authToken = await authentication.getAuthToken();
+          request.baseURL = import.meta.env.VITE_FUNCTION_APP_URL;
+          request.headers.Authorization = `Bearer ${authToken}`;
+          return request;
+        });
         setInTeams(true);
       } catch {
         setInTeams(false);

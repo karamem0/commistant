@@ -49,7 +49,7 @@ _ = app.Use(async (context, next) =>
     {
         var headers = context.Response.Headers;
         headers.ContentSecurityPolicy = "default-src 'self'; " +
-                                        "connect-src 'self' *.azure.com *.microsoft.com *.office.net; " +
+                                        $"connect-src 'self' *.{context.Request.Host.Host} *.azure.com *.microsoft.com *.office.net *.visualstudio.com; " +
                                         "frame-ancestors 'self' *.cloud.microsoft *.microsoft365.com *.office.com teams.microsoft.com; " +
                                         "img-src 'self' blob: data:; " +
                                         "style-src 'self' 'unsafe-inline'";
