@@ -6,8 +6,6 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-import React from 'react';
-
 import Presenter from './Error404Page.presenter';
 
 interface Error404PageProps {
