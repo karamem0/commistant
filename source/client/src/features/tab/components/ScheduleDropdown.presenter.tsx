@@ -41,8 +41,9 @@ function ScheduleDropdown(props: Readonly<ScheduleDropdownProps>, ref: React.Ref
         options && Object.keys(options).sort((a, b) => Number(a) - Number(b)).map((item) => (
           <Option
             key={item}
-            text={options[item] ?? item}
-            value={item} />
+            value={item}>
+            {options[item] ?? item}
+          </Option>
         ))
       }
     </Dropdown>

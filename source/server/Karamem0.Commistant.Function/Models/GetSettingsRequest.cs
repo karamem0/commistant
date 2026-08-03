@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace Karamem0.Commistant.Models;
 
-public record GetSettingsRequest
+public class GetSettingsRequest
 {
 
     [JsonPropertyName("channelId")]

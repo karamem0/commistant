@@ -10,7 +10,7 @@ import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
   AppCreator: { defaultMessage: 'karamem0' },
-  AppDescription: { defaultMessage: 'Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。' },
+  AppDescription: { defaultMessage: 'Microsoft Teams 会議によるコミュニティ イベントをサポートする AI エージェントです。' },
   AppTitle: { defaultMessage: 'Commistant' }
 });
 

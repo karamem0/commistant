@@ -42,6 +42,7 @@ public class ConnectorClientService(IChannelServiceClientFactory factory, IOptio
 
     private readonly ConnectorClientOptions options = options.Value;
 
+    [Obsolete]
     public async Task<ResourceResponse> SendActivityAsync(
         string serviceUrl,
         IActivity activity,
@@ -63,6 +64,7 @@ public class ConnectorClientService(IChannelServiceClientFactory factory, IOptio
         return await connectorClient.Conversations.SendToConversationAsync(activity, cancellationToken);
     }
 
+    [Obsolete]
     public async Task<MeetingInfo> GetMeetingInfoAsync(
         string serviceUrl,
         string meetingId,

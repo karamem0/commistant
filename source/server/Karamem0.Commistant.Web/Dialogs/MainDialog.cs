@@ -120,7 +120,7 @@ public class MainDialog(
             case CommandTypes.Help:
                 _ = await stepContext.Context.SendActivityAsync(
                     """
-                    Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートするアシスタント ボットです。
+                    Commistant は Microsoft Teams 会議によるコミュニティ イベントをサポートする AI エージェントです。
                     会議の開始時、終了時、または会議中に定型のメッセージ通知を送信します。
                     通知にはテキストおよび QR コードつきの URL を添付することができます。
                     <br/>

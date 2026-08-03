@@ -17,7 +17,7 @@ import {
   Outlet,
   Route,
   Routes
-} from 'react-router-dom';
+} from 'react-router';
 import * as ress from 'ress';
 import TeamsInitializer from './common/components/TeamsInitializer';
 import ToastProvider from './common/providers/ToastProvider';

@@ -63,8 +63,15 @@ public class OpenAIService(ChatClient chatClient) : IOpenAIService
             [
                 new SystemChatMessage(
                     """
-                    あなたはユーザーからの入力から JSON を生成する AI アシスタントです。
-                    ユーザーの入力のみを使用し自分の知識を使用してはいけません。
+                    あなたは Microsoft Teams 会議によるコミュニティ イベントをサポートする AI エージェントです。
+                    ユーザーからの入力に対して必要なツールを呼び出してください。
+                    コマンド文字列のみが指定された場合は必ずツールを呼び出してください。
+                    - 会議開始後: MeetingStarted
+                    - 会議終了前: MeetingEnding
+                    - 会議中: MeetingInProgress
+                    - 初期化: Initialize
+                    - ヘルプ: Help
+                    ユーザーの入力のみを使用し内容が不明な場合は空白のままにしてください。
                     """
                 ),
                 new UserChatMessage(text)
