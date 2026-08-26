@@ -13,7 +13,6 @@ using Karamem0.Commistant.Agents;
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Options;
-using Karamem0.Commistant.Routes;
 using Karamem0.Commistant.Services;
 using Mapster;
 using MapsterMapper;
@@ -33,33 +32,6 @@ namespace Karamem0.Commistant;
 
 public static class ConfigureServices
 {
-
-    public static void AddAgent(this IHostApplicationBuilder builder, IConfiguration configuration)
-    {
-        _ = builder.AddAgent<TeamsAgentApplication, AdapterWithErrorHandler>();
-        _ = builder.Services.AddSingleton((provider) => new AgentApplicationOptions(provider.GetRequiredService<IStorage>())
-            {
-                TurnStateFactory = () => new TurnState(
-                    provider.GetRequiredService<ConversationState>(),
-                    provider.GetRequiredService<UserState>(),
-                    new TempState()
-                )
-            }
-        );
-        var options = configuration
-            .GetSection("AzureStorageBlobs")
-            .Get<AzureStorageBlobsOptions>();
-        _ = options ?? throw new InvalidOperationException($"{nameof(AzureStorageBlobsOptions)} を null にはできません");
-        _ = builder.Services.AddSingleton<IStorage>(
-            new BlobsStorage(
-                new Uri(options.Endpoint, options.ContainerName),
-                new DefaultAzureCredential(new DefaultAzureCredentialOptions()),
-                new StorageTransferOptions()
-            )
-        );
-        _ = builder.Services.AddSingleton<ConversationState>();
-        _ = builder.Services.AddSingleton<UserState>();
-    }
 
     public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
@@ -130,17 +102,6 @@ public static class ConfigureServices
             }
         );
         _ = services.AddTransient<IMapper, ServiceMapper>();
-        return services;
-    }
-
-    public static IServiceCollection AddRoutes(this IServiceCollection services)
-    {
-        _ = services.AddTransient<BeforeTurnRouteHandler>();
-        _ = services.AddTransient<MemberAddedRouteHandler>();
-        _ = services.AddTransient<MemberRemovedRouteHandler>();
-        _ = services.AddTransient<MessageRouteHandler>();
-        _ = services.AddTransient<MeetingStartedRouteHandler>();
-        _ = services.AddTransient<MeetingEndedRouteHandler>();
         return services;
     }
 

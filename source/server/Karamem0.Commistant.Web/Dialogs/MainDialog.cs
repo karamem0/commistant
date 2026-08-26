@@ -11,7 +11,6 @@ using Karamem0.Commistant.Services;
 using Karamem0.Commistant.Types;
 using Microsoft.Agents.Builder.Dialogs;
 using Microsoft.Agents.Builder.State;
-using Microsoft.Agents.Core.Models;
 using System.Threading;
 
 namespace Karamem0.Commistant.Dialogs;

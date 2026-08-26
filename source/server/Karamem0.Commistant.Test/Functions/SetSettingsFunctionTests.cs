@@ -31,6 +31,14 @@ public class SetSettingsFunctionTests
     public async Task RunAsync_Success()
     {
         // Setup
+        var conversationReference = new ConversationReference()
+        {
+            Conversation = new ConversationAccount()
+            {
+                Id = "1234567890",
+            },
+            ServiceUrl = "https://www.example.com/",
+        };
         var blobsService = Substitute.For<IBlobsService>();
         _ = blobsService
             .GetObjectAsync<Dictionary<string, object?>>(Arg.Any<string>())
@@ -40,16 +48,13 @@ public class SetSettingsFunctionTests
                     Data = new Dictionary<string, object?>()
                     {
                         ["CommandSettings"] = new CommandSettings(),
-                        ["ConversationReference"] = new ConversationReference()
-                        {
-                            ServiceUrl = "https://www.example.com",
-                        }
+                        ["ConversationReference"] = conversationReference
                     }
                 }
             );
         var connectorClientService = Substitute.For<IConnectorClientService>();
         _ = connectorClientService
-            .GetMeetingInfoAsync(Arg.Any<string>(), Arg.Any<string>())
+            .GetMeetingInfoAsync(conversationReference, Arg.Any<string>())
             .Returns(
                 new MeetingInfo()
                 {

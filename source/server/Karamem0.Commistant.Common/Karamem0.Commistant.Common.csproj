@@ -31,6 +31,7 @@
     <PackageReference Include="Microsoft.Agents.Builder.Dialogs" />
     <PackageReference Include="Microsoft.Agents.Extensions.Teams" />
     <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" />
+    <PackageReference Include="Microsoft.Agents.Storage.Blobs" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" />
     <PackageReference Include="QRCoder" />
   </ItemGroup>

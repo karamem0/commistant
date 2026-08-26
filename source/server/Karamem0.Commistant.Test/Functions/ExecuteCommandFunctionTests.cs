@@ -26,6 +26,14 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Success()
     {
         // Setup
+        var conversationReference = new ConversationReference()
+        {
+            Conversation = new ConversationAccount()
+            {
+                Id = "1234567890",
+            },
+            ServiceUrl = "https://www.example.com/",
+        };
         var blobsService = Substitute.For<IBlobsService>();
         _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
@@ -43,7 +51,7 @@ public class ExecuteCommandFunctionTests
                     Data = new Dictionary<string, object?>()
                     {
                         ["CommandSettings"] = new CommandSettings(),
-                        ["ConversationReference"] = new ConversationReference()
+                        ["ConversationReference"] = conversationReference
                     }
                 }
             );
@@ -110,6 +118,14 @@ public class ExecuteCommandFunctionTests
     public async Task RunAsync_Failure_WhenCommandSettingsIsNull()
     {
         // Setup
+        var conversationReference = new ConversationReference()
+        {
+            Conversation = new ConversationAccount()
+            {
+                Id = "1234567890",
+            },
+            ServiceUrl = "https://www.example.com/",
+        };
         var blobsService = Substitute.For<IBlobsService>();
         _ = blobsService
             .GetBlobNamesAsync(Arg.Any<CancellationToken>())
@@ -127,7 +143,7 @@ public class ExecuteCommandFunctionTests
                     Data = new Dictionary<string, object?>()
                     {
                         ["CommandSettings"] = null,
-                        ["ConversationReference"] = new ConversationReference()
+                        ["ConversationReference"] = conversationReference
                     }
                 }
             );

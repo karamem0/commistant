@@ -45,9 +45,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -72,7 +69,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.True);
         _ = connectorClientService
             .Received()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .Received()
             .CreateAsync("https://www.example.com/");
@@ -101,9 +98,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -128,7 +122,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.True);
         _ = connectorClientService
             .Received()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .Received()
             .CreateAsync("https://www.example.com/");
@@ -157,9 +151,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -184,7 +175,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
             .CreateAsync("https://www.example.com/");
@@ -213,9 +204,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -240,7 +228,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
             .CreateAsync("https://www.example.com/");
@@ -269,9 +257,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -296,7 +281,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.True);
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
             .CreateAsync("https://www.example.com/");
@@ -325,9 +310,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -352,7 +334,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
             .CreateAsync("https://www.example.com/");
@@ -381,9 +363,6 @@ public class MeetingStartedCommandTests
             MeetingStartedUrl = "https://www.example.com/",
         };
         var connectorClientService = Substitute.For<IConnectorClientService>();
-        _ = connectorClientService
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>())
-            .Returns(new ResourceResponse());
         var dateTimeService = Substitute.For<IDateTimeService>();
         _ = dateTimeService
             .GetCurrentDateTime()
@@ -408,7 +387,7 @@ public class MeetingStartedCommandTests
         Assert.That(commandSettings.MeetingStartedSended, Is.False);
         _ = connectorClientService
             .DidNotReceive()
-            .SendActivityAsync("https://www.example.com/", Arg.Any<Activity>());
+            .SendActivityAsync(conversationReference, Arg.Any<Activity>());
         _ = qrCodeService
             .DidNotReceive()
             .CreateAsync("https://www.example.com/");

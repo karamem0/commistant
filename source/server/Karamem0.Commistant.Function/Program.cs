@@ -7,6 +7,7 @@
 //
 
 using Karamem0.Commistant;
+using Karamem0.Commistant.Agents;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,7 @@ _ = configuration.AddJsonFile(
 _ = configuration.AddUserSecrets(typeof(Program).Assembly, true);
 _ = configuration.AddEnvironmentVariables();
 
+builder.AddAgent<FunctionAgentApplication>(configuration);
 builder.AddAzureBlobContainerClient(configuration);
 
 var services = builder.Services;
@@ -41,7 +43,6 @@ _ = services.ConfigureFunctionsApplicationInsights();
 _ = services.AddMicrosoftIdentityWebApiAuthentication(configuration, "MicrosoftIdentity");
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
-_ = services.AddConnectorClient();
 _ = services.AddCommands();
 _ = services.AddServices(configuration);
 

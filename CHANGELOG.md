@@ -1,5 +1,12 @@
 # Changelog
 
+## [v5.2.0] - 2026-09-01
+
+- Internal updates
+  - Microsoft 365 Agents SDK `v1.6` to `v1.8`
+  - Proactive message
+- Dependency updates
+
 ## [v5.1.6] - 2026-08-04
 
 - Dependency updates

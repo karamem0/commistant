@@ -87,8 +87,8 @@ public class MeetingEndingCommand(
             activity.From = conversationReference.Agent;
             activity.Recipient = conversationReference.User;
             activity.Conversation = conversationReference.Conversation;
-            _ = await this.connectorClientService.SendActivityAsync(
-                conversationReference.ServiceUrl,
+            await this.connectorClientService.SendActivityAsync(
+                conversationReference,
                 activity,
                 cancellationToken
             );

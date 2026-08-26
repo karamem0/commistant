@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
-    <PackageReference Include="Microsoft.Agents.Storage.Blobs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,6 +10,7 @@
 #pragma warning disable IDE0075
 
 using Karamem0.Commistant;
+using Karamem0.Commistant.Agents;
 using Microsoft.Agents.Hosting.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +27,7 @@ _ = builder.WebHost.ConfigureKestrel(options =>
     }
 );
 
-builder.AddAgent(configuration);
+builder.AddAgent<WebAgentApplication>(configuration);
 builder.AddAzureOpenAIClient(configuration);
 builder.AddAzureBlobContainerClient(configuration);
 
@@ -37,7 +38,6 @@ _ = services.AddAuthorization();
 _ = services.ConfigureOptions(configuration);
 _ = services.AddMapper();
 _ = services.AddDialogs();
-_ = services.AddRoutes();
 _ = services.AddServices(configuration);
 
 var app = builder.Build();

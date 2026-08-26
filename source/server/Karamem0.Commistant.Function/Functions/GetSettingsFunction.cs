@@ -63,7 +63,7 @@ public class GetSettingsFunction(
             var conversationReference = blobContent.Data.GetValueOrDefault<ConversationReference>(nameof(ConversationReference));
             _ = conversationReference?.ServiceUrl ?? throw new InvalidOperationException("ServiceUrl を null にはできません");
             var meetingInfo = await this.connectorClientService.GetMeetingInfoAsync(
-                conversationReference.ServiceUrl,
+                conversationReference,
                 requestBody.MeetingId,
                 cancellationToken
             );
