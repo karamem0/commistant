@@ -20,7 +20,7 @@
     "@microsoft/applicationinsights-react-js": "^19.4.1",
     "@microsoft/applicationinsights-web": "^3.4.3",
     "@microsoft/teams-js": "2.55.0",
-    "axios": "^1.19.0",
+    "axios": "^1.20.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-error-boundary": "^6.1.3",
