@@ -67,6 +67,7 @@ public class WebAgentApplicationTests
             }
         );
         _ = turnContext.StackState.Returns(new TurnContextStateCollection());
+        _ = turnContext.Services.Returns(new TurnContextStateCollection());
         var turnState = Substitute.For<ITurnState>();
         var target = new WebAgentApplication(
             new AgentApplicationOptions(storage),
@@ -117,6 +118,7 @@ public class WebAgentApplicationTests
             }
         );
         _ = turnContext.StackState.Returns(new TurnContextStateCollection());
+        _ = turnContext.Services.Returns(new TurnContextStateCollection());
         var turnState = Substitute.For<ITurnState>();
         var target = new WebAgentApplication(
             new AgentApplicationOptions(storage),
@@ -183,6 +185,7 @@ public class WebAgentApplicationTests
             }
         );
         _ = turnContext.StackState.Returns(new TurnContextStateCollection());
+        _ = turnContext.Services.Returns(new TurnContextStateCollection());
         var turnState = Substitute.For<ITurnState>();
         var target = new WebAgentApplication(
             new AgentApplicationOptions(storage),

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v5.2.1] - 2026-10-26
+
+- Dependency updates
+
 ## [v5.2.0] - 2026-09-01
 
 - Internal updates

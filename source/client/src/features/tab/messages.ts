@@ -17,16 +17,22 @@ const messages = {
     MeetingInProgress: { defaultMessage: '会議中' },
     MeetingStarted: { defaultMessage: '会議開始後' },
     Message: { defaultMessage: 'メッセージ' },
-    Minutes: { defaultMessage: '{value} 分' },
-    MinutesAfter: { defaultMessage: '{value} 分後' },
-    MinutesBefore: { defaultMessage: '{value} 分前' },
     None: { defaultMessage: 'なし' },
     Save: { defaultMessage: '保存' },
     SaveFailed: { defaultMessage: '設定を保存できませんでした。' },
     SaveSucceeded: { defaultMessage: '設定を保存しました。' },
     Schedule: { defaultMessage: 'スケジュール' },
     Url: { defaultMessage: 'URL' }
-  })
+  }),
+  ...defineMessages<{
+    Minutes: { value: number },
+    MinutesAfter: { value: number },
+    MinutesBefore: { value: number }
+  }>({
+    Minutes: { defaultMessage: '{value} 分' },
+    MinutesAfter: { defaultMessage: '{value} 分後' },
+    MinutesBefore: { defaultMessage: '{value} 分前' }
+  }, { typed: true })
 };
 
 export default messages;
