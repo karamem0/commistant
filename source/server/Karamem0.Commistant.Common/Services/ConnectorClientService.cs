@@ -48,10 +48,7 @@ public class ConnectorClientService(IAgent agent, IConnections connections) : IC
     )
     {
         var connection = this.connections.GetDefaultConnection();
-        var conversation = new Conversation(
-            AgentClaims.CreateIdentity(connection.ConnectionSettings.ClientId),
-            conversationReference
-        );
+        var conversation = new Conversation(AgentClaims.CreateIdentity(connection.ConnectionSettings.ClientId), conversationReference);
         _ = await this.agent.Proactive.SendActivityAsync(
             conversation,
             activity,
@@ -67,10 +64,7 @@ public class ConnectorClientService(IAgent agent, IConnections connections) : IC
     {
         var completionSource = new TaskCompletionSource<MeetingInfo>(TaskCreationOptions.RunContinuationsAsynchronously);
         var connection = this.connections.GetDefaultConnection();
-        var conversation = new Conversation(
-            AgentClaims.CreateIdentity(connection.ConnectionSettings.ClientId),
-            conversationReference
-        );
+        var conversation = new Conversation(AgentClaims.CreateIdentity(connection.ConnectionSettings.ClientId), conversationReference);
         var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes($"0#{meetingId}#0"));
         await this.agent.Proactive.ContinueConversationAsync(
             conversation,

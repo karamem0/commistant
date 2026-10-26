@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Karamem0.Commistant.AppHost/Karamem0.Commistant.AppHost.csproj" />
+  <Project Path="Karamem0.Commistant.Common/Karamem0.Commistant.Common.csproj" />
+  <Project Path="Karamem0.Commistant.Function/Karamem0.Commistant.Function.csproj" />
+  <Project Path="Karamem0.Commistant.Test/Karamem0.Commistant.Test.csproj" />
+  <Project Path="Karamem0.Commistant.Web/Karamem0.Commistant.Web.csproj" />
+</Solution>

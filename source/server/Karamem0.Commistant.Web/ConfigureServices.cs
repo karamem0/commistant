@@ -6,25 +6,15 @@
 // https://github.com/karamem0/commistant/blob/main/LICENSE
 //
 
-using Azure.Identity;
-using Azure.Storage;
-using Karamem0.Commistant.Adapters;
-using Karamem0.Commistant.Agents;
 using Karamem0.Commistant.Dialogs;
 using Karamem0.Commistant.Mappings;
 using Karamem0.Commistant.Options;
 using Karamem0.Commistant.Services;
 using Mapster;
 using MapsterMapper;
-using Microsoft.Agents.Builder.App;
-using Microsoft.Agents.Builder.State;
-using Microsoft.Agents.Hosting.AspNetCore;
-using Microsoft.Agents.Storage;
-using Microsoft.Agents.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
